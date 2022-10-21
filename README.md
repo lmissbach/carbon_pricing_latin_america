@@ -1,6 +1,6 @@
-# Supplementary Data to Carbon Pricing, Cash Transfers and Poverty - Missbach et al. 
+# Supplementary Data to Carbon Pricing, Cash Transfers and Poverty 
 
-This repository contains supplementary data on the publication "Carbon Pricing, Cash Transfers and Poverty" by Missbach, Steckel and Vogt-Schilb.
+This repository contains supplementary data on the publication "Carbon Pricing, Cash Transfers and Poverty".
 
 ## Data
 
