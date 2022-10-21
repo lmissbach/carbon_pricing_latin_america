@@ -1,6 +1,6 @@
 # 0       General ####
 
-# Author: L. Missbach, missbach@mcc-berlin.net
+# Author: L. Missbach, missbach@mcc-berlin.net - test
 
 carbon.price <- 40 # in USD/tCO2
 
