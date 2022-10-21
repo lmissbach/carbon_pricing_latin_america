@@ -335,7 +335,7 @@ kbl(Summary_1.4, format = "latex", caption = "Average Carbon Footprint and Avera
 
 # Electricity-Table
 
-LAC_Electricity <- read_excel("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/3_Supplementary Information/LAC_Electricity.xlsx")
+LAC_Electricity <- read_excel("../0_Data/9_Supplementary Data/LAC_Electricity.xlsx")
 
 LAC_Electricity_2 <- LAC_Electricity %>%
   mutate_at(vars("Coal":"Other"),list(~ paste0(round(.*100,1), "\\%")))%>%
