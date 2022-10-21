@@ -4,283 +4,14 @@
 
 # 0.1   Packages ####
 
-library("cowplot")
-library("eulerr")
-library("ggpubr")
-library("ggrepel")
-library("ggsci")
-library("haven")
-library("Hmisc")
-library("knitr")
-library("kableExtra")
-library("openxlsx")
-library("rattle")
-library("scales")
-library("tidyverse")
-library("VennDiagram")
+if(!require("pacman")) install.packages("pacman")
+
+p_load("cowplot", "eulerr", "ggpubr", "ggrepel",
+       "ggsci", "haven", "Hmisc", "knitr", "kableExtra", "openxlsx", "rattle", "scales", "tidyverse", "VennDiagram")
+
 options(scipen=999)
 
 # 1     Loading Data ####
-
-for(Country.Name in c("Argentina", "Barbados", "Bolivia", "Brazil" ,
-                      "Chile", "Colombia", "Costa Rica", "Dominican Republic", "Ecuador",
-                      "El_Salvador", "Guatemala", "Mexico", "Nicaragua","Peru", "Uruguay")) {
-
-carbon_pricing_incidence_0 <- read_csv(sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/4_Transformed Data/Carbon_Pricing_Incidence_%s.csv", Country.Name))
-
-household_information_0    <- read_csv(sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/4_Transformed Data/household_information_%s_new.csv", Country.Name))
-
-#fuel_expenditures_0       <- read_csv(sprintf("../1_Carbon_Pricing_Incidence/1_Data_Incidence_Analysis/2_Fuel_Expenditure_Data/fuel_expenditures_%s.csv", Country.Name))
-
-# 2   Graphics Individual ####
-
-carbon_pricing_incidence_1 <- left_join(carbon_pricing_incidence_0, household_information_0)
-
-# 2.1 Cumulative Curves ####
-
-adjust_0 <- 0.3
-
-add_on_df <- expand_grid(Income_Group_5 = c(1,2,3,4,5), burden_CO2_national = c(seq(0,0.1,0.001)))%>%
-  mutate(hh_weights = 0)
-
-add_on_weights <- carbon_pricing_incidence_1 %>%
-  group_by(Income_Group_5)%>%
-  summarise(IG_weights = sum(hh_weights))%>%
-  ungroup()
-
-carbon_pricing_incidence_2.1 <- carbon_pricing_incidence_1 %>%
-  mutate(burden_CO2_national = round(burden_CO2_national,3))%>%
-  filter(!is.na(burden_CO2_national))%>%
-  bind_rows(add_on_df)%>%
-  group_by(Income_Group_5, burden_CO2_national)%>%
-  summarise(hh_weights = sum(hh_weights))%>%
-  ungroup()%>%
-  left_join(add_on_weights, by = "Income_Group_5")%>%
-  mutate(share = hh_weights/IG_weights)
-
-add_on_median <- carbon_pricing_incidence_2.1 %>%
-  group_by(Income_Group_5)%>%
-  mutate(cumsum_shares = cumsum(share))%>%
-  filter(cumsum_shares >= 0.5)%>%
-  slice(which.min(cumsum_shares))%>%
-  ungroup()%>%
-  rename(median = burden_CO2_national)%>%
-  select(Income_Group_5, median)
-
-add_on_median <- ggplot_build(ggplot(carbon_pricing_incidence_2.1, aes(y = share, x = burden_CO2_national, group = factor(Income_Group_5)))+
-               geom_smooth(method = "loess", span = adjust_0, se = FALSE))$data[[1]]%>%
-  select(x,y,group)%>%
-  left_join(add_on_median, by = c("group" = "Income_Group_5"))%>%
-  mutate(help = median - x)%>%
-  mutate(help_0 = ifelse(help <0, help*-1, help))%>%
-  group_by(group)%>%
-  filter(help_0 == min(help_0))%>%
-  ungroup()%>%
-  rename(Income_Group_5 = group, median.x = x, median.y = y)%>%
-  select(-median, -help, -help_0)%>%
-  select(median.x, median.y, Income_Group_5)
-
-carbon_pricing_incidence_2.1 <- left_join(carbon_pricing_incidence_2.1, add_on_median)
-
-plot_figure_1 <- function(ATT  = element_text(size = 7), ATX = element_text(size = 7), ATY = element_text(size = 7),
-                          XLAB = "Carbon Price Incidence",
-                          YLAB = "Share of Households per Quintile", 
-                          fill0 = "none"){
-
-P_X <- ggplot(carbon_pricing_incidence_2.1, aes(group = factor(Income_Group_5), colour = factor(Income_Group_5), linetype = factor(Income_Group_5)))+
-  theme_bw()+
-  theme(axis.text.y = ATY, 
-        axis.text.x = ATX,
-        axis.title  = ATT,
-        plot.title = element_text(size = 7),
-        legend.position = "bottom",
-        strip.text = element_text(size = 7),
-        strip.text.y = element_text(angle = 180),
-        panel.grid.major = element_line(size = 0.3),
-        panel.grid.minor = element_blank(),
-        axis.ticks = element_line(size = 0.2),
-        legend.text = element_text(size = 7),
-        legend.title = element_text(size = 7),
-        plot.margin = unit(c(0.1,0.1,0,0), "cm"),
-        panel.border = element_rect(size = 0.3))+
-  #annotate("rect", xmin = min_median, xmax = max_median, ymin = 0, ymax = 0.11, alpha = 0.5, fill = "grey")+
-  #annotate("segment", x = min_median, xend = max_median, y = 0.078, yend = 0.078, arrow = arrow(ends = "both", angle = 90, length = unit (.05, "cm")), size = 0.2)+
-  #annotate("text", x = (min_median + max_median)/2, y = 0.081, label = "paste(Delta, V)", parse = TRUE, size = 1.5)+
-  geom_smooth(aes(x = burden_CO2_national, y = share), size = 0.3, method = "loess", n = 160, span = adjust_0, se = FALSE, fullrange = TRUE)+
-  geom_point(aes(x = median.x, y = median.y, group = factor(Income_Group_5), fill = factor(Income_Group_5)), shape = 21, size = 1.3, stroke = 0.2, colour = "black")+
-  xlab(XLAB) +
-  ylab(YLAB) +
-  labs(colour = "", linetype = "", fill = "")+
-  scale_y_continuous(breaks = c(0,0.025,0.05,0.075), expand = c(0,0), labels = scales::percent_format(accuracy = 0.1))+
-  scale_x_continuous(expand = c(0,0), labels = scales::percent_format(accuracy = 1), breaks = seq(0,0.08, 0.02))+
-  coord_cartesian(xlim = c(0,0.085), ylim = c(0,0.085))+
-  #geom_segment(aes(x = median, xend = median, y = 0, yend = 100, colour = factor(Income_Group_5), linetype = factor(Income_Group_5)), size = 1)+
-  scale_colour_manual(  values = c("#BC3C29FF","#00A087FF","#000000","#E18727FF",   "#0072B5FF"))+
-  scale_fill_manual(    values = c("#BC3C29FF","#00A087FF","#000000","#E18727FF",   "#0072B5FF"))+
-  scale_linetype_manual(values = c("solid", "longdash", "dotdash", "solid", "solid"))+
-  ggtitle(Country.Name)+
-  #guides(fill = guide_legend("Expenditure Quintile"), colour = guide_legend("Expenditure Quintile"), linetype = guide_legend("Expenditure Quintile"))
-  guides(fill = fill0, colour = fill0, linetype = fill0)
-
-return(P_X)
-}
-
-P_1 <- plot_figure_1()
-
-jpeg(sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figure_1_Distribution/National_Carbon_Price_Figure_1_%s.jpg", Country.Name), width = 6, height = 6, unit = "cm", res = 400)
-print(P_1)
-dev.off()
-
-# L_1 <- ggdraw(get_legend(P_1))
-# jpeg("../1_Carbon_Pricing_Incidence/2_Figures/Figure_1_Distribution_National_Carbon_Price/Legend_1.jpg", width = 8*400, height = 2*400, res = 400)
-# L_1
-# dev.off()
-
-# 2.2 Boxplots ####
-
-carbon_pricing_incidence_2.2 <- carbon_pricing_incidence_1 %>%
-  group_by(Income_Group_5)%>%
-  summarise(
-    y5  = wtd.quantile(burden_CO2_national, weights = hh_weights, probs = 0.05),
-    y25 = wtd.quantile(burden_CO2_national, weights = hh_weights, probs = 0.25),
-    y50 = wtd.quantile(burden_CO2_national, weights = hh_weights, probs = 0.5),
-    y75 = wtd.quantile(burden_CO2_national, weights = hh_weights, probs = 0.75),
-    y95 = wtd.quantile(burden_CO2_national, weights = hh_weights, probs = 0.95),
-    mean = wtd.mean(   burden_CO2_national, weights = hh_weights))%>%
-  ungroup()
-
-# Default Y-Axis
-ylim0 <- 0.085
-
-if(Country.Name == "Argentina" | Country.Name == "Turkey" | Country.Name == "South Africa") ylim0 <- 0.205
-
-plot_figure_2 <- function(ATT  = element_text(size = 7), ATX = element_text(size = 7), ATY = element_text(size = 7),
-                          XLAB = "Expenditure Quintiles",
-                          YLAB = "Carbon Price Incidence", 
-                          fill0 = "none",
-                          accuracy_0 = 1,
-                          data_0 = carbon_pricing_incidence_2.2,
-                          title_0 = Country.Name){
-
-P_2 <- ggplot(data_0, aes(x = factor(Income_Group_5)))+
-  geom_boxplot(aes(ymin = y5, lower = y25, middle = y50, upper = y75, ymax = y95), stat = "identity", position = position_dodge(0.5), outlier.shape = NA, width = 0.5, size = 0.3) +
-  theme_bw()+
-  xlab(XLAB)+ ylab(YLAB)+
-  geom_point(aes(y = mean), shape = 23, size = 1.3, stroke = 0.2, fill = "white")+
-  scale_y_continuous(labels = scales::percent_format(accuracy = accuracy_0), expand = c(0,0))+
-  scale_x_discrete(labels = c("1 \n Poorest \n 20 Percent", "2", "3", "4", "5 \n Richest \n 20 Percent"))+
-  coord_cartesian(ylim = c(0,ylim0))+
-  ggtitle(title_0)+
-  theme(axis.text.y = ATY, 
-        axis.text.x = ATX,
-        axis.title  = ATT,
-        plot.title = element_text(size = 7),
-        legend.position = "bottom",
-        strip.text = element_text(size = 7),
-        strip.text.y = element_text(angle = 180),
-        panel.grid.major = element_line(size = 0.3),
-        panel.grid.minor = element_blank(),
-        axis.ticks = element_line(size = 0.2),
-        legend.text = element_text(size = 7),
-        legend.title = element_text(size = 7),
-        plot.margin = unit(c(0.1,0.1,0,0), "cm"),
-        panel.border = element_rect(size = 0.3))
-
-return(P_2)
-}
-
-P_2 <- plot_figure_2()
-
-jpeg(sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figure_2_Boxplot/National_Carbon_Price_Figure_2_%s.jpg", Country.Name), width = 6, height = 6, unit = "cm", res = 400)
-print(P_2)
-dev.off()
-
-# 2.3 Vertical Distribution across Instruments ####
-
-carbon_pricing_incidence_2.3 <- carbon_pricing_incidence_1 %>%
-  group_by(Income_Group_5)%>%
-  summarise(
-    wtd.median_CO2_global   = wtd.quantile(burden_CO2_global,   weight = hh_weights, probs = 0.5),
-    wtd.median_CO2_national = wtd.quantile(burden_CO2_national, weight = hh_weights, probs = 0.5),
-    wtd.median_transport    = wtd.quantile(burden_CO2_transport,    weight = hh_weights, probs = 0.5),
-    wtd.median_electricity  = wtd.quantile(burden_CO2_electricity,  weight = hh_weights, probs = 0.5)
-  )%>%
-  ungroup()
-
-carbon_pricing_incidence_2.3 <- carbon_pricing_incidence_2.3 %>%
-  mutate(CO2_global       = wtd.median_CO2_global  /carbon_pricing_incidence_2.3$wtd.median_CO2_global[1],
-         CO2_national     = wtd.median_CO2_national/carbon_pricing_incidence_2.3$wtd.median_CO2_national[1],
-         transport        = wtd.median_transport   /carbon_pricing_incidence_2.3$wtd.median_transport[1],
-         electricity      = wtd.median_electricity /carbon_pricing_incidence_2.3$wtd.median_electricity[1])%>%
-  select(-starts_with("wtd."))%>%
-  pivot_longer(-Income_Group_5, names_to = "type", values_to = "Value")%>%
-  unite(help, c("type", "Income_Group_5"), sep = "_", remove = FALSE)
-
-plot_figure_3 <- function(ATT  = element_text(size = 7), ATX = element_text(size = 7), ATY = element_text(size = 7),
-                          XLAB = "Expenditure Quintiles",
-                          YLAB = "Carbon Price Incidence", 
-                          fill0 = "none",
-                          data_0 = carbon_pricing_incidence_2.3,
-                          title_0 = Country.Name){
-  P_3 <- ggplot(data_0, aes(x = factor(Income_Group_5)))+
-    geom_hline(yintercept = 1, colour = "black", size = 0.3)+
-    #geom_ribbon(aes(ymin = low, ymax = upper, group = type, fill = type), alpha = 0.2)+
-    #geom_label_repel(aes(y = 1,    group = type,  label = label),   size = 1.6, segment.linetype = 1, segment.size = 0.1, box.padding = 0.00, label.padding = 0.10, label.r = 0.05, direction = "y", min.segment.length = 0, nudge_y = nudge_0)+
-    #geom_label_repel(aes(y = 3,    group = type,  label = Label_2), size = 1.6, segment.linetype = 1, segment.size = 0.1, box.padding = 0.00, label.padding = 0.10, label.r = 0.05, direction = "y", min.segment.length = 0, nudge_y = -0.6)+
-    #geom_label_repel(aes(y = pure, group = type, segment.linetype = 1, label = label_emissions_coverage, segment.size = 1, size = 15), min.segment.length = 0, hjust = 1, force_pull = 0, nudge_x = 1)+
-    geom_line(aes( y = Value, group = type, colour = type, alpha = type), size = 0.4, position = position_dodge(0.2))+
-    geom_point(aes(y = Value, group = type, fill = type, shape = type, alpha = type), size = 1.5, colour = "black", position = position_dodge(0.2), stroke = 0.2)+
-    scale_colour_npg(  labels = c("International Carbon Price","National Carbon Price", "Electricity Sector Carbon Price", "Liquid Fuel Carbon Price")) +
-    scale_fill_npg  (  labels = c("International Carbon Price","National Carbon Price", "Electricity Sector Carbon Price", "Liquid Fuel Carbon Price"))+
-    scale_shape_manual(labels = c("International Carbon Price","National Carbon Price", "Electricity Sector Carbon Price", "Liquid Fuel Carbon Price"), values = c(21,22,23,24,25))+
-    scale_alpha_manual(labels = c("International Carbon Price","National Carbon Price", "Electricity Sector Carbon Price", "Liquid Fuel Carbon Price"), values = c(1,1,1,1,1))+
-    labs(fill = "", colour = "", shape = "", alpha = "", linetype = "")+
-    theme_bw() + 
-    scale_x_discrete(labels = c("1","2","3","4","5"))+
-    #scale_y_continuous(breaks = seq(limit_low, limit_up, step_0))+
-    theme(axis.text.y = ATY, 
-          axis.text.x = ATX,
-          axis.title  = ATT,
-          plot.title = element_text(size = 7),
-          legend.position = "bottom",
-          strip.text = element_text(size = 7),
-          strip.text.y = element_text(angle = 180),
-          panel.grid.major = element_line(size = 0.3),
-          panel.grid.minor = element_blank(),
-          axis.ticks = element_line(size = 0.2),
-          legend.text = element_text(size = 7),
-          legend.title = element_text(size = 7),
-          plot.margin = unit(c(0.1,0.1,0,0), "cm"),
-          panel.border = element_rect(size = 0.3))+
-    coord_cartesian(ylim = c(0.5,2.5))+
-    #guides(fill = guide_legend(nrow = 2, order = 1), colour = guide_legend(nrow = 2, order = 1), shape = guide_legend(nrow = 2, order = 1), alpha = FALSE, size = FALSE)+
-    guides(fill = fill0, colour = fill0, shape = fill0, size = fill0, alpha = fill0)+
-    xlab(XLAB)+
-    ylab(YLAB)+ 
-    ggtitle(title_0)
-  
-  return(P_3)
-  
-}
-
-P_3 <- plot_figure_3()
-
-jpeg(sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figure_3_Vertical_Effects/Figure_3_%s.jpg", Country.Name), width = 6, height = 6, unit = "cm", res = 400)
-print(P_3)
-dev.off()
-
-# 2.4 Correlations with Incidence - Energy, Fuels etc. ####
-# 2.5 Tax Policies ####
-# 2.6 Maps ####
-# 2.7 
-# 3.X ####
-
-print(paste0("End ", Country.Name))
-
-rm(list = ls())
-}
-
-# 4     Joint Figures ####
 
 data_joint_0 <- data.frame()
 
@@ -348,10 +79,10 @@ for(Country.Name in c("Argentina", "Barbados","Bolivia", "Brazil", "Chile", "Col
 data_joint_0 <- data_joint_0 %>%
   select(hh_id, hh_weights, hh_size, Country, hh_expenditures_USD_2014, everything())
 
-# 4.1   Boxplots ####
-# 4.1.1 National Carbon Price ####
+# 2.1   Boxplots ####
+# 2.1.1 National Carbon Price ####
 
-carbon_pricing_incidence_4.1.1 <- data_joint_0 %>%
+carbon_pricing_incidence_2.1.1 <- data_joint_0 %>%
   group_by(Income_Group_5, Country)%>%
   summarise(
     y5  = wtd.quantile(burden_CO2_national, weights = hh_weights, probs = 0.05),
@@ -369,15 +100,15 @@ carbon_pricing_incidence_4.1.1 <- data_joint_0 %>%
 # Default Y-Axis
 ylim0 <- 0.085
 
-plot_figure_2 <- function(ATT  = element_text(size = 7), ATX = element_text(size = 7), ATY = element_text(size = 7),
+plot_figure_1 <- function(ATT  = element_text(size = 7), ATX = element_text(size = 7), ATY = element_text(size = 7),
                           XLAB = "Expenditure Quintiles",
                           YLAB = "Carbon Price Incidence", 
                           fill0 = "none",
                           accuracy_0 = 1,
-                          data_0 = carbon_pricing_incidence_4.1.1,
+                          data_0 = carbon_pricing_incidence_2.1.1,
                           title_0 = "National Carbon Prices"){
   
-  P_2 <- ggplot(data_0, aes(x = as.character(Income_Group_5)))+
+  P_1 <- ggplot(data_0, aes(x = as.character(Income_Group_5)))+
     geom_rect(aes(ymin = min_median, ymax = max_median), xmin = 0, xmax = 6, alpha = 0.2, fill = "lightblue", inherit.aes = FALSE)+
     geom_boxplot(aes(ymin = y5, lower = y25, middle = y50, upper = y75, ymax = y95), stat = "identity", position = position_dodge(0.5), outlier.shape = NA, width = 0.5, size = 0.3) +
     theme_bw()+
@@ -403,18 +134,18 @@ plot_figure_2 <- function(ATT  = element_text(size = 7), ATX = element_text(size
           plot.margin = unit(c(0.1,0.1,0,0), "cm"),
           panel.border = element_rect(size = 0.3))
   
-  return(P_2)
+  return(P_1)
 }
 
-P_4.1.1 <- plot_figure_2()
+P_2.1.1 <- plot_figure_1()
 
-jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figure_2_Boxplot/National_Carbon_Price_Figure_2_Joint_1_Flipped_Ext.jpg", width = 15.5, height = 15, unit = "cm", res = 400)
-print(P_4.1.1)
+jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figure_1.jpg", width = 15.5, height = 15, unit = "cm", res = 400)
+print(P_2.1.1)
 dev.off()
 
-# 4.1.2 Fossil Fuel Subsidy Reform ####
+# 2.1.2 Fossil Fuel Subsidy Reform ####
 
-carbon_pricing_incidence_4.1.2 <- data_joint_0 %>%
+carbon_pricing_incidence_2.1.2 <- data_joint_0 %>%
   group_by(Income_Group_5, Country)%>%
   summarise(
     y5  = wtd.quantile(burden_CO2_transport, weights = hh_weights, probs = 0.05),
@@ -428,15 +159,15 @@ carbon_pricing_incidence_4.1.2 <- data_joint_0 %>%
 # Default Y-Axis
 ylim0 <- 0.055
 
-plot_figure_3 <- function(ATT  = element_text(size = 7), ATX = element_text(size = 7), ATY = element_text(size = 7),
+plot_figure_1.1 <- function(ATT  = element_text(size = 7), ATX = element_text(size = 7), ATY = element_text(size = 7),
                           XLAB = "Expenditure Quintiles",
                           YLAB = "Fossil Fuel Subsidy Reform Incidence", 
                           fill0 = "none",
                           accuracy_0 = 1,
-                          data_0 = carbon_pricing_incidence_4.1.2,
+                          data_0 = carbon_pricing_incidence_2.1.2,
                           title_0 = "Fossil Fuel Subsidy Reform*"){
   
-  P_3 <- ggplot(data_0, aes(x = factor(Income_Group_5)))+
+  P_1.1 <- ggplot(data_0, aes(x = factor(Income_Group_5)))+
     geom_boxplot(aes(ymin = y5, lower = y25, middle = y50, upper = y75, ymax = y95), stat = "identity", position = position_dodge(0.5), outlier.shape = NA, width = 0.5, size = 0.3) +
     theme_bw()+
     facet_wrap(.~Country, nrow = )+
@@ -461,18 +192,18 @@ plot_figure_3 <- function(ATT  = element_text(size = 7), ATX = element_text(size
           plot.margin = unit(c(0.1,0.1,0,0), "cm"),
           panel.border = element_rect(size = 0.3))
   
-  return(P_3)
+  return(P_1.1)
 }
 
-P_4.1.2 <- plot_figure_3()
+P_2.1.2 <- plot_figure_1.1()
 
-jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/6_App/Latin-America-Paper/Figures/Figure_2_Boxplot_FFF_Joint_Flipped.jpg", width = 15.5, height = 15, unit = "cm", res = 400)
-print(P_4.1.2)
-dev.off()
+#jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figure_1_Appendix", width = 15.5, height = 15, unit = "cm", res = 400)
+#print(P_2.1.2)
+#dev.off()
 
-# 4.2   Carbon Footprints over Household Expenditures ####
+# 2.2   Carbon Footprints over Household Expenditures ####
 
-P_4.2 <- ggplot(data_joint_0)+
+P_2.2 <- ggplot(data_joint_0)+
   geom_smooth(formula = y ~ x, aes(y = CO2_t_national, x = hh_expenditures_USD_2014), method = "lm", se = FALSE, colour = "black", size = 0.6, fullrange = TRUE)+
   geom_point(aes(y = CO2_t_national, x = hh_expenditures_USD_2014, fill = Country), colour = "black", shape = 21, alpha = 0.2, size = 0.8)+
   facet_wrap(.~Country, nrow = 4)+
@@ -499,343 +230,13 @@ P_4.2 <- ggplot(data_joint_0)+
         plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm"),
         panel.border = element_rect(size = 0.3))
 
-jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/6_App/Latin-America-Paper/Figures/Figure_1_Carbon_Footprints.jpg", width = 15.5, height = 15, unit = "cm", res = 400)
-print(P_4.2)
+jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figure_1_Appendix.jpg", width = 15.5, height = 15, unit = "cm", res = 400)
+print(P_2.2)
 dev.off()
 
-# 4.3   Venn-Diagramm on the Targeted, the Poor, the Affected ####
+# 3.1   Vertical vs. horizontal effects ####
 
-# 4.3.1 Mexico ####
-
-barrier_0 <- wtd.quantile(data_Mexico$burden_CO2_national, probs = 0.8, weights = data_Mexico$hh_weights)
-
-data_Mexico <- data_joint_0 %>%
-  filter(Country == "Mexico")%>%
-  mutate(poorest_20_percent  = ifelse(Income_Group_5 == 1,1,0),
-         access_to_transfers = ifelse(!is.na(inc_gov_cash) & (inc_gov_cash > 0 | inc_gov_monetary > 0),1,0),
-         most_affected       = ifelse(burden_CO2_national>barrier_0,1,0))%>%
-  filter(poorest_20_percent == 1 | most_affected == 1 | access_to_transfers == 1)
-
-data_Mexico_1 <- select(data_Mexico, poorest_20_percent, most_affected, access_to_transfers)
-weigths_Mexico <- data_Mexico$hh_weights
-data_Mexico_2 <- data_Mexico_1 %>%
-  mutate(access_poor     = ifelse(poorest_20_percent == 1 & access_to_transfers == 1,1,0),
-         access_affected = ifelse(most_affected == 1      & access_to_transfers == 1,1,0),
-         poor_affected   = ifelse(most_affected == 1      & poorest_20_percent == 1,1,0),
-         poor_affected_access = ifelse(most_affected == 1 & poorest_20_percent == 1 & access_to_transfers == 1,1,0))
-data_Mexico_2.1 <- select(data_Mexico, access_to_transfers, poorest_20_percent, most_affected, hh_weights) %>%
-  #mutate("Most Affected"       = ifelse(most_affected == 1 & access_to_transfers == 0 & poorest_20_percent == 0, hh_weights,0),
-  #       "The Poorest"         = ifelse(most_affected == 0 & access_to_transfers == 0 & poorest_20_percent == 1, hh_weights,0),
-  #       "Access to Transfers" = ifelse(most_affected == 0 & access_to_transfers == 1 & poorest_20_percent == 0, hh_weights,0),
-  #       
-  #       "Most Affected&The Poorest"         = ifelse(most_affected == 1 & access_to_transfers == 0 & poorest_20_percent == 1, hh_weights,0),
-  #       "Most Affected&Access to Transfers" = ifelse(most_affected == 1 & access_to_transfers == 1 & poorest_20_percent == 0, hh_weights,0),
-  #       "The Poorest&Access to Transfers"   = ifelse(most_affected == 0 & access_to_transfers == 1 & poorest_20_percent == 1, hh_weights,0),
-  #       
-  #       "Most Affected&The Poorest&Access to Transfers" = ifelse(most_affected == 1 & access_to_transfers == 1 & poorest_20_percent == 1, hh_weights,0))%>%
-  mutate(A = ifelse(most_affected == 1 & access_to_transfers == 0 & poorest_20_percent == 0, hh_weights,0),
-         B = ifelse(most_affected == 0 & access_to_transfers == 0 & poorest_20_percent == 1, hh_weights,0),
-         C = ifelse(most_affected == 0 & access_to_transfers == 1 & poorest_20_percent == 0, hh_weights,0),
-         
-         D = ifelse(most_affected == 1 & access_to_transfers == 0 & poorest_20_percent == 1, hh_weights,0),
-         E = ifelse(most_affected == 1 & access_to_transfers == 1 & poorest_20_percent == 0, hh_weights,0),
-         G = ifelse(most_affected == 0 & access_to_transfers == 1 & poorest_20_percent == 1, hh_weights,0),
-         
-         H = ifelse(most_affected == 1 & access_to_transfers == 1 & poorest_20_percent == 1, hh_weights,0))%>%
-  summarise("Most Affected"       = sum(A),
-            "The Poorest"         = sum(B),
-            "Access to Transfers" = sum(C),
-            "Most Affected&The Poorest"         = sum(D),
-            "Most Affected&Access to Transfers" = sum(E),
-            "The Poorest&Access to Transfers"   = sum(G),
-            "Most Affected&The Poorest&Access to Transfers" = sum(H))
-
-# data_Mexico_3.1 <- c("Most Affected" = 4181882,
-#                    "The Poorest"   = 3030246,
-#                    "Access to Transfers" = 7322681,
-#                    "Most Affected&The Poorest" = 759395,
-#                    "Most Affected&Access to Transfers" = 1659255,
-#                    "The Poorest&Access to Transfers"   = 2811277,
-#                    "The Poorest&Access to Transfers&Most Affected" = 542196)
-
-P.4.3 <- plot(euler(data_Mexico_3.1, shape = "ellipse"), quantities = TRUE, fill = c("#BC3C29FF", "#FFDC91FF", "#6F99ADFF"),
-     main = "Typology of Mexican Households")
-
-jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figure_4_Euler_Diagrams/Figure_4_Mexico.jpg", width = 15.5, height = 12, unit = "cm", res = 400)
-print(P.4.3)
-dev.off()
-
-plot <- draw.triple.venn(area1 = sum(data_Mexico_2$most_affected),
-             sum(data_Mexico_2$poorest_20_percent),
-             sum(data_Mexico_2$access_to_transfers),
-             sum(data_Mexico_2$poor_affected),
-             sum(data_Mexico_2$access_poor),
-             sum(data_Mexico_2$access_affected),
-             sum(data_Mexico_2$poor_affected_access), euler.d = TRUE, scaled = TRUE,
-             category = c("Most affected", "Poor", "Access to transfers"))
-
-ggVennDiagram((data_Mexico_1$poorest_20_percent, data_Mexico_1$access_to_transfers, data_Mexico_1$most_affected))
-
-# 4.3.2 Brazil ####
-
-barrier_0 <- wtd.quantile(data_Brazil$burden_CO2_national, probs = 0.8, weights = data_Brazil$hh_weights)
-
-data_Brazil <- data_joint_0 %>%
-  filter(Country == "Brazil")%>%
-  mutate(poorest_20_percent  = ifelse(Income_Group_5 == 1,1,0),
-         access_to_transfers = ifelse(!is.na(inc_gov_cash) & (inc_gov_cash > 0 | inc_gov_monetary > 0),1,0),
-         most_affected       = ifelse(burden_CO2_national>barrier_0,1,0))%>%
-  filter(poorest_20_percent == 1 | most_affected == 1 | access_to_transfers == 1)
-
-data_Brazil_1 <- select(data_Brazil, poorest_20_percent, most_affected, access_to_transfers)
-weigths_Brazil <- data_Brazil$hh_weights
-data_Brazil_2 <- data_Brazil_1 %>%
-  mutate(access_poor     = ifelse(poorest_20_percent == 1 & access_to_transfers == 1,1,0),
-         access_affected = ifelse(most_affected == 1      & access_to_transfers == 1,1,0),
-         poor_affected   = ifelse(most_affected == 1      & poorest_20_percent == 1,1,0),
-         poor_affected_access = ifelse(most_affected == 1 & poorest_20_percent == 1 & access_to_transfers == 1,1,0))
-data_Brazil_2.1 <- select(data_Brazil, access_to_transfers, poorest_20_percent, most_affected, hh_weights) %>%
-  #mutate("Most Affected"       = ifelse(most_affected == 1 & access_to_transfers == 0 & poorest_20_percent == 0, hh_weights,0),
-  #       "The Poorest"         = ifelse(most_affected == 0 & access_to_transfers == 0 & poorest_20_percent == 1, hh_weights,0),
-  #       "Access to Transfers" = ifelse(most_affected == 0 & access_to_transfers == 1 & poorest_20_percent == 0, hh_weights,0),
-  #       
-  #       "Most Affected&The Poorest"         = ifelse(most_affected == 1 & access_to_transfers == 0 & poorest_20_percent == 1, hh_weights,0),
-  #       "Most Affected&Access to Transfers" = ifelse(most_affected == 1 & access_to_transfers == 1 & poorest_20_percent == 0, hh_weights,0),
-  #       "The Poorest&Access to Transfers"   = ifelse(most_affected == 0 & access_to_transfers == 1 & poorest_20_percent == 1, hh_weights,0),
-  #       
-  #       "Most Affected&The Poorest&Access to Transfers" = ifelse(most_affected == 1 & access_to_transfers == 1 & poorest_20_percent == 1, hh_weights,0))%>%
-  mutate(A = ifelse(most_affected == 1 & access_to_transfers == 0 & poorest_20_percent == 0, hh_weights,0),
-         B = ifelse(most_affected == 0 & access_to_transfers == 0 & poorest_20_percent == 1, hh_weights,0),
-         C = ifelse(most_affected == 0 & access_to_transfers == 1 & poorest_20_percent == 0, hh_weights,0),
-         
-         D = ifelse(most_affected == 1 & access_to_transfers == 0 & poorest_20_percent == 1, hh_weights,0),
-         E = ifelse(most_affected == 1 & access_to_transfers == 1 & poorest_20_percent == 0, hh_weights,0),
-         G = ifelse(most_affected == 0 & access_to_transfers == 1 & poorest_20_percent == 1, hh_weights,0),
-         
-         H = ifelse(most_affected == 1 & access_to_transfers == 1 & poorest_20_percent == 1, hh_weights,0))%>%
-  summarise("Most Affected"       = sum(A),
-            "The Poorest"         = sum(B),
-            "Access to Transfers" = sum(C),
-            "Most Affected&The Poorest"         = sum(D),
-            "Most Affected&Access to Transfers" = sum(E),
-            "The Poorest&Access to Transfers"   = sum(G),
-            "Most Affected&The Poorest&Access to Transfers" = sum(H))
-
-#data_Brazil_3.1 <- c("Most Affected" = 7193562,
-#                     "The Poorest"   = 4874763,
-#                     "Access to Transfers" = 12089309,
-#                     "Most Affected&The Poorest" = 2664433,
-#                     "Most Affected&Access to Transfers" = 1916138,
-#                     "The Poorest&Access to Transfers"   = 4229206,
-#                     "The Poorest&Access to Transfers&Most Affected" = 1994806)
-
-P.4.3 <- plot(euler(data_Brazil_3.1, shape = "ellipse"), quantities = TRUE, fill = c("#BC3C29FF", "#FFDC91FF", "#6F99ADFF"),
-              main = "Typology of Brazilian Households")
-
-jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figure_4_Euler_Diagrams/Figure_4_Brazil.jpg", width = 15.5, height = 12, unit = "cm", res = 400)
-print(P.4.3)
-dev.off()
-
-# 4.X Summary Statistics
-
-data_4.X <- data_joint_0 %>%
-  mutate(population = hh_size*hh_weights)%>%
-  group_by(Country)%>%
-  summarise(number = n(),
-            population = sum(population))%>%
-  ungroup()
-
-t <- read_dta("../0_Data/1_Household Data/3_Chile/1_Data_Clean/LAC_Clean/CHL_EPF_2016-2017.dta")
-
-# 4.3.3 Joint ####
-
-data_4.3.3.1 <- data_joint_0 %>%
-  group_by(Country)%>%
-  mutate(barrier_0 = wtd.quantile(burden_CO2_national, probs = 0.8, weights = hh_weights))%>%
-  ungroup()%>%
-  mutate(poorest_20_percent  = ifelse(Income_Group_5 == 1,1,0),
-         access_to_transfers = ifelse((!is.na(inc_gov_cash)|!is.na(inc_gov_monetary))&(inc_gov_cash > 0 | inc_gov_monetary > 0),1,0),
-         most_affected       = ifelse(burden_CO2_national > barrier_0,1,0))%>%
-  filter(poorest_20_percent == 1 | most_affected == 1 | access_to_transfers == 1)
-
-data_4.3.3.2 <- data_4.3.3.1 %>%
-  select(Country, access_to_transfers, poorest_20_percent, most_affected, hh_weights) %>%
-  mutate(A = ifelse(most_affected == 1 & access_to_transfers == 0 & poorest_20_percent == 0, hh_weights,0),
-         B = ifelse(most_affected == 0 & access_to_transfers == 0 & poorest_20_percent == 1, hh_weights,0),
-         C = ifelse(most_affected == 0 & access_to_transfers == 1 & poorest_20_percent == 0, hh_weights,0),
-         
-         D = ifelse(most_affected == 1 & access_to_transfers == 0 & poorest_20_percent == 1, hh_weights,0),
-         E = ifelse(most_affected == 1 & access_to_transfers == 1 & poorest_20_percent == 0, hh_weights,0),
-         G = ifelse(most_affected == 0 & access_to_transfers == 1 & poorest_20_percent == 1, hh_weights,0),
-         
-         H = ifelse(most_affected == 1 & access_to_transfers == 1 & poorest_20_percent == 1, hh_weights,0))%>%
-  group_by(Country)%>%
-  summarise("Most Affected"       = sum(A),
-            "The Poorest"         = sum(B),
-            "Access to Transfers" = sum(C),
-            "Most Affected&The Poorest"         = sum(D),
-            "Most Affected&Access to Transfers" = sum(E),
-            "The Poorest&Access to Transfers"   = sum(G),
-            "Most Affected&The Poorest&Access to Transfers" = sum(H))%>%
-  ungroup()
-
-create_venn_diagram <- function(Country.0){
-  data_4.3.3.3 <- data_4.3.3.2 %>%
-    filter(Country == Country.0)
-  data_4.3.3.4 <- c(
-    "Most Affected"                                 = data_4.3.3.3$'Most Affected',
-    "The Poorest"                                   = data_4.3.3.3$'The Poorest',
-    "Access to Transfers"                           = data_4.3.3.3$'Access to Transfers',
-    "Most Affected&The Poorest"                     = data_4.3.3.3$'Most Affected&The Poorest',
-    "Most Affected&Access to Transfers"             = data_4.3.3.3$'Most Affected&Access to Transfers',
-    "The Poorest&Access to Transfers"               = data_4.3.3.3$'The Poorest&Access to Transfers',
-    "The Poorest&Access to Transfers&Most Affected" = data_4.3.3.3$'Most Affected&The Poorest&Access to Transfers'
-  )
-  
-  P.venn <- plot(euler(data_4.3.3.4, shape = "ellipse"), labels = FALSE,
-                 quantities = list(type = "percent", fontsize = 7), fills = list(fill = c("#BC3C29FF", "#FFDC91FF", "#6F99ADFF"), alpha = 0.8),
-                 main = list(label = Country.0, fontsize = 7),
-                 #legend = list(side = "bottom", nrow = 1, ncol = 3)
-                 )
-
-  data_4.3.3.5 <- data_joint_0 %>%
-    filter(Country == Country.0)
-  
-  pop <- sum(data_4.3.3.5$hh_weights)
-  
-  data_4.3.3.6 <- rownames_to_column(as.data.frame(data_4.3.3.4))%>%
-    rename(Type = rowname, value = data_4.3.3.4)%>%
-    mutate(total = pop)%>%
-    mutate(percent = round(value/total,2))%>%
-    mutate(label = paste0(percent*100, "%"))
-    
-P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.1$children$tag.quantity.1$label <- data_4.3.3.6$label[data_4.3.3.6$Type == "Most Affected"]
-P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.2$children$tag.quantity.2$label <- data_4.3.3.6$label[data_4.3.3.6$Type == "The Poorest"]
-P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.3$children$tag.quantity.3$label <- data_4.3.3.6$label[data_4.3.3.6$Type == "Access to Transfers"]
-P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.4$children$tag.quantity.4$label <- data_4.3.3.6$label[data_4.3.3.6$Type == "Most Affected&The Poorest"]
-P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.5$children$tag.quantity.5$label <- data_4.3.3.6$label[data_4.3.3.6$Type == "Most Affected&Access to Transfers"]
-P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.6$children$tag.quantity.6$label <- data_4.3.3.6$label[data_4.3.3.6$Type == "The Poorest&Access to Transfers"]
-P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.7$children$tag.quantity.7$label <- data_4.3.3.6$label[data_4.3.3.6$Type == "The Poorest&Access to Transfers&Most Affected"]
-
-return(P.venn)
-  
-}
-
-P.List <- list()
-
-for(Country in c("Argentina", "Barbados", "Brazil", "Bolivia", "Chile",
-                 "Colombia", "Costa Rica", "Dominican Republic", "Ecuador", "El Salvador",
-                 "Guatemala", "Mexico", "Nicaragua", "Paraguay", "Peru", "Uruguay")){
-  P.V <- create_venn_diagram(Country)
-  P.List[[Country]] <- P.V
-}
-
-data.0 <- data.frame(A = c("20% most affected", "Access to transfers", "Poorest 20%"),
-                     B = c(1,2,3),
-                     C = c(1,2,3))
-data.0$A <- factor(data.0$A, levels = c("20% most affected", "Poorest 20%", "Access to transfers"))
-
-Legend <- ggplot(data.0, aes(x = B, y = C, fill = A))+
-  geom_point(shape = 21, alpha = 0.8, size = 2)+
-  scale_fill_manual(values = c("#BC3C29FF", "#FFDC91FF", "#6F99ADFF"))+
-  guides(fill = guide_legend(nrow = 1))+
-  theme_bw()+
-  labs(fill = "")
-
-Legend.2 <- ggdraw(get_legend(Legend))
-
-P.V <- ggarrange(P.List$Argentina, P.List$Barbados, P.List$Brazil, P.List$Bolivia, P.List$Chile,
-                 P.List$Colombia, P.List$`Costa Rica`, P.List$`Dominican Republic`, P.List$Ecuador, P.List$`El Salvador`,
-                 P.List$Guatemala, P.List$Mexico, P.List$Nicaragua, P.List$Paraguay, P.List$Peru, P.List$Uruguay, ncol = 4, nrow = 4)
-
-
-jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figure_4_Euler_Diagrams/Figure_4_joint_1.jpg", width = 15.5, height = 15.5, unit = "cm", res = 400)
-print(P.V)
-dev.off()
-
-jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figure_4_Euler_Diagrams/Legend_Figure_4_joint_1.jpg", width = 15.5, height = 1, unit = "cm", res = 400)
-print(Legend.2)
-dev.off()
-
-
-# 4.3.4 Tables ####
-
-data_4.3.4.0 <- data_joint_0 %>%
-  group_by(Country)%>%
-  mutate(barrier_0 = wtd.quantile(burden_CO2_national, probs = 0.8, weights = hh_weights))%>%
-  ungroup()%>%
-  mutate(poorest_20_percent  = ifelse(Income_Group_5 == 1,1,0),
-         access_to_transfers = ifelse((!is.na(inc_gov_cash)|!is.na(inc_gov_monetary))&(inc_gov_cash > 0 | inc_gov_monetary > 0),1,0),
-         most_affected       = ifelse(burden_CO2_national > barrier_0,1,0))
-
-data_4.3.4.1 <- data_4.3.4.0 %>%
-  group_by(Country)%>%
-  summarise(total_hh = sum(hh_weights))%>%
-  ungroup()
-
-# How many households have access to transfers, overall?
-
-data_4.3.4.2 <- data_4.3.4.0 %>%
-  filter(access_to_transfers == 1)%>%
-  group_by(Country)%>%
-  summarise(access_to_transfers = sum(hh_weights))%>%
-  ungroup()
-
-data_4.3.4.3 <- data_4.3.4.2 %>%
-  left_join(data_4.3.4.1)%>%
-  mutate(share_access = access_to_transfers/total_hh)
-
-# How many of the most affected 20 percent are poor?
-# How many of the most affected 20 percent have access to transfers?
-
-data_4.3.4.4 <- data_4.3.4.0 %>%
-  filter(most_affected == 1)%>%
-  mutate(poor_no_access = ifelse(poorest_20_percent == 1 & access_to_transfers == 0,1,0))%>%
-  group_by(Country)%>%
-  summarise(most_affected       = sum(hh_weights),
-            poorest_20_percent  = sum(hh_weights[poorest_20_percent == 1]),
-            access_to_transfers = sum(hh_weights[access_to_transfers == 1]),
-            poor_no_access      = sum(hh_weights[poor_no_access == 1]))%>%
-  ungroup()%>%
-  mutate(poorest_20_percent_1  = poorest_20_percent/most_affected,
-         access_to_transfers_1 = access_to_transfers/most_affected,
-         poor_no_access_1      = poor_no_access/most_affected)
-
-# Final Table for Paper
-
-data_4.3.4.5 <- data_4.3.4.3 %>%
-  select(Country, share_access)%>%
-  left_join(select(data_4.3.4.4, Country,poorest_20_percent_1, access_to_transfers_1, poor_no_access_1), by = "Country")%>%
-  mutate_at(vars(-Country), list(~ paste0(round(., 3)*100, "%")))
-
-colnames(data_4.3.4.5) <- c("Country", 
-                            #"\\rotatebox{90}{Households with access to transfer programs}",
-                            #"\\rotatebox{90}{...are poorer than 80\\% of the population?}",
-                            #"\\rotatebox{90}{...have access to governmental transfer programs?}",
-                            #"\\rotatebox{90}{...are poorer than 80\\% of the population and have no access to governmental transfer programs?}"
-                            "Households with access to transfer programs",
-                            "...are poorer than 80 % of  the population?",
-                            "...have access to governmental transfer programs?",
-                            "...are poorer than 80 % of the population and have no access to governmental transfer programs?"
-)
-
-kbl(data_4.3.4.5, format = "latex", caption = "Summary Statistics on Access to Transfer Programmes", label = "tab:transfer",
-    booktabs = T, linesep = "", align = "lcccc")%>%
-
-  kable_styling(position = "center", latex_options = c("HOLD_position", "scale_down"))%>%
-  column_spec(1, width = "4 cm", border_right = T)%>%
-  column_spec(2, width = "3 cm", border_right = T)%>%
-  column_spec(3:5, width = "3 cm")%>%
-  add_header_above(c(" " = 2, "Of the most affected 20\\\\% of households, how many..." = 3), escape = FALSE)%>%
-  footnote(general = "This table reports shares of total population and shares of the 20% of population with highest carbon pricing incidence adhering to different criteria for 16 countries in Latin America and the Caribbean.", threeparttable = T)%>%
-  save_kable(., "../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/6_App/Latin-America-Paper/Tables/Table_A8/Table_A8.tex")
-
-#write.xlsx(data_4.3.4.5, "../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/2_Tables/Table_Summary_Stats_2/Transfers_Stats.xlsx")
-
-# 5     Joint Analyses ####
-# 5.1   Vertical vs. horizontal effects ####
-
-data_5.1 <- data_joint_0 %>%
+data_3.1 <- data_joint_0 %>%
   group_by(Country, Income_Group_5)%>%
   summarise(median_burden_CO2_national = wtd.quantile(burden_CO2_national, probs = 0.5, weights = hh_weights),
             q95_burden_CO2_national    = wtd.quantile(burden_CO2_national, probs = 0.95, weights = hh_weights),
@@ -854,15 +255,13 @@ data_5.1 <- data_joint_0 %>%
 
 # Table Output
 
-data_5.1.1 <- data_5.1 %>%
+data_3.1.1 <- data_3.1 %>%
   mutate_at(vars(median_burden_CO2_national_1:dif_q80_q20_burden_CO2_national_5), list(~ label_percent(accuracy = 0.01)(.)))%>%
   mutate_at(vars(median_1_5:dif_80_20_1_5), list(~ round(.,2)))
 
-colnames(data_5.1.1) <- c("Country", "$\\overline{AC}_{r}^{1}$", "MAC5", "H1", "H5", "H1A", "H5A", "MAC 1/5", "H 1/5", "H 1/5 A")
+colnames(data_3.1.1) <- c("Country", "$\\overline{AC}_{r}^{1}$", "MAC5", "H1", "H5", "H1A", "H5A", "MAC 1/5", "H 1/5", "H 1/5 A")
 
-write.xlsx(data_5.1.1, "../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/2_Tables/Table_5_Horizontal_vs_Vertical_Effects/Table_5.xlsx")
-
-kbl(data_5.1.1, format = "latex", caption = "Comparing Median Additional Costs (AC) and Horizontal Spread between first and fifth Expenditure Quintile", 
+kbl(data_3.1.1, format = "latex", caption = "Comparing Median Additional Costs (AC) and Horizontal Spread between first and fifth Expenditure Quintile", 
     booktabs = F, align = "l|cc|cccc|ccc", vline = "", linesep = "",
     col.names = NULL)%>%
   kable_styling(position = "center", latex_options = c("HOLD_position", "scale_down"))%>%
@@ -950,7 +349,7 @@ poly_4 <- data.frame(text = c("Horizontal Differences > Vertical Differences",
                      x = c(2,1),
                      y = c(0.5,2.5))
 
-data_5.1.2 <- data_5.1 %>%
+data_3.1.2 <- data_3.1 %>%
   mutate(Country_Code = ifelse(Country == "Argentina", "ARG",
                                ifelse(Country == "Barbados", "BRB",
                                       ifelse(Country == "Bolivia", "BOL",
@@ -968,15 +367,15 @@ data_5.1.2 <- data_5.1 %>%
                                                                                                                           ifelse(Country == "Peru", "PER",
                                                                                                                                  ifelse(Country == "Uruguay", "URY", "Fail")))))))))))))))))
 
-P.5.1 <- ggplot()+
+P.3.1 <- ggplot()+
   #geom_polygon(data = poly, aes(x = y, y = x, group = g), colour = "black", alpha = 0.5, fill = NA)+
   geom_polygon(data = poly_3, aes(x = x, y = y, group = g), colour = "black", fill = NA)+
   geom_polygon(data = poly_2, aes(x = x, y = y, group = g, fill = label), alpha = 0.5)+
   geom_text(data = poly_4, aes(label = text, x = x, y = y))+
   #geom_text(data = poly, aes(x = z_4, y = z_3, group = g, label = label))+
   theme_bw()+
-  geom_point(data = data_5.1.2, aes(y = median_1_5, x = dif_95_05_1_5), shape = 17, colour = "black", size = 2)+
-  geom_text_repel(data = data_5.1.2, aes(label = Country_Code, y = median_1_5, x = dif_95_05_1_5),
+  geom_point(data = data_3.1.2, aes(y = median_1_5, x = dif_95_05_1_5), shape = 17, colour = "black", size = 2)+
+  geom_text_repel(data = data_3.1.2, aes(label = Country_Code, y = median_1_5, x = dif_95_05_1_5),
                   direction = "x", size = 2.5)+
   coord_cartesian(xlim = c(0,3.2), ylim = c(0,3.2))+
   #geom_abline(intercept = 0, slope = 1)+
@@ -1003,36 +402,113 @@ P.5.1 <- ggplot()+
         plot.margin = unit(c(0.1,0.1,0,0), "cm"),
         panel.border = element_rect(size = 0.3))
 
-jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figure_5_Vertical_vs_Horizontal/Figure_5.jpg", width = 14, height = 15, unit = "cm", res = 400)
-print(P.5.1)
+jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figure_2.jpg", width = 14, height = 15, unit = "cm", res = 400)
+print(P.3.1)
 dev.off()
 
-# 5.2   Correlation with Expenditure Shares ####
+# 3.2   Robustness Check on Indicator for Horizontal Effects ####
 
-data_5.2 <- data.frame()
+data_3.2 <- data.frame()
+
+for (i in seq(0.01, 1,0.01)){
+  
+  lower_0 <- 0.5 - i/2
+  upper_0 <- 0.5 + i/2
+  
+  data_3.2.1 <- data_joint_0 %>%
+    filter(Income_Group_5 == 1 | Income_Group_5 == 5)%>%
+    group_by(Country, Income_Group_5)%>%
+    summarise(q_lower = wtd.quantile(burden_CO2_national, probs = lower_0, weights = hh_weights),
+              q_upper = wtd.quantile(burden_CO2_national, probs = upper_0, weights = hh_weights))%>%
+    ungroup()%>%
+    mutate(dif = q_upper - q_lower)%>%
+    select(Country, Income_Group_5, dif)%>%
+    pivot_wider(names_from = Income_Group_5, values_from = dif, names_prefix = "dif_")%>%
+    mutate(H1 = dif_1/dif_5)%>%
+    mutate(span = i,
+           lower = lower_0,
+           upper = upper_0)
+  
+  data_3.2 <- data_3.2 %>%
+    bind_rows(data_3.2.1)
+}
+
+data_3.2.2 <- data_joint_0 %>%
+  filter(Income_Group_5 == 1 | Income_Group_5 == 5)%>%
+  group_by(Country, Income_Group_5)%>%
+  summarise(median = wtd.quantile(burden_CO2_national, probs = 0.5, weights = hh_weights))%>%
+  ungroup()%>%
+  pivot_wider(names_from = "Income_Group_5", values_from = median, names_prefix = "median_")%>%
+  mutate(AC1 = median_1/median_5)%>%
+  select(Country, AC1)
+
+data_3.2.3 <- data_3.2 %>%
+  bind_rows(expand_grid(Country = distinct(data_3.2.2, Country)$Country, span = c(-0.1,1.1)))%>%
+  left_join(data_3.2.2)%>%
+  arrange(Country)%>%
+  mutate(interest = ifelse(span == 0.9,"90%",""))
+
+P_3.2 <- ggplot(data = data_3.2.3)+
+  facet_wrap(. ~ Country)+
+  geom_hline(yintercept = 1)+
+  geom_vline(xintercept = 0.9, colour = "#4DBBD5FF")+
+  geom_line(aes(x = span, y = AC1), colour = "#00A087FF")+
+  geom_line(aes(x = span, y = H1), size = 0.01)+
+  geom_point(aes(x = span, y = H1, fill = factor(interest), size = factor(interest)), shape = 21, stroke = 0.2, size = 0.4)+
+  theme_bw()+
+  ylab(bquote('Measure of Horizontal Inequality ' ~hat(H)[r]^1~ ''))+
+  scale_colour_npg()+
+  scale_size_manual(values = c(0.3,0.5))+
+  xlab("Percentage covered to compute horizontal spread")+
+  scale_x_continuous(labels = scales::percent_format(), expand = c(0,0), breaks = c(0,0.5,0.9))+
+  coord_cartesian(xlim = c(0,1), ylim = c(0,4))+
+  guides(fill = "none", size = "none", colour = "none")+
+  theme(axis.text.y = element_text(size = 7), 
+        axis.text.x = element_text(size = 7),
+        axis.title  = element_text(size = 7),
+        plot.title  = element_text(size = 7),
+        legend.position = "bottom",
+        strip.text = element_text(size = 7),
+        #strip.text.y = element_text(angle = 180),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.ticks = element_line(size = 0.2),
+        legend.text = element_text(size = 7),
+        legend.title = element_text(size = 7),
+        plot.margin = unit(c(0.1,0.1,0,0), "cm"),
+        panel.border = element_rect(size = 0.3))
+
+jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figure_2_Appendix.jpg", width = 14, height = 15, unit = "cm", res = 400)
+print(P_3.2)
+dev.off()
+
+# 4     Correlation Analyses ####
+# 4.1   Correlation with Expenditure Shares ####
+
+data_4.1 <- data.frame()
 
 for(i in c("Argentina", "Barbados", "Bolivia", "Brazil" ,
            "Chile", "Colombia", "Costa Rica", "Dominican Republic", "Ecuador",
            "El Salvador", "Guatemala", "Mexico", "Nicaragua","Paraguay","Peru", "Uruguay")){
-  data_5.2.1 <- data_joint_0 %>%
+  data_4.1.1 <- data_joint_0 %>%
     filter(Country == i)
   
-  cor_1 <- cor(data_5.2.1$share_energy,   data_5.2.1$burden_CO2_national, method = "pearson")
-  cor_2 <- cor(data_5.2.1$share_goods,    data_5.2.1$burden_CO2_national, method = "pearson")
-  cor_3 <- cor(data_5.2.1$share_services, data_5.2.1$burden_CO2_national, method = "pearson")
-  cor_4 <- cor(data_5.2.1$share_food,     data_5.2.1$burden_CO2_national, method = "pearson")
+  cor_1 <- cor(data_4.1.1$share_energy,   data_4.1.1$burden_CO2_national, method = "pearson")
+  cor_2 <- cor(data_4.1.1$share_goods,    data_4.1.1$burden_CO2_national, method = "pearson")
+  cor_3 <- cor(data_4.1.1$share_services, data_4.1.1$burden_CO2_national, method = "pearson")
+  cor_4 <- cor(data_4.1.1$share_food,     data_4.1.1$burden_CO2_national, method = "pearson")
   
-  data_5.2.2 <- data.frame(Country = rep(i,4), Category= c("Energy", "Goods", "Services", "Food"), Correlation = c(cor_1, cor_2, cor_3, cor_4), Help = c(1,1,1,1))
-  data_5.2 <- bind_rows(data_5.2, data_5.2.2)
+  data_4.1.2 <- data.frame(Country = rep(i,4), Category= c("Energy", "Goods", "Services", "Food"), Correlation = c(cor_1, cor_2, cor_3, cor_4), Help = c(1,1,1,1))
+  data_4.1 <- bind_rows(data_4.1, data_4.1.2)
   
 }  
 
-data_5.2.1 <- data_5.2 %>%
+data_4.1.3 <- data_4.1 %>%
   mutate(Correlation = round(Correlation,2))%>%
   pivot_wider(names_from = "Category", values_from = "Correlation")%>%
   select(-Help)
 
-kbl(mutate_all(data_5.2.1, linebreak), format = "latex", caption = "Correlation Coefficients for Carbon Pricing Incidence and Expenditure Shares on different Consumption Categories", 
+kbl(mutate_all(data_4.1.3, linebreak), format = "latex", caption = "Correlation Coefficients for Carbon Pricing Incidence and Expenditure Shares on different Consumption Categories", 
     booktabs = T, align = "l|cccc", format.args = list(big.mark = ",", scientific = FALSE), linesep = "", vline = "")%>%
   kable_styling(position = "center", latex_options = c("HOLD_position", "scale_down"))%>%
   column_spec(1, width = "3.5 cm")%>%
@@ -1040,9 +516,7 @@ kbl(mutate_all(data_5.2.1, linebreak), format = "latex", caption = "Correlation 
   footnote(general = "This table displays correlation coefficients for carbon pricing incidence and expenditure shares on different consumption categories.", threeparttable = T)%>%
   save_kable(., "../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/6_App/Latin-America-Paper/Tables/Table_A5/Table_A5.tex")
 
-write.xlsx(data_5.2.1, "../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/2_Tables/Correlation_Consumption.xlsx")
-
-P.5.2 <- ggplot(data_5.2, aes(x = Correlation, group = Country))+
+P.4.1 <- ggplot(data_4.1, aes(x = Correlation, group = Country))+
   geom_vline(aes(xintercept = 0))+
   facet_wrap(Category ~ ., strip.position = "left", nrow = 4)+
   theme_bw()+
@@ -1073,47 +547,47 @@ P.5.2 <- ggplot(data_5.2, aes(x = Correlation, group = Country))+
         panel.border = element_rect(size = 0.3))+
   ggtitle("A)")
 
-jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figure_6_Correlation_Coefficients/Figure_6.jpg", width = 15.5, height = 15, unit = "cm", res = 400)
-print(P.5.2)
+jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figure_3A.jpg", width = 15.5, height = 15, unit = "cm", res = 400)
+print(P.4.1)
 dev.off()
 
-# 5.3   Correlation with Energy Expenditure Shares ####
+# 4.2   Correlation with Energy Expenditure Shares ####
 
-data_5.3 <- data.frame()
+data_4.2 <- data.frame()
 
 for(i in c("Argentina", "Barbados", "Bolivia", "Brazil" ,
-    "Chile", "Colombia", "Costa Rica", "Dominican Republic", "Ecuador",
-    "El Salvador", "Guatemala", "Mexico", "Nicaragua","Paraguay","Peru", "Uruguay")){
-  data_5.3.1 <- data_joint_0 %>%
+           "Chile", "Colombia", "Costa Rica", "Dominican Republic", "Ecuador",
+           "El Salvador", "Guatemala", "Mexico", "Nicaragua","Paraguay","Peru", "Uruguay")){
+  data_4.2.1 <- data_joint_0 %>%
     filter(Country == i)%>%
     mutate_at(vars(starts_with("exp_USD_")), list(~ ./hh_expenditures_USD_2014))%>%
     rename_at(vars(starts_with("exp_USD_")), list(~ str_replace(., "exp_USD_", "share_E_")))
   
-  cor_1 <- cor(data_5.3.1$share_E_Electricity, data_5.3.1$burden_CO2_national, method = "pearson")
-  cor_2 <- cor(data_5.3.1$share_E_Kerosene,    data_5.3.1$burden_CO2_national, method = "pearson")
-  cor_3 <- cor(data_5.3.1$share_E_LPG,         data_5.3.1$burden_CO2_national, method = "pearson")
-  cor_4 <- cor(data_5.3.1$share_E_Biomass,     data_5.3.1$burden_CO2_national, method = "pearson")
-  cor_5 <- cor(data_5.3.1$share_E_Firewood,    data_5.3.1$burden_CO2_national, method = "pearson")
-  cor_6 <- cor(data_5.3.1$share_E_Gas,         data_5.3.1$burden_CO2_national, method = "pearson")
-  cor_7 <- cor(data_5.3.1$share_E_Petrol,      data_5.3.1$burden_CO2_national, method = "pearson")
-  cor_8 <- cor(data_5.3.1$share_E_Diesel,      data_5.3.1$burden_CO2_national, method = "pearson")
+  cor_1 <- cor(data_4.2.1$share_E_Electricity, data_4.2.1$burden_CO2_national, method = "pearson")
+  cor_2 <- cor(data_4.2.1$share_E_Kerosene,    data_4.2.1$burden_CO2_national, method = "pearson")
+  cor_3 <- cor(data_4.2.1$share_E_LPG,         data_4.2.1$burden_CO2_national, method = "pearson")
+  cor_4 <- cor(data_4.2.1$share_E_Biomass,     data_4.2.1$burden_CO2_national, method = "pearson")
+  cor_5 <- cor(data_4.2.1$share_E_Firewood,    data_4.2.1$burden_CO2_national, method = "pearson")
+  cor_6 <- cor(data_4.2.1$share_E_Gas,         data_4.2.1$burden_CO2_national, method = "pearson")
+  cor_7 <- cor(data_4.2.1$share_E_Petrol,      data_4.2.1$burden_CO2_national, method = "pearson")
+  cor_8 <- cor(data_4.2.1$share_E_Diesel,      data_4.2.1$burden_CO2_national, method = "pearson")
   
-  data_5.3.2 <- data.frame(Country = rep(i,8), Category = c("Electricity", "Kerosene", "LPG", "Biomass",
+  data_4.2.2 <- data.frame(Country = rep(i,8), Category = c("Electricity", "Kerosene", "LPG", "Biomass",
                                                             "Firewood", "Gas", "Petrol", "Diesel"),
                            Correlation = c(cor_1, cor_2, cor_3, cor_4,
                                            cor_5, cor_6, cor_7, cor_8),
                            Help = c(rep(1,8)))
-  data_5.3 <- bind_rows(data_5.3, data_5.3.2)
+  data_4.2 <- bind_rows(data_4.2, data_4.2.2)
   
 }  
 
-data_5.3.1 <- data_5.3 %>%
+data_4.2.3 <- data_4.2 %>%
   mutate(Correlation = round(Correlation,2))%>%
   pivot_wider(names_from = "Category", values_from = "Correlation", values_fill = NA)%>%
   select(-Help)%>%
   mutate_all(~ ifelse(is.na(.),"",.))
 
-kbl(mutate_all(data_5.3.1, linebreak), format = "latex", caption = "Correlation Coefficients for Carbon Pricing Incidence and Expenditure Shares on different Energy Consumption Categories", 
+kbl(mutate_all(data_4.2.3, linebreak), format = "latex", caption = "Correlation Coefficients for Carbon Pricing Incidence and Expenditure Shares on different Energy Consumption Categories", 
     booktabs = T, align = "l|cccccccc", format.args = list(big.mark = ",", scientific = FALSE), linesep = "", vline = "")%>%
   kable_styling(position = "center", latex_options = c("HOLD_position", "scale_down"))%>%
   column_spec(1, width = "3.5 cm")%>%
@@ -1121,11 +595,7 @@ kbl(mutate_all(data_5.3.1, linebreak), format = "latex", caption = "Correlation 
   footnote(general = "This table displays correlation coefficients for carbon pricing incidence and expenditure shares on different energy items.", threeparttable = T)%>%
   save_kable(., "../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/6_App/Latin-America-Paper/Tables/Table_A6/Table_A6.tex")
 
-
-write.xlsx(data_5.3.1, "../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/2_Tables/Table_Correlation_Coefficients/Correlation_Energy.xlsx")
-
-
-P.5.3 <- ggplot(data_5.3, aes(x = Correlation, group = Country))+
+P.4.2 <- ggplot(data_4.2, aes(x = Correlation, group = Country))+
   geom_vline(aes(xintercept = 0))+
   facet_wrap(Category ~ ., strip.position = "left", nrow = 4)+
   theme_bw()+
@@ -1156,217 +626,30 @@ P.5.3 <- ggplot(data_5.3, aes(x = Correlation, group = Country))+
         panel.border = element_rect(size = 0.3))+
   ggtitle("B)")
 
-jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figure_7_Correlation_Coefficients_Energy/Figure_7_1.jpg", width = 15.5, height = 12, unit = "cm", res = 400)
-print(P.5.3)
+jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figure_3B.jpg", width = 15.5, height = 12, unit = "cm", res = 400)
+print(P.4.2)
 dev.off()
 
-t <- ggarrange(P.5.2, P.5.3, common.legend = TRUE, legend = "bottom")
+P_4 <- ggarrange(P.4.1, P.4.2, common.legend = TRUE, legend = "bottom")
 
-jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figure_7_Correlation_Coefficients_Energy/Figure_7_2.jpg", width = 15.5, height = 12, unit = "cm", res = 400)
-print(t)
+jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figure_3.jpg", width = 15.5, height = 12, unit = "cm", res = 400)
+print(P_4)
 dev.off()
 
+# 5.1   Venn-Diagramm on the Targeted, the Poor, the Affected ####
+# 5.1.1 Joint ####
 
-# 5.4   Robustness Check on Indicator for Horizontal Effects ####
-
-data_5.4 <- data.frame()
-
-for (i in seq(0.01, 1,0.01)){
-  
-  lower_0 <- 0.5 - i/2
-  upper_0 <- 0.5 + i/2
-  
-  data_5.4.1 <- data_joint_0 %>%
-    filter(Income_Group_5 == 1 | Income_Group_5 == 5)%>%
-    group_by(Country, Income_Group_5)%>%
-    summarise(q_lower = wtd.quantile(burden_CO2_national, probs = lower_0, weights = hh_weights),
-              q_upper = wtd.quantile(burden_CO2_national, probs = upper_0, weights = hh_weights))%>%
-    ungroup()%>%
-    mutate(dif = q_upper - q_lower)%>%
-    select(Country, Income_Group_5, dif)%>%
-    pivot_wider(names_from = Income_Group_5, values_from = dif, names_prefix = "dif_")%>%
-    mutate(H1 = dif_1/dif_5)%>%
-    mutate(span = i,
-           lower = lower_0,
-           upper = upper_0)
-  
-  data_5.4 <- data_5.4 %>%
-    bind_rows(data_5.4.1)
-}
-
-data_5.4.2 <- data_joint_0 %>%
-  filter(Income_Group_5 == 1 | Income_Group_5 == 5)%>%
-  group_by(Country, Income_Group_5)%>%
-  summarise(median = wtd.quantile(burden_CO2_national, probs = 0.5, weights = hh_weights))%>%
-  ungroup()%>%
-  pivot_wider(names_from = "Income_Group_5", values_from = median, names_prefix = "median_")%>%
-  mutate(AC1 = median_1/median_5)%>%
-  select(Country, AC1)
-
-data_5.4.3 <- data_5.4 %>%
-  bind_rows(expand_grid(Country = distinct(data_5.4.2, Country)$Country, span = c(-0.1,1.1)))%>%
-  left_join(data_5.4.2)%>%
-  arrange(Country)%>%
-  mutate(interest = ifelse(span == 0.9,"90%",""))
-
-PH1 <- ggplot(data = data_5.4.3)+
-  facet_wrap(. ~ Country)+
-  geom_hline(yintercept = 1)+
-  geom_vline(xintercept = 0.9, colour = "#4DBBD5FF")+
-  geom_line(aes(x = span, y = AC1), colour = "#00A087FF")+
-  geom_line(aes(x = span, y = H1), size = 0.01)+
-  geom_point(aes(x = span, y = H1, fill = factor(interest), size = factor(interest)), shape = 21, stroke = 0.2, size = 0.4)+
-  theme_bw()+
-  ylab(bquote('Measure of Horizontal Inequality ' ~hat(H)[r]^1~ ''))+
-  scale_colour_npg()+
-  scale_size_manual(values = c(0.3,0.5))+
-  xlab("Percentage covered to compute horizontal spread")+
-  scale_x_continuous(labels = scales::percent_format(), expand = c(0,0), breaks = c(0,0.5,0.9))+
-  coord_cartesian(xlim = c(0,1), ylim = c(0,4))+
-  guides(fill = "none", size = "none", colour = "none")+
-  theme(axis.text.y = element_text(size = 7), 
-        axis.text.x = element_text(size = 7),
-        axis.title  = element_text(size = 7),
-        plot.title  = element_text(size = 7),
-        legend.position = "bottom",
-        strip.text = element_text(size = 7),
-        #strip.text.y = element_text(angle = 180),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.ticks = element_line(size = 0.2),
-        legend.text = element_text(size = 7),
-        legend.title = element_text(size = 7),
-        plot.margin = unit(c(0.1,0.1,0,0), "cm"),
-        panel.border = element_rect(size = 0.3))
-
-jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/6_App/Latin-America-Paper/Figures/Figure_A3.jpg", width = 14, height = 15, unit = "cm", res = 400)
-print(PH1)
-dev.off()
-
-# 6     For Presentation Purposes ####
-# 6.1   Figure 2 Boxplot_Flipped ####
-
-Country.Name.6 <- "Brazil"
-
-carbon_pricing_incidence_6 <- read_csv(sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/4_Transformed Data/Carbon_Pricing_Incidence_%s.csv", Country.Name.6))
-
-household_information_6    <- read_csv(sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/4_Transformed Data/household_information_%s_new.csv", Country.Name.6))
-
-carbon_pricing_incidence_6 <- left_join(carbon_pricing_incidence_6, household_information_6)
-
-carbon_pricing_incidence_6.1 <- carbon_pricing_incidence_6 %>%
-  group_by(Income_Group_5)%>%
-  summarise(
-    y5  = wtd.quantile(burden_CO2_national, weights = hh_weights, probs = 0.05),
-    y25 = wtd.quantile(burden_CO2_national, weights = hh_weights, probs = 0.25),
-    y50 = wtd.quantile(burden_CO2_national, weights = hh_weights, probs = 0.5),
-    y75 = wtd.quantile(burden_CO2_national, weights = hh_weights, probs = 0.75),
-    y95 = wtd.quantile(burden_CO2_national, weights = hh_weights, probs = 0.95),
-    mean = wtd.mean(   burden_CO2_national, weights = hh_weights))%>%
-  ungroup()%>%
-  mutate(Status = ifelse(Income_Group_5 == 1 | Income_Group_5 == 5,1,0))
-
-# Default Y-Axis
-ylim0 <- 0.085
-
-P_6.1.1 <- ggplot(carbon_pricing_incidence_6.1, aes(x = factor(Income_Group_5)))+
-  geom_boxplot(aes(ymin = y5, lower = y25, middle = y50, upper = y75, ymax = y95), stat = "identity", position = position_dodge(0.5), outlier.shape = NA, width = 0.5, size = 0.3) +
-  theme_bw()+
-  xlab("Expenditure Quintiles")+ ylab("Carbon Price Incidence")+
-  geom_point(aes(y = mean), shape = 23, size = 1.1, stroke = 0.4, fill = "white")+
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1), expand = c(0,0))+
-  scale_x_discrete(labels = c("1", "2", "3", "4", "5"))+
-  coord_flip(ylim = c(0,0.062))+
-  ggtitle(expression(paste("Incidence of a National Carbon Price (USD 40/t", CO[2], ") in Brazil", sep = "")))+
-  theme(axis.text.y = element_text(size = 8), 
-        axis.text.x = element_text(size = 8),
-        axis.title  = element_text(size = 9),
-        plot.title  = element_text(size = 9),
-        legend.position = "bottom",
-        strip.text = element_text(size = 7),
-        strip.text.y = element_text(angle = 180),
-        panel.grid.major = element_line(size = 0.3),
-        panel.grid.minor = element_blank(),
-        axis.ticks = element_line(size = 0.2),
-        legend.text = element_text(size = 7),
-        legend.title = element_text(size = 7),
-        plot.margin = unit(c(0.3,0.3,0.3,0.3), "cm"),
-        panel.border = element_rect(size = 0.3))
-
-P_6.1.2 <- ggplot(carbon_pricing_incidence_6.1, aes(x = factor(Income_Group_5)))+
-  geom_boxplot(aes(ymin = y5, lower = y25, middle = y50, upper = y75, ymax = y95, fill = factor(Status)), stat = "identity", position = position_dodge(0.5), outlier.shape = NA, width = 0.5, size = 0.3) +
-  theme_bw()+
-  xlab("Expenditure Quintiles")+ ylab("Carbon Price Incidence")+
-  geom_point(aes(y = mean, shape = factor(Status)), size = 1.1, stroke = 0.4, fill = "white")+
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1), expand = c(0,0))+
-  scale_x_discrete(labels = c("1", "2", "3", "4", "5"))+
-  coord_flip(ylim = c(0,0.062))+
-  ggtitle(expression(paste("Incidence of a National Carbon Price (USD 40/t", CO[2], ") in Brazil", sep = "")))+
-  scale_fill_manual(values = c("white", "lightgrey"))+
-  guides(fill = "none", shape = "none")+
-  scale_shape_manual(values = c(23,22))+
-  theme(axis.text.y = element_text(size = 8), 
-        axis.text.x = element_text(size = 8),
-        axis.title  = element_text(size = 9),
-        plot.title  = element_text(size = 9),
-        legend.position = "bottom",
-        strip.text = element_text(size = 7),
-        strip.text.y = element_text(angle = 180),
-        panel.grid.major = element_line(size = 0.3),
-        panel.grid.minor = element_blank(),
-        axis.ticks = element_line(size = 0.2),
-        legend.text = element_text(size = 7),
-        legend.title = element_text(size = 7),
-        plot.margin = unit(c(0.3,0.3,0.3,0.3), "cm"),
-        panel.border = element_rect(size = 0.3))
-
-P_6.1.3 <- ggplot(carbon_pricing_incidence_6.1, aes(x = factor(Income_Group_5)))+
-  geom_boxplot(aes(ymin = y5, lower = y25, middle = y50, upper = y75, ymax = y95, fill = factor(Status), colour = factor(Status), size = factor(Status)), stat = "identity", position = position_dodge(0.5), outlier.shape = NA, width = 0.5, alpha = 0.5) +
-  theme_bw()+
-  xlab("Expenditure Quintiles")+ ylab("Carbon Price Incidence")+
-  geom_point(aes(y = mean, shape = factor(Status), size = factor(Status), colour = factor(Status)), size = 1.1, stroke = 0.4, fill = "white")+
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1), expand = c(0,0))+
-  scale_x_discrete(labels = c("1", "2", "3", "4", "5"))+
-  coord_flip(ylim = c(0,0.062))+
-  ggtitle(expression(paste("Incidence of a National Carbon Price (USD 40/t", CO[2], ") in Brazil", sep = "")))+
-  scale_fill_manual(values = c("white", "lightgrey"))+
-  scale_colour_manual(values = c("black", "#BC3C29FF"))+
-  scale_size_manual(values = c(0.3, 0.7))+
-  guides(fill = "none", shape = "none", colour = "none", size = "none")+
-  scale_shape_manual(values = c(23,22))+
-  theme(axis.text.y = element_text(size = 8), 
-        axis.text.x = element_text(size = 8),
-        axis.title  = element_text(size = 9),
-        plot.title  = element_text(size = 9),
-        legend.position = "bottom",
-        strip.text = element_text(size = 7),
-        strip.text.y = element_text(angle = 180),
-        panel.grid.major = element_line(size = 0.3),
-        panel.grid.minor = element_blank(),
-        axis.ticks = element_line(size = 0.2),
-        legend.text = element_text(size = 7),
-        legend.title = element_text(size = 7),
-        plot.margin = unit(c(0.3,0.3,0.3,0.3), "cm"),
-        panel.border = element_rect(size = 0.3))
-
-
-jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/01_Drafts/0_EAERE_2022/Graphics/Distribution_Brazil_%d.jpg", width = 11, height = 10, unit = "cm", res = 400)
-print(P_6.1.1)
-print(P_6.1.2)
-print(P_6.1.3)
-dev.off()
-
-# 6.2   Figure 4 Venn-Diagramm ####
-
-carbon_pricing_incidence_6.2 <- carbon_pricing_incidence_6 %>%
+data_5.1.1 <- data_joint_0 %>%
+  group_by(Country)%>%
   mutate(barrier_0 = wtd.quantile(burden_CO2_national, probs = 0.8, weights = hh_weights))%>%
+  ungroup()%>%
   mutate(poorest_20_percent  = ifelse(Income_Group_5 == 1,1,0),
          access_to_transfers = ifelse((!is.na(inc_gov_cash)|!is.na(inc_gov_monetary))&(inc_gov_cash > 0 | inc_gov_monetary > 0),1,0),
          most_affected       = ifelse(burden_CO2_national > barrier_0,1,0))%>%
   filter(poorest_20_percent == 1 | most_affected == 1 | access_to_transfers == 1)
 
-carbon_pricing_incidence_6.2.1 <- carbon_pricing_incidence_6.2 %>%
-  select(access_to_transfers, poorest_20_percent, most_affected, hh_weights) %>%
+data_5.1.2 <- data_5.1.1 %>%
+  select(Country, access_to_transfers, poorest_20_percent, most_affected, hh_weights) %>%
   mutate(A = ifelse(most_affected == 1 & access_to_transfers == 0 & poorest_20_percent == 0, hh_weights,0),
          B = ifelse(most_affected == 0 & access_to_transfers == 0 & poorest_20_percent == 1, hh_weights,0),
          C = ifelse(most_affected == 0 & access_to_transfers == 1 & poorest_20_percent == 0, hh_weights,0),
@@ -1376,50 +659,162 @@ carbon_pricing_incidence_6.2.1 <- carbon_pricing_incidence_6.2 %>%
          G = ifelse(most_affected == 0 & access_to_transfers == 1 & poorest_20_percent == 1, hh_weights,0),
          
          H = ifelse(most_affected == 1 & access_to_transfers == 1 & poorest_20_percent == 1, hh_weights,0))%>%
+  group_by(Country)%>%
   summarise("Most Affected"       = sum(A),
             "The Poorest"         = sum(B),
             "Access to Transfers" = sum(C),
             "Most Affected&The Poorest"         = sum(D),
             "Most Affected&Access to Transfers" = sum(E),
             "The Poorest&Access to Transfers"   = sum(G),
-            "Most Affected&The Poorest&Access to Transfers" = sum(H))
+            "Most Affected&The Poorest&Access to Transfers" = sum(H))%>%
+  ungroup()
 
-carbon_pricing_incidence_6.2.2 <- c(
-    "Most Affected"                                 = carbon_pricing_incidence_6.2.1$'Most Affected',
-    "The Poorest"                                   = carbon_pricing_incidence_6.2.1$'The Poorest',
-    "Access to Transfers"                           = carbon_pricing_incidence_6.2.1$'Access to Transfers',
-    "Most Affected&The Poorest"                     = carbon_pricing_incidence_6.2.1$'Most Affected&The Poorest',
-    "Most Affected&Access to Transfers"             = carbon_pricing_incidence_6.2.1$'Most Affected&Access to Transfers',
-    "The Poorest&Access to Transfers"               = carbon_pricing_incidence_6.2.1$'The Poorest&Access to Transfers',
-    "The Poorest&Access to Transfers&Most Affected" = carbon_pricing_incidence_6.2.1$'Most Affected&The Poorest&Access to Transfers'
+create_venn_diagram <- function(Country.0){
+  data_5.1.3 <- data_5.1.2 %>%
+    filter(Country == Country.0)
+  data_5.1.4 <- c(
+    "Most Affected"                                 = data_5.1.3$'Most Affected',
+    "The Poorest"                                   = data_5.1.3$'The Poorest',
+    "Access to Transfers"                           = data_5.1.3$'Access to Transfers',
+    "Most Affected&The Poorest"                     = data_5.1.3$'Most Affected&The Poorest',
+    "Most Affected&Access to Transfers"             = data_5.1.3$'Most Affected&Access to Transfers',
+    "The Poorest&Access to Transfers"               = data_5.1.3$'The Poorest&Access to Transfers',
+    "The Poorest&Access to Transfers&Most Affected" = data_5.1.3$'Most Affected&The Poorest&Access to Transfers'
   )
   
-  P.venn.3 <- plot(euler(carbon_pricing_incidence_6.2.2, shape = "ellipse"), labels = FALSE,
-                 quantities = list(type = "percent", fontsize = 8), fills = list(fill = c("#BC3C29FF", "#FFDC91FF", "#6F99ADFF"), alpha = 0.8),
-                 main = list(label = "Brazil", fontsize = 7),
-                 legend = list(side = "bottom", nrow = 1, ncol = 3, fontsize = 7)
+  P.venn <- plot(euler(data_5.1.4, shape = "ellipse"), labels = FALSE,
+                 quantities = list(type = "percent", fontsize = 7), fills = list(fill = c("#BC3C29FF", "#FFDC91FF", "#6F99ADFF"), alpha = 0.8),
+                 main = list(label = Country.0, fontsize = 7),
+                 #legend = list(side = "bottom", nrow = 1, ncol = 3)
                  )
 
-  carbon_pricing_incidence_6.2.3 <- carbon_pricing_incidence_6 
+  data_5.1.5 <- data_joint_0 %>%
+    filter(Country == Country.0)
   
-  pop <- sum(carbon_pricing_incidence_6.2.3$hh_weights)
+  pop <- sum(data_5.1.5$hh_weights)
   
-  carbon_pricing_incidence_6.2.4 <- rownames_to_column(as.data.frame(carbon_pricing_incidence_6.2.2))%>%
-    rename(Type = rowname, value = carbon_pricing_incidence_6.2.2)%>%
+  data_5.1.6 <- rownames_to_column(as.data.frame(data_5.1.4))%>%
+    rename(Type = rowname, value = data_5.1.4)%>%
     mutate(total = pop)%>%
-    mutate(percent = round(value/total,3))%>%
+    mutate(percent = round(value/total,2))%>%
     mutate(label = paste0(percent*100, "%"))
+    
+P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.1$children$tag.quantity.1$label <- data_5.1.6$label[data_5.1.6$Type == "Most Affected"]
+P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.2$children$tag.quantity.2$label <- data_5.1.6$label[data_5.1.6$Type == "The Poorest"]
+P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.3$children$tag.quantity.3$label <- data_5.1.6$label[data_5.1.6$Type == "Access to Transfers"]
+P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.4$children$tag.quantity.4$label <- data_5.1.6$label[data_5.1.6$Type == "Most Affected&The Poorest"]
+P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.5$children$tag.quantity.5$label <- data_5.1.6$label[data_5.1.6$Type == "Most Affected&Access to Transfers"]
+P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.6$children$tag.quantity.6$label <- data_5.1.6$label[data_5.1.6$Type == "The Poorest&Access to Transfers"]
+P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.7$children$tag.quantity.7$label <- data_5.1.6$label[data_5.1.6$Type == "The Poorest&Access to Transfers&Most Affected"]
+
+return(P.venn)
   
-  P.venn.3$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.1$children$tag.quantity.1$label <- carbon_pricing_incidence_6.2.4$label[carbon_pricing_incidence_6.2.4$Type == "Most Affected"]
-  P.venn.3$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.2$children$tag.quantity.2$label <- carbon_pricing_incidence_6.2.4$label[carbon_pricing_incidence_6.2.4$Type == "The Poorest"]
-  P.venn.3$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.3$children$tag.quantity.3$label <- carbon_pricing_incidence_6.2.4$label[carbon_pricing_incidence_6.2.4$Type == "Access to Transfers"]
-  P.venn.3$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.4$children$tag.quantity.4$label <- carbon_pricing_incidence_6.2.4$label[carbon_pricing_incidence_6.2.4$Type == "Most Affected&The Poorest"]
-  P.venn.3$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.5$children$tag.quantity.5$label <- carbon_pricing_incidence_6.2.4$label[carbon_pricing_incidence_6.2.4$Type == "Most Affected&Access to Transfers"]
-  P.venn.3$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.6$children$tag.quantity.6$label <- carbon_pricing_incidence_6.2.4$label[carbon_pricing_incidence_6.2.4$Type == "The Poorest&Access to Transfers"]
-  P.venn.3$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.7$children$tag.quantity.7$label <- carbon_pricing_incidence_6.2.4$label[carbon_pricing_incidence_6.2.4$Type == "The Poorest&Access to Transfers&Most Affected"]
+}
+
+P.List <- list()
+
+for(Country in c("Argentina", "Barbados", "Brazil", "Bolivia", "Chile",
+                 "Colombia", "Costa Rica", "Dominican Republic", "Ecuador", "El Salvador",
+                 "Guatemala", "Mexico", "Nicaragua", "Paraguay", "Peru", "Uruguay")){
+  P.V <- create_venn_diagram(Country)
+  P.List[[Country]] <- P.V
+}
+
+data.0 <- data.frame(A = c("20% most affected", "Access to transfers", "Poorest 20%"),
+                     B = c(1,2,3),
+                     C = c(1,2,3))
+data.0$A <- factor(data.0$A, levels = c("20% most affected", "Poorest 20%", "Access to transfers"))
+
+Legend <- ggplot(data.0, aes(x = B, y = C, fill = A))+
+  geom_point(shape = 21, alpha = 0.8, size = 2)+
+  scale_fill_manual(values = c("#BC3C29FF", "#FFDC91FF", "#6F99ADFF"))+
+  guides(fill = guide_legend(nrow = 1))+
+  theme_bw()+
+  labs(fill = "")
+
+Legend.2 <- ggdraw(get_legend(Legend))
+
+P.5 <- ggarrange(P.List$Argentina, P.List$Barbados, P.List$Brazil, P.List$Bolivia, P.List$Chile,
+                 P.List$Colombia, P.List$`Costa Rica`, P.List$`Dominican Republic`, P.List$Ecuador, P.List$`El Salvador`,
+                 P.List$Guatemala, P.List$Mexico, P.List$Nicaragua, P.List$Paraguay, P.List$Peru, P.List$Uruguay, ncol = 4, nrow = 4)
 
 
-jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/01_Drafts/0_EAERE_2022/Graphics/Venn_Brazil_%d.jpg", width = 11, height = 10, unit = "cm", res = 400)
-print(P.venn.3)
+jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figure_4.jpg", width = 15.5, height = 15.5, unit = "cm", res = 400)
+print(P.5)
 dev.off()
 
+jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figure_4_Legend.jpg", width = 15.5, height = 1, unit = "cm", res = 400)
+print(Legend.2)
+dev.off()
+
+# 5.1.2 Tables ####
+
+data_5.1.2 <- data_joint_0 %>%
+  group_by(Country)%>%
+  mutate(barrier_0 = wtd.quantile(burden_CO2_national, probs = 0.8, weights = hh_weights))%>%
+  ungroup()%>%
+  mutate(poorest_20_percent  = ifelse(Income_Group_5 == 1,1,0),
+         access_to_transfers = ifelse((!is.na(inc_gov_cash)|!is.na(inc_gov_monetary))&(inc_gov_cash > 0 | inc_gov_monetary > 0),1,0),
+         most_affected       = ifelse(burden_CO2_national > barrier_0,1,0))
+
+data_5.1.2.1 <- data_5.1.2 %>%
+  group_by(Country)%>%
+  summarise(total_hh = sum(hh_weights))%>%
+  ungroup()
+
+# How many households have access to transfers, overall?
+
+data_5.1.2.2 <- data_5.1.2 %>%
+  filter(access_to_transfers == 1)%>%
+  group_by(Country)%>%
+  summarise(access_to_transfers = sum(hh_weights))%>%
+  ungroup()
+
+data_5.1.2.3 <- data_5.1.2.2 %>%
+  left_join(data_5.1.2.1)%>%
+  mutate(share_access = access_to_transfers/total_hh)
+
+# How many of the most affected 20 percent are poor?
+# How many of the most affected 20 percent have access to transfers?
+
+data_5.1.2.4 <- data_5.1.2 %>%
+  filter(most_affected == 1)%>%
+  mutate(poor_no_access = ifelse(poorest_20_percent == 1 & access_to_transfers == 0,1,0))%>%
+  group_by(Country)%>%
+  summarise(most_affected       = sum(hh_weights),
+            poorest_20_percent  = sum(hh_weights[poorest_20_percent == 1]),
+            access_to_transfers = sum(hh_weights[access_to_transfers == 1]),
+            poor_no_access      = sum(hh_weights[poor_no_access == 1]))%>%
+  ungroup()%>%
+  mutate(poorest_20_percent_1  = poorest_20_percent/most_affected,
+         access_to_transfers_1 = access_to_transfers/most_affected,
+         poor_no_access_1      = poor_no_access/most_affected)
+
+# Final Table for Paper
+
+data_5.1.2.5 <- data_5.1.2.3 %>%
+  select(Country, share_access)%>%
+  left_join(select(data_5.1.2.4, Country,poorest_20_percent_1, access_to_transfers_1, poor_no_access_1), by = "Country")%>%
+  mutate_at(vars(-Country), list(~ paste0(round(., 3)*100, "%")))
+
+colnames(data_5.1.2.5) <- c("Country", 
+                            #"\\rotatebox{90}{Households with access to transfer programs}",
+                            #"\\rotatebox{90}{...are poorer than 80\\% of the population?}",
+                            #"\\rotatebox{90}{...have access to governmental transfer programs?}",
+                            #"\\rotatebox{90}{...are poorer than 80\\% of the population and have no access to governmental transfer programs?}"
+                            "Households with access to transfer programs",
+                            "...are poorer than 80 % of  the population?",
+                            "...have access to governmental transfer programs?",
+                            "...are poorer than 80 % of the population and have no access to governmental transfer programs?"
+)
+
+kbl(data_5.1.2.5, format = "latex", caption = "Summary Statistics on Access to Transfer Programmes", label = "tab:transfer",
+    booktabs = T, linesep = "", align = "lcccc")%>%
+
+  kable_styling(position = "center", latex_options = c("HOLD_position", "scale_down"))%>%
+  column_spec(1, width = "4 cm", border_right = T)%>%
+  column_spec(2, width = "3 cm", border_right = T)%>%
+  column_spec(3:5, width = "3 cm")%>%
+  add_header_above(c(" " = 2, "Of the most affected 20\\\\% of households, how many..." = 3), escape = FALSE)%>%
+  footnote(general = "This table reports shares of total population and shares of the 20% of population with highest carbon pricing incidence adhering to different criteria for 16 countries in Latin America and the Caribbean.", threeparttable = T)%>%
+  save_kable(., "../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/6_App/Latin-America-Paper/Tables/Table_A8/Table_A8.tex")
