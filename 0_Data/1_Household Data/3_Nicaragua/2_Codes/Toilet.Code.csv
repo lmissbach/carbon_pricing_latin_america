@@ -1,0 +1,9 @@
+toilet,Toilet, TLT
+1,Excusado o letrina sin tratar, Limited
+2,Excusado o letrina con tratamiento, Basic
+3,Inodoro conectado a tubería de aguas negras, Basic
+4,Inodoro conectado a sumidero o pozo séptico, Basic
+5,Inodoro que descarga en río o quebrada, Limited
+6,No tiene, No Service
+8,N/S, NA
+9,Ignorado, NA

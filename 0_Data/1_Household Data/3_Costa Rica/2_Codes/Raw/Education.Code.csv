@@ -1,0 +1,53 @@
+edu_hhh,Education
+0,Ningún grado
+1,Preparatoria
+2,Enseñanza especial
+11,Primer año de primaria
+12,Segundo año de primaria
+13,Tercero año de primaria
+14,Cuarto año de primaria
+15,Quinto año de primaria
+16,Sexto año de primaria
+19,Primaria ignorados
+21,Primer año de secundaria académica
+22,Segundo año de  secundario académica
+23,Tercer año de secundaria académica
+24,Cuarto año de  secundaria académica
+25,Quinto año de  secundaria académica
+26,Tiene el bachillerato de secundaria academica
+29,Secundaria académica ignorado
+31,Primer año de secundaria técnica
+32,Segundo año de secundaria técnica
+33,Tercer año de secundaria técnica
+34,Cuarto año de secundaria técnica
+35,Quinto año de secundaria técnica
+36,Sexto año de secundaria técnica
+37,Tiene el bachillerato de secundaria técnica
+39,Secundaria técnica ignorado
+41,Primer año en parauniversitaria
+42,Segundo año en parauniversitaria
+43,Tercer año en parauniversitaria
+44,Cuarto año en parauniversitaria
+49,Parauniversitaria ignorados
+51,Primer año de universidad
+52,Segundo años de universidad
+53,Tercer año de universidad
+54,Cuarto año de universidad
+55,Quinto año de universidad
+56,Sexto año de universidad
+57,Setimo año de universidad
+58,Octavo año de universidad
+59,Universitaria ignorado
+61,Especialidad un año
+62,Especialidad dos años
+63,Especialidad tercer año
+64,Especialidad cuarto año
+65,Especialidad quinto año
+69,Especialidad ignorada
+71,"Maestría, doctorado un año"
+72,"Maestría, doctorado dos años"
+73,"Maestría, doctorado tres años"
+74,"Maestría, doctorado cuatro años"
+75,"Maestría, doctorado cinco años"
+79,"Maestría, doctorado Ignorada"
+99,Ignorado

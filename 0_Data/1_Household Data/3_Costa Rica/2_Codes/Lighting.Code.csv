@@ -1,0 +1,7 @@
+lighting_fuel,Lighting_Fuel, LF
+0,No hay luz eléctrica, No Lighting
+1,...del ICE?, Electricity
+2,...de la CNFL?, Electricity
+3,...de la ESPH o la JASEC?, Electricity
+4,...de una cooperativa?, Electricity
+5,...de otra fuente de energía?, Other

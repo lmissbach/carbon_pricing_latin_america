@@ -1,0 +1,26 @@
+edu_hhh,Education,ISCED
+1,Creche,0
+2,Pre-Escola,0
+3,Classe de Alfabetizacao,0
+4,Alfabetizcap de Jovens e Adultos,0
+5,Antigo Primario,1
+6,Antigo Ginasial (media 1 ciclo),1
+7,Regiular Do Ensino Fundamental Ou Do 1 GRAU,1
+8,Educacao de Jovens e Adultos - Eja do ensino fundamental ou supletivo do 1 grau,1
+9,ANtigo cientifico classico medio 2 ciclo,2
+10,Regular do ensino medio ou do 2 grau,2
+11,Educacao de jovens e adultos - eja do ensino medio ou supletivo do 2 grau,2
+12,Superior - graduacao,6
+13,Especializadcao ne nivel superior,6
+14,Mestrado,7
+15,Doutorado,8
+30,Classe de Alfabetizacao (Currently),0
+40,Alfabetizcap de Jovens e Adultos (Currently),0
+50,Antigo Primario (Currently),1
+60,Antigo Ginasial (media 1 ciclo) (Currently),1
+70,Regiular Do Ensino Fundamental Ou Do 1 GRAU (Currently),1
+80,Educacao de Jovens e Adultos - Eja do ensino fundamental ou supletivo do 1 grau (Currently),1
+90,ANtigo cientifico classico (medio 2 ciclo) (Currently),2
+100,Regular do ensino medio ou do 2 grau (Currently),2
+110,Educacao de jovens e adultos - eja do ensino medio ou supletivo do 2 grau (Currently),2
+NA,NA,NA

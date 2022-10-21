@@ -1,0 +1,14 @@
+drinking.water,Label,WTR
+1,1. Cañería de red dentro de la vivienda?,Basic
+2,2.Cañería de red fuera de la vivienda pero dentro del lote o terreno,Basic
+3,3.Pileta pública?,Basic
+4,4. Cosecha de agua de lluvia?,Basic
+5,5.Pozo perforado o entubado con bomba,Basic
+6,6.Pozo excavado cubierto con bomba,Basic
+7,7.Pozo excavado cubierto sin bomba,Limited
+8,8.Pozo excavado no cubierto?,Limited
+9,9.Manantial o Vertiente protegida?,Limited
+10,10.Río/Acequia/Vertiente no protegida?,No Service
+11,11. Agua embotellada?,Basic
+12,12. Carro repartidor (Aguatero)?,Basic
+13,13. Otro (Especifique),Other

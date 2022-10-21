@@ -1,0 +1,9 @@
+toilet,Toilet, TLT
+11,De uso exclusivo del hogarRed general, Basic
+12,De uso exclusivo del hogarFosa séptica pozo negro, Basic
+13,De uso exclusivo del hogarEntubado hacia el arroyo, Limited
+14,De uso exclusivo del hogarOtro (superficie), Basic
+21,Compartido con otro hogarRed general, Basic
+22,Compartido con otro hogarFosa séptica pozo negro, Basic
+23,Compartido con otro hogarEntubado hacia el arroyo, Limited
+24,Compartido con otro hogarOtro (superficie), No Service

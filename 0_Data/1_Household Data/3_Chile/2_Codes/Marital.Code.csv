@@ -1,0 +1,8 @@
+marital_status,marital_Status
+1,Married
+2,Civil Union
+3,Divorced
+4,Widowed
+5,Unmarried
+-88,Unknown
+-99,Unknown

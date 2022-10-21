@@ -1,0 +1,6 @@
+toilet.type,Label,TLT
+1,1.Baño o letrina con descarga de agua,Basic
+2,2.Letrina de pozo ciego con piso,Basic
+3,3.Pozo abierto (pozo ciego sin piso),Basic
+4,4.Baño ecológico (seco o de compostaje),Basic
+5,5.Ninguno (Arbusto/Campo),No Service

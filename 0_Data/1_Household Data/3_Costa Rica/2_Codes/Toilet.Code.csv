@@ -1,0 +1,8 @@
+toilet,Toilet, TLT
+0,No tiene, No Service
+1,...conectado a alcantarilla o cloaca?, Basic
+2,...conectado a tanque séptico?, Basic
+3,...conectado tanque séptico con tratamiento (fosa biológica)?, Basic
+4,...de hueco de pozo negro o letrina?, Limited
+5,...con salida directa a acequia zanja río o estero?, Limited
+6,Otro sistema (especifique), No Service

@@ -1,0 +1,8 @@
+heating_fuel,Heating.Fuel,HF
+1,Mains gas?,Gas
+2,Bulk gas (zeppelin)?,Gas
+3,Gas in tube?,LPG
+4,Gas in a carafe?,LPG
+5,electricity?,Electricity
+6,Kerosene / firewood / charcoal?, Kerosene Firewood Charcoal
+7,other?,Other

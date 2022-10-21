@@ -1,0 +1,13 @@
+water,Water
+1,"Tubería conectada a la red pública, dentro de la vivienda"
+2,"Tubería conectada a la red pública, fuera de la vivienda, pero dentro del terreno"
+3,Puesto público
+4,Pozo público o privado
+5,Ojo de agua o manantial
+6,"Río, quebrada, arroyo"
+7,"Camión, carreta o pipa"
+8,"Lago, laguna"
+9,De otra vivienda/vecino/empresa
+10,"Otro, cuál?"
+98,N/S
+99,Ignorado

@@ -1,0 +1,59 @@
+ethnicity,Ethnicity_0,Ethnicity
+11,"Si, Rama",Indigeneous
+12,"Si, Garifuna",Indigeneous
+13,"Si, Mayagna / Sumu",Indigeneous
+14,"Si, Miskitu",Indigeneous
+15,"Si, Ulwa",Indigeneous
+16,"Si, Creole",Indigeneous
+17,"Si, Mestizo de la costa caribe",Indigeneous
+18,"Si, Xiu / Sutiava",Indigeneous
+19,"Si, Nahoa / Nicarao",Indigeneous
+110,"Si, Chorotega / Nathual / Mange",Indigeneous
+111,"Si, Cacapera / Matagalpa",Indigeneous
+112,"Si, Otro",Indigeneous
+198,"Si, N/S",Indigeneous
+199,"Si, Ignorado",Indigeneous
+21,"No, Rama",Non-Indigeneous
+22,"No, Garifuna",Non-Indigeneous
+23,"No, Mayagna / Sumu",Non-Indigeneous
+24,"No, Miskitu",Non-Indigeneous
+25,"No, Ulwa",Non-Indigeneous
+26,"No, Creole",Non-Indigeneous
+27,"No, Mestizo de la costa caribe",Non-Indigeneous
+28,"No, Xiu / Sutiava",Non-Indigeneous
+29,"No, Nahoa / Nicarao",Non-Indigeneous
+210,"No, Chorotega / Nathual / Mange",Non-Indigeneous
+211,"No, Cacapera / Matagalpa",Non-Indigeneous
+212,"No, Otro",Non-Indigeneous
+298,"No, N/S",Non-Indigeneous
+299,"No, Ignorado",Non-Indigeneous
+31,"N/S, Rama",No Sabe
+32,"N/S, Garifuna",No Sabe
+33,"N/S, Mayagna / Sumu",No Sabe
+34,"N/S, Miskitu",No Sabe
+35,"N/S, Ulwa",No Sabe
+36,"N/S, Creole",No Sabe
+37,"N/S, Mestizo de la costa caribe",No Sabe
+38,"N/S, Xiu / Sutiava",No Sabe
+39,"N/S, Nahoa / Nicarao",No Sabe
+310,"N/S, Chorotega / Nathual / Mange",No Sabe
+311,"N/S, Cacapera / Matagalpa",No Sabe
+312,"N/S, Otro",No Sabe
+398,"N/S, N/S",No Sabe
+399,"N/S, Ignorado",No Sabe
+91,"Ignorado, Rama",No Sabe
+92,"Ignorado, Garifuna",No Sabe
+93,"Ignorado, Mayagna / Sumu",No Sabe
+94,"Ignorado, Miskitu",No Sabe
+95,"Ignorado, Ulwa",No Sabe
+96,"Ignorado, Creole",No Sabe
+97,"Ignorado, Mestizo de la costa caribe",No Sabe
+98,"Ignorado, Xiu / Sutiava",No Sabe
+99,"Ignorado, Nahoa / Nicarao",No Sabe
+910,"Ignorado, Chorotega / Nathual / Mange",No Sabe
+911,"Ignorado, Cacapera / Matagalpa",No Sabe
+912,"Ignorado, Otro",No Sabe
+998,"Ignorado, N/S",No Sabe
+999,"Ignorado, Ignorado",No Sabe
+2,Non-Indigeneous,Non-Indigeneous
+3,No Sabe,No Sabe

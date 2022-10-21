@@ -1,0 +1,9 @@
+cooking_fuel,Cooking_Fuel,CF
+1,leña,Firewood
+2,gas, LPG
+3,carbón, Coal
+4,electricidad, Electricity
+5,kerosene alcohol, Kerosene
+6,ninguno no cocina, NA
+7,otro, Unknown
+9,nr, NA

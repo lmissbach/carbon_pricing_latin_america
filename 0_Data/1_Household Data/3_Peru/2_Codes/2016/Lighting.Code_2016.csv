@@ -1,0 +1,30 @@
+Label,lighting_fuel,LF
+Electricidad  ,1,Electricity
+Electricidad Generador ,2,Electricity
+Electricidad Generador Petroleum/Gas,3,Electricity
+Electricidad Generador Vela,4,Electricity
+Electricidad Kerosene ,5,Electricity
+Electricidad otro ,6,Electricity
+Electricidad otro Generador,7,Electricity
+Electricidad otro Vela,8,Electricity
+Electricidad Petroleum/Gas ,9,Electricity
+Electricidad Vela ,10,Electricity
+Electricidad Vela Petroleum/Gas,11,Electricity
+Generador  ,12,Electricity Other
+Generador otro ,13,Electricity Other
+Kerosene  ,14,Kerosene
+Kerosene Generador ,15,Kerosene
+Kerosene otro ,16,Kerosene
+Kerosene otro Generador,17,Kerosene
+Kerosene Vela ,18,Kerosene
+no utiliza  ,19,No Lighting
+otro  ,20,Other
+Petroleum/Gas  ,21,Gas
+Petroleum/Gas Generador ,22,Electricity Other
+Petroleum/Gas Generador Vela,23,Electricity Other
+Petroleum/Gas otro ,24,Gas
+Petroleum/Gas otro Vela,25,Gas
+Petroleum/Gas Vela ,26, Gas
+Vela  ,27,Other
+Vela Generador ,28,Electricity Other
+Vela otro ,29,Other

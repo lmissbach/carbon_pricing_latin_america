@@ -1,0 +1,8 @@
+water,Water
+1,Dentro de la vivienda von abastecimiento publico
+2,Dentro de la vivienda con otro tipo de abastecimiento
+3,Fuera de la vivienda pero dentra de la propiedad con abastecimiento publico
+4,Fuera de la vivienda pero dentro de la propoedad con otro tipo de abastecimiento
+4.1,Tuberia por poliducto (buen estado)
+5,No tiene
+6,Tiene pero no le cae (por mas de un mes)

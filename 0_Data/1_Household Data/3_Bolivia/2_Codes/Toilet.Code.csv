@@ -1,0 +1,10 @@
+toilet,Toilet,TLT
+1_1,1.Baño o letrina con descarga de agua 1.A la red de alcantarillado?,Basic
+1_2,1.Baño o letrina con descarga de agua 2.A una cámara séptica?,Basic
+1_3,1.Baño o letrina con descarga de agua 3.A un pozo de absorción?,Basic
+1_4,1.Baño o letrina con descarga de agua 4.A la superficie (calle/quebrada/río)?,Limited
+1_5,1.Baño o letrina con descarga de agua 5.No sabe?,Basic
+2_NA,2.Letrina de pozo ciego con piso NA,Basic
+3_NA,3.Pozo abierto (pozo ciego sin piso) NA,Limited
+4_NA,4.Baño ecológico (seco o de compostaje) NA,Limited
+5_NA,5.Ninguno (Arbusto/Campo) NA,No Service

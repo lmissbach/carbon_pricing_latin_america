@@ -1,0 +1,11 @@
+toilet,Toilet,TLT
+1,Inodoro a alcantarillado, Basic
+2,Inodoro a fosa sÃ©ptica, Basic
+3,Inodoro comÃºn a alcantarillado, Basic
+4,Inodoro comÃºn a fosa sÃ©ptica, Basic
+5,Letrina privada, Basic
+6,Letrina comÃºn, Limited
+7,Letrina abonera privada, Basic
+8,Letrina abonera comÃºn, Basic
+9,Letrina solar privada, Basic
+10,Letrina solar comÃºn, Basic

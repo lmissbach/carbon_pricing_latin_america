@@ -1,0 +1,23 @@
+edu_hhh,Education,ISCED
+1,Sin Instruccion,0
+3,Educ. Especial 1 a 9,1
+4,Educ. Escolar Basica 1 a 6,1
+5,Educ. Escolar Basica 7 a 9,1
+6,Secundaria Ciclo Basico,2
+7,Bachillerato Humanistico/Cientifico,3
+8,Bachillerato Technico / Comercial,3
+9,Bachillerato a Distancia,3
+10,Educ. Media Cientifica,3
+11,Educ. MEdia Tecnica,3
+12,Educ. Basica Bilingue de Jovenes y Adultos,3
+13,Educ. Media a Distancia para Jovenes y Adultos,2
+14,Educ. Basica Alternativa de Jovenes y Adultos,2
+15,Educ. Madia Alternativa de Jovenes y Adultos,2
+17,Programas de Alfabetizacion,1
+19,Tecnica Superior,4
+20,Formacion Docente,4
+21,Profesionalizacion Docente,4
+22,Form. Militar/Policial,5
+23,Superior Universitario,7
+99,Not known,9
+NA,NA,NA

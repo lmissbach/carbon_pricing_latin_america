@@ -1,0 +1,8 @@
+water,Water, WTR
+1,Dentro de la vivienda von abastecimiento publico, Basic
+2,Dentro de la vivienda con otro tipo de abastecimiento, Basic
+3,Fuera de la vivienda pero dentra de la propiedad con abastecimiento publico, Basic
+4,Fuera de la vivienda pero dentro de la propoedad con otro tipo de abastecimiento, Basic
+4.1,Tuberia por poliducto (buen estado), Basic
+5,No tiene, No Service
+6,Tiene pero no le cae (por mas de un mes), Limited

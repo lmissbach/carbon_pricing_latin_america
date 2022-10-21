@@ -1,0 +1,10 @@
+toilet,Toilet,TLT
+1,con arrastre de agua con red de alcantarillado sanitario, Basic
+2,con arrastre de agua con cámara séptica y pozo ciego(absorbente), Basic
+3,con arrastre de agua con pozo ciego(absorbente), Basic
+4,con arrastre de agua en la superficie de la tierra hoyo abierto zanja arroyo..., Limited
+5,letrina ventilada de hoyo seco (común c/tubo de ventilación), Basic
+6,letrina común de hoyo seco (con losa techo paredes y puertas), Limited
+7,letrina común sin techo o puerta, No Service
+8,otro, No Service
+9,nr, NA

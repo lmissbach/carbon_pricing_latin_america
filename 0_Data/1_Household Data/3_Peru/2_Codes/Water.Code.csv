@@ -1,0 +1,9 @@
+water,Water,WTR
+1,red pública dentro de la vivienda,Basic
+2,red pública fuera de la vivienda pero dentro del edificio,Basic
+3,pilón de uso público,Basic
+4,camión - cisterna u otro similar,Basic
+5,pozo,Basic
+6,río acequia manantial o similar,Limited
+7,otra,Limited
+8,rio acequia lago laguna,Limited

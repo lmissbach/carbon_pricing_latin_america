@@ -1,0 +1,13 @@
+water,Water, WTR
+1,Tubería conectada a la red pública dentro de la vivienda, Basic
+2,Tubería conectada a la red pública fuera de la vivienda pero dentro del terreno, Basic
+3,Puesto público, Limited
+4,Pozo público o privado, Limited
+5,Ojo de agua o manantial, No Service
+6,Río quebrada arroyo, No Service
+7,Camión carreta o pipa, Limited
+8,Lago laguna, No Service
+9,De otra vivienda/vecino/empresa, Basic
+10,Otro cuál?, No Service
+98,N/S, NA
+99,Ignorado,NA

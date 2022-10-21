@@ -1,0 +1,8 @@
+toilet,Toilet
+0,No tiene
+1,...conectado a alcantarilla o cloaca?
+2,...conectado a tanque séptico?
+3,...conectado tanque séptico con tratamiento (fosa biológica)?
+4,"...de ""hueco"", de pozo negro o letrina?"
+5,"...con salida directa a acequia, zanja, río o estero?"
+6,Otro sistema (especifique)

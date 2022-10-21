@@ -1,0 +1,16 @@
+edu_hhh,Education, ISCED
+0,Ninguno,0
+1,Preescolar,0
+2,Educación de adultos,1
+3,Primaria,1
+4,Secundaria,2
+5,Técnico básico,3
+6,Técnico medio,4
+7,Formación docente,5
+8,Técnico superior,5
+9,Universitario,6
+10,Maestría,7
+11,Doctorado,8
+12,Educación especial,5
+98,N/S, NA
+99,Ignorado, NA

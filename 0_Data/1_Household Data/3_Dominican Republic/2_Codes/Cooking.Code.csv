@@ -1,0 +1,8 @@
+cooking_fuel,Cooking,CF
+1,LPG,LPG
+2,Kerosene, Kerosene
+3,Electricity, Electricity
+4,Firewood, Firewood
+5,Coal, Charcoal
+6,Does not cook, Unknown
+99,Other, Unknown

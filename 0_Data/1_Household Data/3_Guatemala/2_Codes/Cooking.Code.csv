@@ -1,0 +1,12 @@
+Cooking_Fuel,cooking_fuel, CF
+LPG,1, LPG
+Firewood LPG Coal,2, Firewood
+Firewood,3, Firewood
+No Fuel,4, Other
+LPG & Coal,5, LPG
+Firewood & LPG,6, Firewood
+Coal,7, Charcoal
+Firewood & Coal,8, Firewood
+Other,9, Other
+Firewood & Kerosene,10, Firewood
+Kerosene,11, Kerosene

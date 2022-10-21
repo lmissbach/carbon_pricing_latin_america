@@ -1,0 +1,13 @@
+education,Label,ISCED
+1,sin nivel,0
+2,inicial,1
+3,primaria incompleta,1
+4,primaria completa,1
+5,secundaria incompleta,2
+6,secundaria completa,3
+7,superior no universitaria incompleta,4
+8,superior no universitaria completa,4
+9,superior universitaria incompleta,6
+10,superior universitaria completa,7
+11,post-grado universitario,8
+12,na,9

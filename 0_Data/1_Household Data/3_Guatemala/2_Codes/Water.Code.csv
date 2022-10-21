@@ -1,0 +1,9 @@
+water,Water, WTR
+1,Tubería dentro de la vivienda, Basic
+2,Tubería fuera de la vivienda, Basic
+3,Chorro publico, Limited
+4,Pozo perforado, Limited
+5,Río lago manantial, Limited
+6,Camion cisterna, Basic
+7,Agua de lluvia, Basic
+98,Otro cual, No Service

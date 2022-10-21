@@ -1,0 +1,46 @@
+Label,cooking_fuel,CF
+0,1,Other
+Carbon    ,2,Coal
+Carbon Lena   ,3,Coal
+Carbon Lena Otro  ,4,Coal
+Carbon Otro   ,5,Coal
+Electricidad    ,6,Electricity
+Electricidad Carbon   ,7,Electricity
+Electricidad Gas natural   ,8,Electricity
+Electricidad Gas natural Carbon Otro ,9,Electricity
+Electricidad Gas(LPG)   ,10,Electricity
+Electricidad Gas(LPG) Carbon  ,11,Electricity
+Electricidad Gas(LPG) Carbon Lena ,12,Electricity
+Electricidad Gas(LPG) Carbon Lena Otro,13,Electricity
+Electricidad Gas(LPG) Carbon Otro ,14,Electricity
+Electricidad Gas(LPG) Gas natural  ,15,Electricity
+Electricidad Gas(LPG) Lena  ,16,Electricity
+Electricidad Gas(LPG) Lena Otro ,17,Electricity
+Electricidad Gas(LPG) Otro  ,18,Electricity
+Electricidad Lena   ,19,Electricity
+Electricidad Lena Otro  ,20,Electricity
+Electricidad Otro   ,21,Electricity
+Gas natural    ,22,Gas
+Gas natural Carbon   ,23,Gas
+Gas natural Carbon Otro  ,24,Gas
+Gas natural Lena   ,25,Gas
+Gas natural Lena Otro  ,26,Gas
+Gas natural Otro   ,27,Gas
+Gas(LPG)    ,28,LPG
+Gas(LPG) Carbon   ,29,LPG
+Gas(LPG) Carbon Lena  ,30,LPG
+Gas(LPG) Carbon Lena Otro ,31,LPG
+Gas(LPG) Carbon Otro  ,32,LPG
+Gas(LPG) Gas natural   ,33,LPG
+Gas(LPG) Kerosene   ,34,LPG
+Gas(LPG) Kerosene Otro  ,35,LPG
+Gas(LPG) Lena   ,36,LPG
+Gas(LPG) Lena Otro  ,37,LPG
+Gas(LPG) Otro   ,38,LPG
+Kerosene    ,39,Kerosene
+Kerosene Carbon   ,40,Kerosene
+Kerosene Lena   ,41,Kerosene
+Lena    ,42,Firewood
+Lena Otro   ,43,Firewood
+Otro    ,44,Other
+na, 45,na

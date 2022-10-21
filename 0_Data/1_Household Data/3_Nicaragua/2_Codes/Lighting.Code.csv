@@ -1,0 +1,12 @@
+lighting_fuel,Lighting_Fuel, LF
+1,Red de energía eléctrica, Electricity
+2,Planta/ generador electrico, Electricity
+3,Panel solar, Electricity
+4,Bateria de automovil, Electricity
+5,Gas kerosén (candíl), Kerosene
+6,Candela, Other
+7,Ocote, Other
+8,Otro Cuál?, Other
+9,Ninguno, NA
+98,N/S, NA
+99,Ignorado, NA

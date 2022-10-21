@@ -1,0 +1,30 @@
+edu_hhh,Education, ISCED
+1001,Parvularia No obtuvo,0
+2001,BÃ¡sica No obtuvo,1
+2005,BÃ¡sica Diploma militar o policial,1
+2006,BÃ¡sica Profesorado,1
+20010,BÃ¡sica Otro, 1
+3001,Media No obtuvo,3
+3002,Media Bachiller,3
+3005,Media Diploma militar o policial,3
+3006,Media Profesorado,3
+3009,Media Trabajador(a) social,3
+30010,Media Otro,3
+4002,Superior universitario Bachiller,6
+4003,Superior universitario TÃ­tulo universitario,7
+4004,Superior universitario Postgrado,7
+4005,Superior universitario Diploma militar o policial,8
+4006,Superior universitario Profesorado,7
+4007,Superior universitario Enfermero(a) auxiliar,6
+4008,Superior universitario Enfermero(a) graduado,6
+40010,Superior universitario Otro,6
+40011,Superior universitario Diploma universitario y no universitario,7
+5002,Superior no universitario Bachiller,6
+5005,Superior no universitario Diploma militar o policial,6
+5006,Superior no universitario Profesorado,5
+5007,Superior no universitario Enfermero(a) auxiliar,5
+5008,Superior no universitario Enfermero(a) graduado,6
+50010,Superior no universitario Otro,6
+50011,Superior no universitario Diploma universitario y no universitario,6
+6001,EducaciÃ³n especial No obtuvo,5
+7001,Otro No obtuvo,9

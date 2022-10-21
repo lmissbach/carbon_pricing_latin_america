@@ -1,0 +1,20 @@
+edu_hhh,Education,ISCED
+1,None,0
+2,Just starting formal education,0
+3,Special Education,9
+4,Kindergarten,0
+5,Kindergarten,0
+6,Kindergarten,0
+7,Primary Education,1
+8,Primary Education,1
+9,Secondary Education,2
+10,Secondary Education,2
+11,Bachelor's Equivalent,6
+12,Bachelor's Equivalent,6
+13,Master's Equivalent,7
+14,Professional,7
+15,Postgrad Equivalent,7
+16,Master's,7
+17,PhD,8
+-88,Unknown, NA
+-99,Unknown,NA

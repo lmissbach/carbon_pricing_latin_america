@@ -1,0 +1,13 @@
+water,Water, WTR
+1,essap (ex-corposana),Basic
+2,senasa o junta de saneamiento, Basic
+3,pozo artesiano, Basic
+4,pozo sin bomba, Limited
+5,pozo con bomba, Basic
+6,red arivado, Basic
+7,red comunitaria, Basic
+8,manantial o naciente, No Service
+9,tajamar río o arroyo, No Service
+10,agua de lluvia, No Service
+11,otro, No Service
+99,nr, NA

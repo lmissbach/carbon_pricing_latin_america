@@ -1,0 +1,692 @@
+ind_hhh,Industry
+C,C. INDUSTRIA MANUFACTURERA
+F,F. CONSTRUCCIÓN
+G,G. VENTA POR MAYOR Y POR MENOR; REPARACIÓN DE VEHÍCULOS AUTOMOTORES Y MOTOCICLETAS
+10,10. ELABORACIÓN DE PRODUCTOS ALIMENTICIOS
+60,60. ACTIVIDADES DE PROGRAMACIÓN Y TRANSMISIÓN DE RADIO TELEVISIÓN
+01,"01. AGRICULTURA, GANADERÍA, CAZA Y SERVICIOS CONEXOS"
+61,61. TELECOMUNICACIONES
+45,45. VENTA POR MAYOR Y POR MENOR; REPARACIÓN DE VEHÍCULOS AUTOMOTORES Y MOTOCICLETAS
+65,"65. SERVICIOS DE SEGUROS, REASEGUROS Y FONDOS DE PENSIONES, EXCEPTO PLANES DE SEGURIDAD SOCIAL DE AFILIACIÓN OBLIGATORIA"
+85,85. SERVICIOS DE EDUCACIÓN
+06,06. EXTRACCIÓN DE PETRÓLEO CRUDO Y GAS NATURAL
+46,"46. VENTA POR MAYOR, EXCEPTO EL DE VEHÍCULOS AUTOMOTORES Y MOTOCICLETAS"
+86,86. ACTIVIDADES DE ATENCIÓN DE LA SALUD HUMANA
+07,07. EXTRACCIÓN DE MINERALES METALÍFEROS
+47,"47. VENTA POR MENOR, EXCEPTO EL DE VEHÍCULOS AUTOMOTORES  Y MOTOCICLETAS"
+620,620. Programación informática y de consultoría de informática y actividades conexas
+170,170. Fabricación de papel y de productos de papel
+011,011. Cultivo de plantas no perennes
+321,"321. Fabricación de joyas, bisutería y artículos conexos"
+641,641. Intermediación monetaria
+251,"251. Fabricación de productos metálicos para uso estructural, tanques, depósitos, recipientes de metal y generadores de"
+651,651. Seguros
+851,851. Educación preescolar y primaria
+561,561. Actividades de expendio de comidas en locales y puestos de comidas
+471,471. Venta por menor en locales no especializados
+491,491. Servicio de transporte por vía férrea
+691,691. Servicios jurídicos
+502,502. Transporte por vías de navegación interiores
+012,012. Cultivo de plantas perennes
+932,932. Otras actividades de esparcimiento y recreativas
+492,492. Otros servicios de transporte por vía terrestre
+433,433. Terminación y acabado de edificios
+243,243. Fundición de metales
+463,"463. Venta por mayor de alimentos, bebidas y tabaco"
+563,563. Expendio de bebidas en locales y puestos
+014,014. Cría de animales en general
+464,464. Venta por mayor de enseres domésticos
+465,"465. Venta por mayor de maquinaria, equipo y materiales"
+107,107. Elaboración de otros productos alimenticios
+477,477. Venta al por menor de otros productos en tiendas especializadas
+478,478. Venta por menor en puestos de venta y mercados
+139,139. Fabricación de otros productos textiles
+3100,3100. Fabricación de muebles y colchones
+4100,4100. Construcción de edificaciones
+1010,"1010. Explotación de mataderos, producción, procesamiento y conservación de carne y productos cárnicos"
+7110,7110. Actividades de arquitectura e ingeniería y actividades conexas de consultoría técnica
+4210,4210. Construcción de obras de ingeniería civil
+2310,2310. Fabricación de vidrio y productos de vidrio
+1410,"1410. Fabricación de prendas de vestir, excepto prendas de piel"
+3510,"3510. Generación, transmisión y distribución de energía eléctrica"
+4510,4510. Venta de vehículos automotores
+0810,"0810. Extracción de piedra, arena y arcilla"
+2220,2220. Fabricación de productos de plástico
+4220,4220. Construcción de obras de servicio público
+7420,7420. Actividades de fotografía
+1520,1520. Fabricación de calzado
+4520,4520. Mantenimiento y reparación de vehículos automotores
+8620,8620. Servicios médicos y odontológicos
+1030,"1030. Elaboración y conservación de frutas, hortalizas y tubérculos"
+1430,1430. Fabricación de prendas de tejidos de punto y ganchillo
+8530,8530. Educación superior
+4630,"4630. Venta por mayor de alimentos, bebidas y tabaco"
+5630,5630. Expendio de bebidas en locales y puestos
+1040,1040. Elaboración de aceites y grasas de origen vegetal y animal
+1050,1050. Elaboración de productos lácteos
+6190,6190. Servicios telefónicos y de internet al público y otras actividades de telecomunicaciones
+9001,"9001. Producción de obras de teatro, conciertos, espectáculos musicales, danza y otras producciones escénicas"
+0111,"0111. Cultivo de cereales, legumbres y semillas oleaginosas"
+0311,0311. Pesca
+8411,8411. Actividades de la administración pública en general
+1511,"1511. Curtido, teñido y adobo de cueros y pieles"
+6511,6511. Servicio de planes de seguros de vida
+4711,"4711. Venta por menor en supermercados, almacenes y tiendas de barrio no especializados con predominio de alimentos, beb"
+0121,0121. Cultivo de frutas de pepita y grano
+4721,4721. Venta por menor de alimentos en tiendas especializadas
+4921,4921. Transporte regular urbano y suburbano de pasajeros por vía terrestre
+4331,4331. Terminación de edificios y obras de ingeniería civil
+0141,0141. Cría de ganado bovino y búfalos
+4641,"4641. Venta por mayor de productos textiles, prendas de vestir y calzado"
+4751,4751. Venta por menor de productos textiles en tiendas especializadas
+1061,1061. Beneficiado y elaboración de productos de molinería
+1071,1071. Elaboración de productos de panadería
+0112,0112. Cultivo de hortalizas
+3312,3312. Reparación de maquinaria
+4652,"4652. Venta por mayor de equipos electrónicos, de comunicaciones y sus partes"
+4752,"4752. Venta por menor de artículos de ferretería, pintura y productos de vidrio en tiendas especializadas"
+4662,4662. Venta por mayor de metales y minerales metalíferos
+4782,"4782. Venta de productos textiles, prendas de vestir y calzado en puestos de venta y mercados"
+1392,"1392. Fabricación de artículos confeccionados de materiales textiles, excepto prendas de vestir"
+2023,"2023. Fabricación de jabones y detergentes, preparados para limpiar y pulir, perfumes y preparados de tocador"
+4923,4923. Transporte automotor de carga por carretera
+4663,"4663. Venta por mayor de materiales de construcción, artículos de ferretería, materiales de fontanería, calefacción, y p"
+1073,"1073. Elaboración de cacao, chocolate y productos de confitería"
+1104,1104. Elaboración de bebidas no alcohólicas; producción de aguas minerales y otras aguas embotelladas
+0144,0144. Cría de ganado ovino y caprino
+4644,"4644. Venta por mayor de productos farmacéuticos, perfumería, instrumental médico y artículos ortopédicos"
+2394,"2394. Fabricación de cemento, cal y yeso"
+2395,"2395. Fabricación de artículos de hormigón, cemento y yeso"
+6419,6419. Otros tipos de intermediación monetaria
+8129,8129. Otras actividades de limpieza de edificios e instalaciones industriales
+0729,0729. Extracción de otros minerales metalíferos no ferrosos
+8549,8549. Otros tipos de enseñanza n.c.p.
+4649,4649. Venta por mayor de otros enseres domésticos
+4659,4659. Venta por mayor de otros tipos de maquinaria y equipo
+4669,"4669. Venta por mayor de sustancias químicas de uso industrial, desechos, chatarra y otros productos n.c.p."
+1079,1079. Elaboración de otros productos alimenticios n.c.p.
+2599,2599. Fabricación de otros productos elaborados de metal n.c.p.
+8699,8699. Otros servicios relacionados con la salud humana
+0899,0899. Explotación de otras minas y canteras n.c.p.
+21000,"21000. Fabricación de productos farmacéuticos, sustancias químicas medicinales y productos botánicos de uso farmacéutico"
+41000,41000. Construcción de edificaciones
+12000,12000. Elaboración de productos de tabaco
+75000,75000. Actividades veterinarias
+36000,"36000. Captación, tratamiento y distribución de agua"
+97000,97000. Actividades de hogares privados como empleadores de personal doméstico
+89000,89000. Descripciones genéricas para asignar códigos de Act. Eco.
+99000,99000. Servicio de organizaciones y órganos extraterritoriales
+60100,60100. Transmisiones de radio
+51100,51100. Transporte de pasajeros por vía aérea
+61100,61100. Servicios de telefonía fija e internet por conexión alámbrica
+02100,"02100. Plantaciones forestales, conservación de bosques y zonas forestales; explotación de viveros forestales"
+72100,72100. Investigaciones y desarrollo experimental en el campo de las Ciencias Naturales y la Ingeniería
+53100,53100. Actividades de correo nacional
+73100,73100. Publicidad
+24100,24100. Industrias básicas de hierro y acero (Siderurgia)
+06100,06100. Extracción de petróleo crudo
+16100,"16100. Aserrado, secado, tableado, descortezado y cepillado de madera"
+26100,"26100. Fabricación de condensadores, transformadores, tableros electrónicos y circuitos integrados"
+86100,86100. Servicios de hospitales
+77100,77100. Alquiler de vehículos automotores de pasajeros sin conductor
+09100,"09100. Actividades de exploración, prospección, perforación, sondeo y otros servicios relacionados con la extracción de"
+29100,29100. Fabricación y ensamblado  de vehículos automotores
+69100,69100. Servicios jurídicos
+10200,10200. Elaboración y conservación de pescado y productos de pescado
+60200,60200. Programación y transmisiones de televisión
+80200,80200. Actividades de servicios de sistemas de seguridad
+51200,51200. Transporte de carga por vía aérea
+61200,61200. Servicios de telefonía móvil e internet por conexión inalámbrica
+42200,42200. Construcción de obras de servicio público
+72200,72200. Investigaciones y desarrollo experimental en el campo de las Ciencias Sociales y las Humanidades
+82200,82200. Actividades de centros de llamadas
+53200,53200. Actividades de courier
+73200,73200. Estudios de mercado y realización de encuestas de opinión pública
+94200,94200. Actividades de sindicatos
+06200,06200. Extracción gas natural
+26200,26200. Fabricación y/o ensamblado de computadoras y equipo periférico
+58200,58200. Edición de programas informáticos
+69200,"69200. Servicios de contabilidad, teneduría de libros y auditoria; consultoría fiscal"
+20300,20300. Fabricación de fibras artificiales
+61300,61300. Actividades de telecomunicaciones por satélite
+81300,"81300. Actividades de plantación, cuidado y mantenimiento de parques, jardines en áreas privadas o comunitarias"
+32300,32300. Fabricación de artículos de deporte
+82300,"82300. Organización de conferencias, reuniones, convenciones y exposiciones comerciales"
+35300,"35300. Suministro de vapor, aire acondicionado, agua caliente y producción de hielo"
+45300,"45300. Venta de partes, piezas y accesorios para vehículos automotores"
+65300,65300. Fondos de pensiones
+26300,26300. Fabricación de equipo de comunicaciones
+87300,87300. Servicios de atención en instituciones para personas de la tercera edad y personas minusválidas con alojamiento
+29300,"29300. Fabricación de partes, piezas y accesorios para vehículos automotores"
+49300,49300. Transporte por tuberías
+01500,01500. Cultivo de productos agrícolas en combinación con la cría de animales (explotación mixta)
+32500,32500. Fabricación de instrumentos y materiales médicos y odontológicos
+10800,10800. Elaboración de alimentos preparados para animales
+42900,42900. Construcción de otras obras de ingeniería civil
+43900,43900. Otras actividades especializadas de construcción
+46900,46900. Venta por mayor de diversos productos sin especialización
+79900,79900. Otros servicios de reservas y actividades conexas
+91010,91010. Actividades de bibliotecas y archivos
+62010,62010. Actividades de programación informática
+96010,"96010. Servicios de lavado y limpieza, incluida la limpieza en seco, de productos textiles y de piel"
+17010,"17010. Fabricación de pasta de madera, papel y cartón"
+22110,22110. Fabricación de cubiertas y cámaras de caucho; recauchutado y renovación de cubiertas de caucho
+32110,32110. Fabricación de joyas de metales preciosos
+82110,82110. Actividades combinadas de servicios administrativos de oficina
+03110,03110. Pesca  lacustre
+13110,13110. Preparación e hilado de fibras textiles
+33110,33110. Reparación y mantenimiento de productos elaborados de metal
+43110,43110. Demolición y derribo de edificios y otras estructuras
+64110,64110. Banca central
+94110,94110. Actividades de asociaciones empresariales y de empleadores
+25110,25110. Fabricación de productos metálicos para uso estructural (construcción)
+65110,65110. Servicio de planes de seguros de vida
+85110,85110. Educación preescolar
+95110,"95110. Reparación de computadoras, servidores informáticos y terminales informáticas"
+18110,18110. Actividades de impresión
+38110,38110. Servicio de recogida de desechos no peligrosos
+58110,"58110. Edición de libros impresos, en formato electrónico, grabaciones sonoras o por Internet"
+59110,"59110. Actividades de producción de películas cinematográficas, vídeos y programas de televisión"
+79110,79110. Actividades de agencias de viajes
+20210,20210. Fabricación de plaguicidas y otros productos químicos de uso agropecuario
+50210,50210. Transporte de pasajeros por vías de navegación interiores
+01210,01210. Cultivo de frutas de pepita y grano
+81210,81210. Limpieza general de edificios
+03210,03210. Explotación de criaderos de peces y granjas piscícolas
+43210,43210. Instalación de sistemas eléctricos en edificaciones y estructuras de ingeniería civil
+93210,93210. Actividades de parques de atracciones
+84210,"84210. Ministerio de relaciones exteriores, misiones diplomáticas y consulares"
+85210,85210. Educación secundaria de formación general
+95210,95210. Reparación de aparatos electrónicos de consumo
+16210,"16210. Fabricación de hojas de madera, tableros de partículas a base de madera suficientemente delgadas"
+56210,56210. Suministro de comidas bajo contrato
+01310,01310. El cultivo de plantas para propagación
+47810,"47810. Venta de alimentos, bebidas y tabaco en puestos de venta y mercados"
+74910,74910. Consultoría en agronomía
+94910,94910. Actividades de organizaciones religiosas
+86910,86910. Servicios de medicina tradicional y alternativa
+91020,"91020. Actividades de museos, gestión de lugares y edificios históricos"
+62020,62020. Actividades de consultoría de informática y de gestión de instalaciones informáticas
+96020,96020. Servicios de peluquería y otros tratamientos de belleza
+17020,"17020. Fabricación de papel, cartón ondulado y envases de papel y cartón"
+32120,32120. Fabricación de artículos de bisutería
+03120,03120. Pesca fluvial
+13120,13120. Fabricación de telas
+43120,"43120. Preparación de terreno, para obras posteriores de actividades de construcción"
+93120,93120. Actividades de clubes deportivos
+64120,64120. Servicios de entidades financieras de segundo piso
+94120,"94120. Actividades de colegios de profesionales, sociedades científicas"
+15120,"15120. Fabricación de maletas, bolsos de mano y artículos similares; artículos de talabartería y guarnicionería"
+25120,"25120. Fabricación de tanques, calderas, depósitos y recipientes de metal"
+65120,65120. Servicios de seguros generales
+85120,85120. Educación primaria
+95120,95120. Reparación y mantenimiento de equipo de comunicaciones
+56120,56120. Expendio de comida en puestos fijos y móviles
+59120,"59120. Actividades de postproducción de películas cinematográficas, vídeos y programas de televisión"
+79120,79120. Actividades de operadores turísticos
+20220,"20220. Fabricación de pinturas, barnices y productos de revestimiento similares, tintas de imprenta y masillas"
+50220,50220. Transporte de carga por vías de navegación interiores
+01220,01220. Cultivo de frutas tropicales y subtropicales
+43220,"43220. Instalaciones de fontanería, calefacción y aire acondicionado"
+84220,84220. Actividades de defensa
+95220,95220. Reparación de aparatos de uso doméstico
+16220,16220. Fabricación de partes y piezas de carpintería para edificios y construcciones de madera
+24320,24320. Fundición de metales no ferrosos
+47420,47420. Venta por menor de equipos de sonido y audio
+23920,23920. Fabricación de materiales de construcción de arcilla
+74920,74920. Actividades de traducción e interpretación
+25920,"25920. Tratamiento a metales: revestimiento, torneado, soldadura, enchapado, grabado, pulido, herrería y  actividades af"
+08920,08920. Extracción de turba
+11030,"11030. Producción de malta, elaboración de cerveza y otras  bebidas malteadas"
+91030,"91030. Actividades de jardines botánicos, zoológicos y de parques nacionales"
+96030,96030. Servicios funerarios y actividades conexas
+20130,20130. Fabricación de plásticos y caucho sintético en formas primarias
+01130,01130. Cultivo de tubérculos
+32130,32130. Fabricación de artículos de orfebrería
+13130,"13130. Acabado de productos textiles: blanqueo, teñido, sanforizado, plisado, estampado serigráfico de productos textile"
+33130,33130. Reparación de equipo electrónico y óptico
+84130,84130. Actividades de regulación y facilitación de la actividad económica
+25130,"25130. Fabricación de generadores de vapor, excepto calderas de agua caliente para calefacción central"
+58130,"58130. Edición de periódicos, revistas y otras publicaciones periódicas"
+01230,01230. Cultivos de frutas cítricas
+52230,"52230. Servicio de aeropuertos, terminales aéreas y otros servicios complementarios del transporte aéreo"
+95230,95230. Reparación y mantenimiento de calzado y artículos de cuero
+16230,16230. Fabricación de recipientes de madera
+77330,77330. Alquiler de maquinaria y equipo de construcción e ingeniería civil sin operador
+01430,01430. Cría de ganado camélido o auquénido
+46530,"46530. Venta por mayor de maquinaria, equipo y materiales agropecuarios"
+47630,47630. Venta al por menor de artículos deportivos en tiendas especializadas
+47830,"47830. Venta de libros, revistas y periódicos en puestos de venta y mercados"
+23930,23930. Fabricación de otros productos de cerámica y porcelana
+74930,74930. Consultoría en economía
+96040,"96040. Actividades de baños turcos, saunas y baños de vapor"
+01140,01140. Cultivo de caña de azúcar
+33140,33140. Reparación de equipo eléctrico
+28140,"28140. Fabricación de cojinetes, engranajes, trenes de engranajes y piezas de transmisión"
+59140,59140. Actividades de exhibición de películas cinematográficas y cintas de vídeo
+01240,01240. Cultivo de frutas de carozo (hueso)
+95240,95240. Reparación de muebles y accesorios domésticos
+28240,"28240. Fabricación de maquinaria para la explotación de minas, canteras y obras de construcción"
+47640,47640. Venta por menor de juegos y juguetes en tiendas especializadas
+10740,"10740. Elaboración de pastas, macarrones y fideos"
+47840,"47840. Venta de papel, productos de papel y artículos de librería en puestos de venta y mercados"
+96050,96050. Servicios de centros de estética y spa
+33150,"33150. Reparación de equipo de transporte, excepto vehículos automotores"
+28150,"28150. Fabricación de hornos, hogares y quemadores"
+28250,"28250. Fabricación de maquinaria para la elaboración de alimentos, bebidas y tabaco"
+01450,01450. Cría de ganado porcino
+47850,47850. Venta de juegos y juguetes en puestos de venta y mercados
+96060,"96060. Servicios de adivinos, yatiris, espiritistas, astrólogos y afines"
+01160,01160. Cultivo de plantas forrajeras
+33160,33160. Reparación de máquinas de oficina
+47760,"47760. Venta por menor de gas en garrafas, carbón y leña para uso doméstico"
+47860,"47860. Venta de aparatos de uso doméstico, productos eléctricos y electrónicos en puestos de venta y mercados"
+23960,"23960. Corte, tallado y acabado de la piedra"
+01170,01170. Cultivo de flores
+01470,01470. Apicultura
+47870,47870. Venta de grabaciones de música y vídeo en puestos de venta y mercados
+62090,62090. Otras actividades de la tecnología de la información y de servicios informáticos
+22190,"22190. Fabricación de planchas, tubos, correas, cuerdas, conectores y otros productos de caucho"
+66190,66190. Otras actividades auxiliares de las actividades de los servicios financieros
+47190,47190. Venta al por menor en locales no especializados sin predominio de alimentos
+28190,28190. Fabricación de otros tipos de maquinaria de uso general
+58190,58190. Otras actividades de edición
+43290,43290. Otras instalaciones para obras de construcción
+16290,"16290. Fabricación de otros productos de madera; de artículos de corcho, paja y materiales trenzables n.c.p."
+47890,47890. Venta de otros artículos en puestos de venta y mercados
+30990,30990. Fabricación de otros tipos de equipo de transporte
+64990,"64990. Otras actividades de servicios financieros, excepto las de seguros y fondos de pensiones n.c.p."
+31001,"31001. Fabricación de muebles y partes de muebles, principalmente de madera"
+10101,10101. Matanza de ganado bovino y procesamiento de su carne
+80101,80101. Actividades de seguridad privada
+71101,71101. Actividades de consultoría en arquitectura
+42101,42101. Construcción de obras de ingeniería civil
+52101,52101. Explotación de instalaciones de almacenamiento y depósito para todo tipo de productos
+14101,"14101. Fabricación de prendas de vestir para hombres, mujeres y niños"
+74101,74101. Actividades de diseño de prendas de vestir y telas
+35101,35101. Generación de energía eléctrica
+45101,45101. Venta de vehículos automotores nuevos
+55101,55101. Servicios de hoteles
+08101,08101. Extracción de piedras
+68101,"68101. Actividades de alquiler, compra, venta de bienes inmuebles propios realizados sin intermediarios"
+88101,88101. Actividades de asistencia social sin alojamiento para personas de la tercera edad
+71201,"71201. Ensayos de calificación, fiabilidad, composición, pureza de los productos (verificadora)"
+02201,02201. Extracción de madera en rolas (troncas)
+22201,"22201. Fabricación de planchas, hojas, tubos y mangueras de plástico; accesorios para estos productos"
+32201,32201. Fabricación de instrumentos de música de viento
+24201,24201. Fabricación de productos primarios de metales no ferrosos
+74201,74201. Actividades de fotografía
+15201,15201. Fabricación de calzado para todo uso y de cualquier material
+45201,45201. Mantenimiento y reparación integral de vehículos
+46201,46201. Venta por mayor de materias primas agrícolas y de la silvicultura
+86201,86201. Servicio de atención médica en clínicas
+87201,87201. Instituciones de atención a personas con capacidades diferentes con alojamiento
+68201,68201. Actividades inmobiliarias de bienes inmuebles con intermediarios
+19201,19201. Fabricación de combustibles líquidos o gaseosos
+10301,"10301. Elaboración de conservas de frutas, hortalizas y tubérculos inmersos en vinagre, aceite u otros conservantes"
+02301,02301. Aprovechamiento de productos forestales no maderables
+14301,14301. Fabricación de prendas de vestir tejidas a máquina o a mano
+85301,85301. Educación superior no universitaria
+46301,"46301. Venta por mayor de frutas, tubérculos y hortalizas"
+56301,56301. Expendio de bebidas alcohólicas en locales
+47301,47301. Venta al por menor de combustible para vehículos automotores en comercios especializados
+10401,10401. Elaboración de aceites vegetales
+02401,02401. Servicios de apoyo a la silvicultura a cambio de una retribución o por contrata
+45401,"45401. Venta de motocicletas y de sus partes, piezas y accesorios"
+10501,10501. Elaboración de leches y productos lácteos
+61901,61901. Servicios telefónicos al público
+87901,"87901. Servicios de orfanatos, hogares y albergues infantiles"
+88901,88901. Servicios de guardería para niños
+90011,90011. Producción de obras de teatro
+11011,11011. Elaboración de bebidas alcohólicas destiladas
+20111,"20111. Fabricación de gases industriales, aire líquido o comprimido, gases refrigerantes, gases inertes y otros compuest"
+01111,01111. Cultivo de cereales
+93111,93111. Servicios de instalaciones para la práctica deportiva
+84111,"84111. Actividades de los Órganos Ejecutivo, Legislativo y Electoral"
+15111,"15111. Curtido, teñido y adobo de cueros"
+56111,"56111. Expendio de comidas en restaurantes, churrasquerías, chifas, fricaserías y otros locales"
+47111,"47111. Venta por menor en supermercados con surtido compuesto principalmente de alimentos, bebidas y tabaco"
+52211,52211. Explotación de instalaciones terminales de buses
+47211,"47211. Venta por menor de frutas, hortalizas y tubérculos"
+49211,"49211. Transporte en micros, buses y colectivos"
+43311,43311. Revestimiento de yeso de interiores y exteriores
+01411,01411. Cría y reproducción de ganado bovino y búfalos
+85411,85411. Escuelas deportivas
+47411,"47411. Venta por menor de computadoras, equipo periférico y programas informáticos"
+47511,47511. Venta por menor de hilados de lana y algodón
+10611,"10611. Procesamiento de cereales: producción de harina, sémola y gránulos de trigo, avena, maíz y otros cereales"
+01611,01611. Actividades de servicios agrícolas
+46611,"46611. Venta por mayor de gas licuado, diesel, gasolina y queroseno"
+47611,47611. Venta por menor de libros y revistas
+10711,10711. Elaboración de pan
+47711,47711. Venta por menor de prendas de vestir
+47911,47911. Venta por menor por correo y por Internet
+11021,11021. Elaboración de vinos
+01121,01121. Cultivo de hortalizas de raíz
+33121,33121. Reparación y mantenimiento de maquinaria industrial
+84121,84121. Actividades de regulación y gestión de la salud (SEDES)
+66121,66121. Actividades de corredores de valores
+47221,47221. Venta por menor de bebidas alcohólicas en tienda
+49221,"49221. Transporte regular de larga distancia de pasajeros (interprovincial, interdepartamental e internacional)"
+85421,85421. Enseñanza de música
+46421,46421. Venta por mayor de libros y revistas
+46521,"46521. Venta por mayor de equipos electrónicos, partes y piezas"
+47521,"47521. Venta por menor de artículos de ferretería, fontanería y calefacción"
+46621,"46621. Venta por mayor de metales, minerales y productos semiacabados ferrosos y no ferrosos"
+47621,"47621. Venta por menor de discos compactos de audio, video y casetes grabados"
+10721,10721. Elaboración de azúcar de caña
+47721,47721. Venta por menor de calzado
+47821,47821. Venta de productos textiles en puestos de venta y mercados
+13921,"13921. Fabricación de frazadas, mantas de viaje, edredones, almohadas y otros artículos conexos"
+64921,64921. Actividades de casas de empeño
+47921,47921. Venta realizada por vendedores ambulantes
+84231,84231. Actividades de la policía y protección civil (bomberos y tránsito)
+49231,49231. Transporte automotor de carga urbano
+46431,"46431. Venta por mayor de muebles, artículos de mimbre y corcho; colchones y somieres"
+46631,46631. Venta por mayor de materiales de construcción
+47731,47731. Venta por menor de productos farmacéuticos y medicinales
+11041,11041. Elaboración de bebidas gaseosas
+01441,01441. Cría de ganado ovino
+46441,46441. Venta por mayor de productos farmacéuticos medicinales
+47741,47741. Venta por menor de relojes
+23941,23941. Fabricación de cemento
+23951,"23951. Fabricación de materiales prefabricados de hormigón, cemento o piedra artificial para obras de construcción"
+01461,01461. Cría y reproducción de aves de corral
+01271,01271. Cultivo de café
+47771,47771. Venta por menor de flores naturales y artificiales
+01281,"01281. Cultivo de especias, plantas aromáticas, medicinales y farmacéuticas"
+96091,"96091. Servicios de clubes nocturnos, lenocinios y casas de tolerancia"
+17091,17091. Fabricación de artículos de papel de uso doméstico y para la higiene personal
+01191,01191. Cultivo de tabaco
+82191,82191. Servicios de fotocopiado
+93191,93191. Actividades de ligas y órganos reguladores
+64191,64191. Servicios de entidades bancarias
+52291,52291. Transporte intermodal de carga y/o servicio de operadores logísticos para el transporte de mercaderías
+93291,"93291. Actividades de salones de baile, discotecas y similares"
+95291,95291. Reparación y arreglo de prendas de vestir
+07291,07291. Extracción de minerales metalíferos no ferrosos
+77291,"77291. Alquiler de productos textiles, prendas de vestir y calzado"
+46491,46491. Venta por mayor de materiales y productos de limpieza
+46591,46591. Venta por mayor de muebles y equipo de oficina
+47591,47591. Venta por menor de enseres eléctricos y línea blanca
+46691,"46691. Venta por mayor de sustancias químicas de uso industrial: tinta, colorantes, anilina y similares"
+10791,"10791. Tostado, torrado, molienda y fabricación de productos de café"
+74991,74991. Otras actividades especializadas de carácter profesional
+94991,94991. Organización de protección de los derechos humanos
+25991,25991. Fabricación de envases de productos metálicos
+86991,86991. Servicios de laboratorios clínicos
+31002,"31002. Fabricación de muebles y partes de muebles, principalmente de metal"
+10102,10102. Matanza de ganado porcino y procesamiento de su carne
+80102,80102. Servicio de transporte de caudales y objetos de valor
+71102,"71102. Actividades de consultoría en ingeniería civil, hidráulica y afines"
+42102,42102. Mantenimiento y reparación de carreteras
+52102,52102. Zonas francas
+23102,23102. Fabricación de envases y recipientes de vidrio
+14102,14102. Fabricación de prendas de vestir de cuero
+74102,74102. Actividades de diseño gráfico
+45102,45102. Venta de vehículos automotores usados
+08102,08102. Extracción de yeso y anhidrita
+68102,68102. Actividades de anticrético de bienes inmuebles propios realizadas sin intermediarios
+71202,71202. Ensayos de medición de indicadores ambientales
+22202,22202. Fabricación de envases de plástico
+32202,32202. Fabricación de instrumentos de música de cuerda
+74202,74202. Actividades de filmación de acontecimientos sociales
+15202,15202. Fabricación de partes de cuero para calzado
+45202,45202. Lavado de automotores automático y manual
+46202,46202. Venta por mayor de animales vivos
+86202,86202. Consultorios médicos
+87202,87202. Instituciones de atención a personas con problemas de salud mental con alojamiento
+10302,10302. Elaboración de jugos naturales y sus concentrados de frutas y hortalizas
+02302,02302. Aprovechamiento de productos forestales no maderables para combustible
+14302,14302. Fabricación de complementos de vestir tejidas a máquina o a mano
+85302,85302. Educación superior universitaria
+46302,46302. Venta por mayor de productos lácteos
+56302,56302. Expendio de jugos en locales
+47302,"47302. Venta por menor de grasas, aceites y lubricantes para vehículos automotores"
+45402,45402. Mantenimiento y reparación de motocicletas
+10502,10502. Elaboración de helados
+85502,85502. Servicios de educación especial
+61902,61902. Servicios de internet al público
+11012,11012. Elaboración de singani y aguardientes
+01112,01112. Cultivo de legumbres secas para grano
+84112,84112. Actividades de Ministerios y Viceministerios
+56112,"56112. Expendio de comidas en cafeterías, confiterías, snack, heladerías y otros locales de comida rápida"
+47112,"47112. Venta por menor en almacenes con surtido compuesto principalmente de alimentos, bebidas y tabaco"
+49212,49212. Transporte en minibús
+01412,01412. Producción de leche cruda de vaca y de búfala
+46412,46412. Venta por mayor de telas
+47412,47412. Venta al por menor de aparatos telefónicos y comunicación
+46512,46512. Venta por mayor de programas informáticos
+47512,47512. Venta por menor de  telas
+10612,"10612. Beneficiado (descascarillado, pulido y blanqueado) y molienda de arroz"
+01612,01612. Suministro de maquinaría agrícola con operadores
+10712,10712. Elaboración de productos de pastelería
+11022,11022. Elaboración de bebidas alcohólicas fermentadas pero no destiladas (chicha)
+01122,01122. Cultivo de hortalizas de flor y fruto
+33122,33122. Reparación y mantenimiento de maquinaria de uso agropecuario y forestal
+84122,84122. Actividades de regulación y gestión de la educación (Dirección Departamental de Educación)
+66122,66122. Actividades de casas de cambio
+49222,"49222. Transporte en taxi, radiotaxi y mototaxi"
+85422,85422. Enseñanza de escuelas y academias de baile
+46522,46522. Venta por mayor de equipo telefónico y de comunicaciones
+47522,47522. Venta por menor de pintura y productos conexos
+47722,"47722. Venta por menor de artículos de talabartería, marroquinería y otros artículos de cuero y piel"
+47822,47822. Venta de prendas de vestir en puestos de venta y mercados
+13922,"13922. Fabricación de mantelería, toallas y paños de cocina"
+64922,64922. Concesión de préstamos fuera del sistema bancario
+47922,47922. Venta realizada por vendedores a domicilio
+20232,"20232. Fabricación de cosméticos, perfumes, productos de higiene y tocador"
+84232,84232. Actividades de servicios judiciales y de justicia (administración de prisiones)
+49232,49232. Transporte automotor de carga interprovincial y interdepartamental
+46432,46432. Venta por mayor de artículos de iluminación
+46632,46632. Venta por mayor de artículos sanitarios
+10732,10732. Elaboración de chocolates y productos de chocolate
+47732,47732. Venta por menor de cosméticos y artículos de perfumería
+25932,25932. Fabricación de herramientas de mano y artículos de ferretería
+11042,"11042. Elaboración de aguas minerales, tónicas y otras aguas envasadas"
+01442,01442. Cría de ganado caprino
+46442,46442. Venta por mayor de productos de perfumería y de belleza
+47742,47742. Venta por menor de artículos de joyería y bisutería
+23942,23942. Fabricación de cal y yeso
+01462,01462. Producción de huevos
+01272,01272. Cultivo de cacao
+47772,"47772. Venta por menor de plantas, semillas, abonos y fertilizantes"
+01282,01282. Cultivo de hoja de coca
+96092,96092. Servicios para animales domésticos
+17092,"17092. Fabricación de papel para imprimir, escribir y otros papeles listos para su utilización"
+82192,"82192. Servicio de transcripción (taquigrafía, mecanografía)"
+93192,"93192. Actividades por cuenta propia de deportistas, árbitros, jueces y cronometradores"
+64192,64192. Servicios de cooperativas de ahorro y crédito
+52292,52292. Servicios de tramitación de formalidades de aduana o agencias despachantes de aduana
+93292,"93292. Actividades de juegos electrónicos, mecánicos accionados con fichas"
+95292,"95292. Reparación de bicicletas, triciclos y similares"
+07292,07292. Extracción de metales preciosos
+77292,"77292. Alquiler de utensilios de cocina, vajilla, muebles y otros artículos de uso doméstico"
+01492,01492. Cría de conejos cuyes y castilla
+85492,85492. Escuelas de modelaje
+46492,"46492. Venta por mayor de juegos, juguetes y artículos de cotillón"
+46592,46592. Venta por mayor de maquinaria y equipo de la industria manufacturera
+46692,46692. Venta por mayor de abonos y productos químicos de uso agrícola
+47792,"47792. Venta por menor de libros, revistas y similares usados"
+13992,"13992. Fabricación de encajes, tules y bordados en piezas, tiras o motivos decorativos"
+74992,74992. Otras actividades especializadas de carácter técnico
+94992,94992. Organizaciones que promueven el desarrollo comunitario y cívico
+25992,"25992. Fabricación de artículos de alambre, clavos, tornillos, arandelas, pernos y otros"
+86992,86992. Servicios de diagnóstico por imagen
+14103,"14103. Fabricación de ropa de trabajo, uniformes y guardapolvos"
+74103,74103. Actividades de decorado de interiores
+55103,55103. Servicios de hostales
+08103,08103. Extracción de arenas
+45203,45203. Mantenimiento de neumáticos
+86203,86203. Consultorios odontológicos
+10303,"10303. Elaboración de pulpas, jaleas, dulces y mermeladas obtenidos por cocción"
+85303,85303. Educación superior de especialización y postgrado
+46303,"46303. Venta por mayor de huevos, aceites y grasas comestibles"
+56303,"56303. Expendio de jugos y bebidas en puestos fijos, móviles y ambulantes"
+10503,10503. Elaboración de quesos
+61903,61903. Servicios de mantenimiento en redes de telecomunicación
+90013,"90013. Actividades de músicos, orquestas, bandas y sus directores"
+01113,01113. Cultivo de semillas oleaginosas
+84113,84113. Actividades de los Gobiernos Departamentales Autónomos
+47113,"47113. Venta por menor en tiendas de barrio con surtido compuesto principalmente de alimentos, bebidas y tabaco"
+47213,"47213. Venta por menor de huevos, aceites y grasas comestibles"
+49213,49213. Transporte en trufi
+43313,"43313. Colocación de pisos de madera, cerámica y otros revestimientos para paredes y pisos"
+46413,46413. Venta por mayor de confecciones para el hogar
+47513,47513. Venta por menor de  confecciones para el hogar
+10613,10613. Beneficiado de quinua
+47613,47613. Venta al por menor de material de oficina y artículos de librería
+01123,01123. Cultivo de hortalizas de hoja y tallo
+84123,84123. Actividades de regulación y gestión de la vivienda y urbanismo
+47223,47223. Venta por menor de bebidas no alcohólicas en tienda
+49223,49223. Transporte en autobuses escolares y para el transporte de empleados
+46423,"46423. Venta por mayor de papel, cartón, materiales de embalaje y artículos de librería"
+47523,"47523. Venta por menor de vidrio plano, espejos y sus productos"
+47723,"47723. Venta por menor de partes, piezas y accesorios para el calzado"
+47823,47823. Venta de calzados en puestos de venta y mercados
+13923,"13923. Fabricación de banderas, gallardetes, estandartes y similares"
+64923,64923. Servicios financieros de instituciones no dedicadas a la interminación monetaria
+49233,49233. Transporte automotor de carga internacional
+46433,46433. Venta por mayor de artículos de bazar y menaje de cocina
+46633,46633. Venta por mayor de artículos prefabricados de cemento
+10733,10733. Elaboración de productos de confitería
+46443,"46443. Venta por mayor de instrumental médico, odontológico y artículos ortopédicos"
+96093,96093. Servicios de limpiabotas
+95293,95293. Reparación de relojes
+77293,"77293. Alquiler de instrumentos musicales, equipo de música, luz y sonido"
+85493,85493. Enseñanza de idiomas
+46593,"46593. Venta por mayor de maquinaria, equipo de minería y construcción"
+47593,47593. venta por menor de muebles y colchones
+47793,"47793. Venta por menor de prendas de vestir, calzado y productos textiles usados"
+94993,94993. Servicios de clubes de rotarios y logias
+25993,25993. Fabricación de artículos de metal de uso doméstico
+86993,"86993. Servicios de enfermeros, parteras, fisioterapeutas y otro personal especializado"
+31004,31004. Fabricación de somieres y colchones
+10104,"10104. Matanza, producción y procesamiento de carne de aves"
+71104,"71104. Actividades de consultoría en estudios geofísicos, geológicos y sismográficos"
+14104,14104. Fabricación de ropa deportiva
+45204,45204. Pintura de vehículos automotores
+10304,"10304. Elaboración de frutas, hortalizas y tubérculos congelados, desecados, deshidratados y fritos"
+46304,46304. Venta por mayor de carne en general y productos cárnicos
+10504,10504. Elaboración de yogurt
+32904,"32904. Fabricación escobas, pinceles y rodillos para pintura"
+90014,90014. Actividades de escritores
+84114,84114. Actividades de los Gobiernos Municipales Autónomos
+52214,52214. Servicio de aparcamientos o garajes
+47214,"47214. Venta por menor de carnes, embutidos y otros productos cárnicos"
+49214,49214. Transporte en funiculares y teleféricos
+43314,43314. Pintura de interior y exteriores de edificaciones
+46414,46414. Venta por mayor de prendas y accesorios de vestir
+47514,47514. Venta por menor de  artículos de mercería
+10614,10614. Elaboración de alimentos mediante el tostado o insuflación de granos de cereales
+01124,01124. Cultivo de hortalizas de bulbo
+49224,49224. Transporte de autobuses turísticos
+85424,85424. Enseñanza de bellas artes
+47524,47524. Venta por menor de materiales de construcción
+13924,"13924. Fabricación de cortinas, cenefas, visillos, fundas para diferentes objetos"
+46434,"46434. Venta por mayor de artefactos para el hogar, eléctricos, a gas y otros combustibles"
+46634,46634. Venta al por mayor de materiales de construcción de acero y aluminio
+46444,46444. Venta por mayor de productos veterinarios
+47774,"47774. Venta por menor de objetos de arte, artesanías y artículos religiosos"
+96094,96094. Servicios de cuidadores de vehículos
+64194,64194. Servicios de fondos financieros privados
+81294,81294. Actividades de desinfección y exterminio de plagas
+85494,85494. Servicio de tutoría académica
+47594,"47594. Venta por menor de cubiertos, vajilla, cristalería y utensilios de cocina"
+46694,46694. Venta por mayor de materiales plásticos y caucho
+10794,10794. Elaboración de sal de mesa (sal yodada)
+47794,"47794. Venta por menor de aparatos eléctricos, electrónicos y de computación usados"
+94994,94994. Asociación de copropietarios
+86994,"86994. Servicios de bancos de sangre, esperma y de otros órganos"
+10105,10105. Matanza de otro tipo de ganado y procesamiento de su carne
+14105,14105. Fabricación de sombreros y gorros
+55105,55105. Servicios de residenciales
+22205,"22205. Fabricación de artículos de mesa, cocina y tocador de plástico"
+45205,45205. Tapicería de vehículos automotores
+86205,86205. Servicios de poli consultorios y otros centros de salud
+46305,"46305. Venta por mayor de productos de panadería, pastelería y pastas frescas"
+32905,"32905. Fabricación de velas, cirios y artículos similares"
+90015,"90015. Actividades de escultores, pintores, dibujantes y grabadores"
+47215,"47215. Venta por menor de productos de panadería, pastelería y pastas frescas"
+85415,85415. Actividades de instructores y entrenadores deportivos
+46415,46415. Venta por mayor de calzado (excepto el ortopédico)
+01125,01125. Cultivo de legumbres frescas
+33125,33125. Reparación y mantenimiento de maquinaria de uso para la actividad comercial
+84125,84125. Actividades de regulación y gestión de programas de protección ambiental
+49235,49235. Transporte automotor de mudanzas
+46635,"46635. Venta por mayor de madera sin desbastar, puertas, ventanas, marcos y productos primarios"
+47775,"47775. Venta por menor de gafas, lentes, monturas y otros artículos no realizados a medida"
+96095,96095. Servicio de baños públicos
+81295,81295. Servicio de barrido de calles
+95295,95295. Servicios de copia de llaves
+85495,85495. Cursos de nivelación y preparación para ingresar a la universidad
+10795,10795. Elaboración de concentrados artificiales
+94995,94995. Organizaciones ambientalistas y ecologistas
+10106,10106. Elaboración de embutidos
+14106,14106. Fabricación de accesorios de vestir
+55106,55106. Servicios de alojamientos
+46306,"46306. Venta por mayor de café, té, cacao y especias"
+46436,"46436. Venta por mayor de aparatos de radió, televisión, CD, DVD grabadas y otro equipo de video y audio"
+46636,"46636. Venta por mayor de artículos de ferretería, fontanería y calefacción"
+47776,47776. Venta por menor de materiales y productos de limpieza
+96096,"96096. Servicios de traslado de maletas, changadores y cargadores y afines"
+85496,85496. Enseñanza para la conducción de automotores y aeronaves
+47596,47596. Venta por menor de instrumentos musicales
+46696,46696. Venta por mayor de desperdicios y desechos metálicos
+14107,14107. Confección de prendas de vestir a medida
+46307,"46307. Venta por mayor de bebidas, cigarrillos y tabaco"
+47217,"47217. Venta por menor de azúcar, dulces, chocolates y otros productos de confitería"
+46417,46417. Venta por mayor de artículos de talabartería
+46637,"46637. Venta por mayor de pintura, barnices y productos conexos"
+85497,"85497. Enseñanza comercial, contable y secretariado"
+47597,"47597. Venta por menor de cajas de caudales, cajas fuertes y otros sistemas de seguridad"
+14108,"14108. Confección de disfraces, trajes típicos y similares"
+55108,55108. Servicios de moteles
+46308,"46308. Venta por mayor de azúcar, dulces, chocolates, golosinas y otros"
+90018,90018. Actividades de servicios de amplificación y discjockey
+46638,"46638. Venta por mayor de vidrio, espejos y sus productos"
+85498,85498. Enseñanza de oficios
+10798,10798. Beneficiado de la castaña
+71109,71109. Otras actividades de consultorías en ingeniería n.c.p.
+23109,23109. Fabricación de otros productos de vidrio n.c.p.
+55109,55109. Otros servicios de alojamiento n.c.p.
+46109,46109. Venta por mayor a cambio de una retribución o por contrato de mercaderías n.c.p.
+70209,70209. Otras actividades de consultoría de gestión n.c.p.
+71209,71209. Otros servicios de ensayo y análisis técnico n.c.p.
+22209,22209. Fabricación de otros productos de plástico n.c.p.
+45209,45209. Mantenimiento y reparación de vehículos n.c.p.
+19209,19209. Fabricación de otros productos a base de petróleo n.c.p.
+10309,"10309. Elaboración y conservación de frutas, hortalizas, tubérculos n.c.p."
+46309,46309. Venta por mayor de otros productos alimenticios n.c.p.
+10509,10509. Elaboración de otros productos lácteos n.c.p.
+85509,85509. Servicios de apoyo educativo n.c.p.
+32909,32909. Otras industrias manufactureras n.c.p.
+88909,88909. Otras actividades de asistencia social sin alojamiento n.c.p.
+90019,90019. Otros servicios de espectáculos artísticos n.c.p.
+47219,47219. Venta por menor de otros productos alimenticios en tiendas especializadas n.c.p.
+43319,43319. Otros trabajos de terminación de edificios y obras de ingeniería civil n.c.p.
+47519,47519. Venta por menor de otros productos textiles en tiendas especializadas n.c.p.
+01619,01619. Otros servicios agrícolas
+10719,10719. Elaboración de otros productos de panadería y pastelería n.c.p.
+33129,33129. Reparación y mantenimiento de otras maquinarias n.c.p.
+84129,84129. Regulación de las actividades de otros organismos que prestan servicios sociales n.c.p.
+01629,01629. Otros servicios ganaderos n.c.p.
+13929,"13929. Fabricación de otros artículos confeccionados de materiales textiles, excepto prendas de vestir n.c.p."
+46439,46439. Venta por mayor de otros artículos para el hogar n.c.p.
+11049,"11049. Elaboración de otras bebidas, aromatizadas y/o edulcoradas, no alcohólicas"
+23959,"23959. Fabricación de otros artículos de hormigón, yeso, cemento o piedra artificial"
+47779,47779. Venta por menor de otros productos nuevos n.c.p.
+96099,96099. Otras actividades de servicios personales n.c.p.
+17099,17099. Fabricación de artículos de papelería de uso educativo y otros productos de papel
+81299,81299. Otros servicios de limpieza n.c.p.
+52299,52299. Otras actividades de apoyo al transporte n.c.p.
+93299,93299. Otras actividades de esparcimiento y recreativas n.c.p.
+95299,95299. Reparación de otros efectos personales y enseres domésticos n.c.p.
+85499,85499. Otros tipos de enseñanza n.c.p.
+46599,"46599. Venta por mayor de otros tipos de maquinaria, equipo y materiales n.c.p."
+47599,47599. Venta por menor de otros enseres domésticos para el hogar n.c.p.
+10799,10799. Elaboración de productos alimenticios n.c.p.
+13999,13999. Fabricación de otros productos textiles n.c.p.
+94999,94999. Otros servicios proporcionados por asociaciones n.c.p.
+25999,25999. Fabricación de productos metálicos n.c.p.
+86999,86999. Otros servicios relacionados con la salud humana n.c.p.

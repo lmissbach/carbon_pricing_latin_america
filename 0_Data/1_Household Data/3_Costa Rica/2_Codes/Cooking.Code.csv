@@ -1,0 +1,6 @@
+cooking_fuel,Cooking_Fuel, CF
+0,Ninguno (no cocina), Other
+1,Electricidad, Electricity
+2,Gas, LPG
+3,Leña o carbón, Firewood Charcoal
+4,Otro, Other

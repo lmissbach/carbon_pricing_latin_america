@@ -1,0 +1,12 @@
+edu_hhh,Education, ISCED
+01,No schooling,0
+02,Preschool,0
+03,Incomplete Primary,0
+04,Primary,1
+05,Incomplete Secondary,1
+06,Secondary,2
+07,Incomplete High School,2
+08,High School,3
+09,Incomplete Professional,5
+10,Professional,6
+11,Postgraduate,7

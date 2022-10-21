@@ -1,0 +1,9 @@
+toilet,Toilet,TLT
+1,red pública de desagüe dentro de la vivienda,Basic
+2,red pública de desagüe fuera de la vivienda pero dentro del edificio,Basic
+3,letrina,Basic
+4,pozo séptico,Basic
+5,pozo ciego o negro,Basic
+6,río acequia o canal,Limited
+7,otra,Limited
+9,campo abierto o al aire libre,No Service

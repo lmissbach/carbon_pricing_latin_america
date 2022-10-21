@@ -1,0 +1,72 @@
+ind_hhh;
+;
+130;0130 Propagación de plantas (actividades de los viveros, excepto viveros forestales)
+141;0141 Cría de ganado bovino y bufalino
+161;0161 Actividades de apoyo a la agricultura
+210;0210 Silvicultura y otras actividades forestales
+220;0220 Extracción de madera
+812;0812 Extracción de arcillas de uso industrial, caliza, caolín y bentonitas
+1050;1051 Elaboración de productos de molinería
+1072;1072 Elaboración de panela
+1080;1081 Elaboración de productos de panadería
+2022;2022 Fabricación de pinturas, barnices y revestimientos similares, tintas para impresión y masillas
+2023;"2023 Fabricación de jabones y detergentes, preparados para limpiar y pulir; perfumes y preparados de tocador"
+2100;Fabricación de productos farmacéuticos, sustancias químicas medicinales y productos botánicos de uso
+3230;3230 Fabricación de artículos y equipo para la práctica del deporte
+3530;3530 Suministro de vapor y aire acondicionado
+3812;3812 Recolección de desechos peligrosos
+4100;4111 Construcción de edificios residenciales
+4210;4210 Construcción de carreteras y vías de ferrocarril
+4312;4312 Preparación del terreno
+4321;4321 Instalaciones eléctricas
+4322;4322 Instalaciones de fontanería, calefacción y aire acondicionado
+4412;
+4520;4520 Mantenimiento y reparación de vehículos automotores
+4630;4631 Comercio al por mayor de productos alimenticios
+4669;4669 Comercio al por mayor de otros productos n.c.p.
+4711;Comercio al por menor en establecimientos no especializados con surtido compuesto principalmente por
+4752;Comercio al por menor de artículos de ferretería, pinturas y productos de vidrio en establecimientos
+4921;4921 Transporte de pasajeros
+4923;4923 Transporte de carga por carretera
+5221;5221 Actividades de estaciones, vías y servicios complementarios para el transporte terrestre
+5223;Actividades de aeropuertos, servicios de navegación aérea y demás actividades conexas al transporte aéreo
+5310;5310 Actividades postales nacionales
+5311;5310 Actividades postales nacionales
+5610;5611 Expendio a la mesa de comidas preparadas
+6100;6110 Actividades de telecomunicaciones alámbricas
+6210;6209 Otras actividades de tecnologías de información y actividades de servicios informáticos
+6419;6421 Actividades de las corporaciones financieras
+6512;6512 Seguros de vida
+6622;6621 Actividades de agentes y corredores de seguros
+6820;6820 Actividades inmobiliarias realizadas a cambio de una retribución o por contrata
+7020;7020 Actividades de consultaría de gestión
+7210;7210 Investigaciones y desarrollo experimental en el campo de las ciencias naturales y la ingeniería
+7410;7410 Actividades especializadas de diseño
+7810;7810 Actividades de agencias de empleo
+7830;7830 Otras actividades de suministro de recurso humano
+7911;7911 Actividades de las agencias de viaje
+8010;8010 Actividades de seguridad privada
+8110;8110 Actividades combinadas de apoyo a instalaciones
+8121;8121 Limpieza general interior de edificios
+8129;8129 Otras actividades de limpieza de edificios e instalaciones industriales
+8130;8130 Actividades de paisajismo y servicios de mantenimiento conexos
+8220;8220 Actividades de centros de llamadas (Call center)
+8411;8411 Actividades legislativas de la administración pública
+8412;8412 Actividades ejecutivas de la administración pública
+8423;8423 Orden público y actividades de seguridad
+8430;8430 Actividades de planes de seguridad social de afiliación obligatoria
+8510;8511 Educación de la primera infancia
+8521;8521 Educación básica secundaria
+8522;8522 Educación media académica
+8530;8530 Establecimientos que combinan diferentes niveles de educación
+8610;8610 Actividades de hospitales y clínicas, con internación
+8690;8691 Actividades de apoyo diagnóstico
+8890;8890 Otras actividades de asistencia social sin alojamiento
+9200;9200 Actividades de juegos de azar y apuestas
+9312;9312 Actividades de clubes deportivos
+9491;9491 Actividades de asociaciones religiosas
+9499;9499 Actividades de otras asociaciones n.c.p.
+9511;9511 Mantenimiento y reparación de computadores y de equipo periférico
+9603;9603 Pompas fúnebres y actividades relacionadas
+9700;9700 Actividades de los hogares individuales como empleadores de personal doméstico
+999999;Unknown

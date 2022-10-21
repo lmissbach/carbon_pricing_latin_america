@@ -1,0 +1,8 @@
+cooking_fuel,Label,CF
+1,1.LEÑA,Firewood
+2,2.GUANO/BOSTA O TAQUIA, Other Biomass
+3,3.GAS LICUADO (garrafa),LPG
+4,4.GAS NATURAL POR RED,Gas
+5,5.OTRO (Especifique),Other
+6,6.ELECTRICIDAD,Electricity
+7,7.NO COCINA, No Cooking

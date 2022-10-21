@@ -1,0 +1,53 @@
+edu_hhh,Education, ISCED
+0,Ningún grado,0
+1,Preparatoria,2
+2,Enseñanza especial,1
+11,Primer año de primaria,1
+12,Segundo año de primaria,1
+13,Tercero año de primaria,1
+14,Cuarto año de primaria,1
+15,Quinto año de primaria,1
+16,Sexto año de primaria,1
+19,Primaria ignorados,NA
+21,Primer año de secundaria académica,2
+22,Segundo año de  secundario académica,2
+23,Tercer año de secundaria académica,2
+24,Cuarto año de  secundaria académica,2
+25,Quinto año de  secundaria académica,2
+26,Tiene el bachillerato de secundaria academica,2
+29,Secundaria académica ignorado,NA
+31,Primer año de secundaria técnica,3
+32,Segundo año de secundaria técnica,3
+33,Tercer año de secundaria técnica,3
+34,Cuarto año de secundaria técnica,3
+35,Quinto año de secundaria técnica,3
+36,Sexto año de secundaria técnica,3
+37,Tiene el bachillerato de secundaria técnica,3
+39,Secundaria técnica ignorado,NA
+41,Primer año en parauniversitaria,6
+42,Segundo año en parauniversitaria,6
+43,Tercer año en parauniversitaria,6
+44,Cuarto año en parauniversitaria,6
+49,Parauniversitaria ignorados,NA
+51,Primer año de universidad,7
+52,Segundo años de universidad,7
+53,Tercer año de universidad,7
+54,Cuarto año de universidad,7
+55,Quinto año de universidad,7
+56,Sexto año de universidad,7
+57,Setimo año de universidad,7
+58,Octavo año de universidad,7
+59,Universitaria ignorado,NA
+61,Especialidad un año,7
+62,Especialidad dos años,7
+63,Especialidad tercer año,7
+64,Especialidad cuarto año,7
+65,Especialidad quinto año,7
+69,Especialidad ignorada, 9
+71,Maestría doctorado un año,8
+72,Maestría doctorado dos años,8
+73,Maestría doctorado tres años,8
+74,Maestría doctorado cuatro años,8
+75,Maestría doctorado cinco años,8
+79,Maestría doctorado Ignorada, NA
+99,Ignorado, NA

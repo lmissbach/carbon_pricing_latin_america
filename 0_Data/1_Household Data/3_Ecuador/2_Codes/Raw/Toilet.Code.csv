@@ -1,0 +1,6 @@
+Label,toilet.type,TLT
+Inodoro y alcantarillado,1,Basic
+Inodoro y pozo ciego,2,Basic
+Inodoro y pozo séptico,3,Basic
+Letrina,4,Basic
+No tiene,5,No Service

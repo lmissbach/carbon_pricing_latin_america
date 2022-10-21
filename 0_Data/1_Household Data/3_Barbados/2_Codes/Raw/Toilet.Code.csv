@@ -1,0 +1,7 @@
+toilet,Toilet
+1,WC (flush toilet linked to sewer)
+2,WC (flush toilet linked to septic tank)
+3,WC (flush toilet linked to well)
+4,WC (flush toilet linked to private treatment facility)
+5,Pit - latrine
+6,Other

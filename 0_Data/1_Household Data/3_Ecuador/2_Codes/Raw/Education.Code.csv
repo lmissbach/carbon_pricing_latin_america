@@ -1,0 +1,11 @@
+Label,education,ISCED
+Alfabetización,1,1
+Educación básica,2,1
+Educación inicial,3,2
+Educación Media o Bachillerato,4,5
+Ninguno,5,0
+Post Bachillerato / Sup. No Universitario,6,6
+Postgrado,7,7
+Primaria,8,1
+Secundaria,9,3
+Superior,10,6

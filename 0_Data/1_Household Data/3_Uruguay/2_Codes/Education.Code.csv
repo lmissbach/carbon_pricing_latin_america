@@ -1,0 +1,9 @@
+Education,edu_hhh, ISCED
+Educacion Primaria,1, 1
+Educacion Media,2,2
+Unknown,3,9
+Educacion Technica,4, 5
+Magisterio o Profesorado,5,8
+Postgrado,6,7
+Terciario no universitario,7,6
+Universidad o similar,8,6

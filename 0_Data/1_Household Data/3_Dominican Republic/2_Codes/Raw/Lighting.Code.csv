@@ -1,0 +1,9 @@
+lighting_fuel,Lighting
+1,Electricity (public)
+2,Electricity (private)
+3,Power Plant
+4,Kerosene
+5,Gas (Propan)
+6,Solar Panel
+7,Candle
+99,Others

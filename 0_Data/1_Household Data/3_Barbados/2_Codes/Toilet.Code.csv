@@ -1,0 +1,7 @@
+toilet,Toilet,TLT
+1,WC (flush toilet linked to sewer),Basic 
+2,WC (flush toilet linked to septic tank), Basic 
+3,WC (flush toilet linked to well),Basic 
+4,WC (flush toilet linked to private treatment facility),Basic 
+5,Pit - latrine, Limited 
+6,Other, No Service
