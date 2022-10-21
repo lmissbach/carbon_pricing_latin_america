@@ -6,19 +6,15 @@ carbon.price <- 40 # in USD/tCO2
 
 # 1       Packages ####
 
-library("haven")
-library("Hmisc")
-library("openxlsx")
-library("rattle")
-library("scales")
-library("tidyverse")
+if(!require("pacman")) install.packages("pacman")
+
+p_load("haven", "Hmisc", "openxlsx", "rattle", "scales", "tidyverse")
+
 options(scipen=999)
 
 # 1.1     Setup ####
 
 for(Country.Name in c("Argentina", "Barbados", "Bolivia", "Brazil", "Chile", "Colombia", "Costa Rica", "Dominican Republic", "Ecuador", "El Salvador", "Guatemala", "Mexico", "Nicaragua", "Paraguay" ,"Peru", "Uruguay")) {
-
-#Country.Name <- "Brazil"
 
 Country_Year <- data.frame(Country = c("Argentina", "Barbados", "Bolivia", "Brazil", "Chile", "Colombia", "Costa Rica", "Dominican Republic", "Ecuador", "El Salvador", "Guatemala", "Mexico","Nicaragua", "Paraguay", "Peru", "Uruguay"), 
                            Year =    c("2017",     "2016"  ,    "2019",    "2017"  , "2018",  "2016",     "2018",       "2018",               "2013",    "2015",        "2014",     "2019",   "2014",    "2011",       "2019", "2016"))
@@ -34,7 +30,7 @@ path_0                  <-list.files("../0_Data/1_Household Data/")[grep(Country
 household_information   <- read_csv(sprintf("../0_Data/1_Household Data/%s/1_Data_Clean/household_information_%s.csv", path_0, Country.Name), col_types = cols(hh_id = col_character()))
 expenditure_information <- read_csv(sprintf("../0_Data/1_Household Data/%s/1_Data_Clean/expenditures_items_%s.csv", path_0, Country.Name), col_types = cols(hh_id = col_character()))
 if(Country.Name == "Bolivia"){expenditure_information <- read_csv(sprintf("../0_Data/1_Household Data/%s/1_Data_Clean/expenditures_items_%s.csv", path_0, Country.Name), col_types = cols(hh_id = col_character(),item_code = col_character()))}
-if(Country.Name != "Chile"){appliances_0            <- read_csv(sprintf("../0_Data/1_Household Data/%s/1_Data_Clean/appliances_0_1_%s.csv", path_0, Country.Name), col_types = cols(hh_id = col_character()))}
+if(Country.Name != "Chile")  {appliances_0            <- read_csv(sprintf("../0_Data/1_Household Data/%s/1_Data_Clean/appliances_0_1_%s.csv", path_0, Country.Name), col_types = cols(hh_id = col_character()))}
 
 if(ncol(expenditure_information)>4){
 print("Warning! Expenditure-DF is in Wide-Format.")
@@ -46,6 +42,8 @@ if(sum(is.na(household_information$inc_gov_cash))==nrow(household_information)){
 
 # 3       Data Cleaning ####
 # 3.1     Check for Duplicates ####
+
+# Multiple checks for duplicates.
 
 household_information_1 <- household_information %>%
   group_by_at(vars(-hh_id))%>%
@@ -81,7 +79,7 @@ hh_duplicates_expenditures_1 <- expenditure_information_1 %>%
   select(hh_id)
 
 # Alternative: calculates share of duplicates on the item level
-# Use this as a monitoring tool
+
 expenditure_information_2 <- expenditure_information %>%
   filter(!is.na(expenditures_year) & expenditures_year != 0)%>%
   group_by(item_code, expenditures_year)%>%
@@ -96,8 +94,6 @@ hh_duplicates_expenditures_2 <- expenditure_information_2 %>%
   select(hh_id)%>%
   distinct()
 
-# Could be sufficient to monitor
-
 expenditure_information_3 <- expenditure_information %>%
   filter(!is.na(expenditures_year) & expenditures_year != 0)%>%
   group_by(hh_id)%>%
@@ -109,8 +105,6 @@ expenditure_information_3 <- expenditure_information %>%
 
 if(nrow(filter(expenditure_information_3, duplicate_flag_2 ==1))>1) print("Warning! Two or more households spend exactly the same amount of money on all their items.")
 print(paste0(nrow(filter(expenditure_information_3, duplicate_flag_2 == 1)), sprintf(" households report the same amount of expenditures on all their items in %s.", Country.Name)))
-
-# Probably more important than searching for duplicates at item expenditure level
 
 hh_duplicates_expenditures_3 <- expenditure_information_3 %>%
   filter(duplicate_flag_2 == 1)%>%
@@ -188,7 +182,7 @@ rm(expenditure_information_1, expenditure_information_2, expenditure_information
 expenditure_information_4 <- expenditure_information %>%
   # pivot_longer(-hh_id, names_to = "item_code", values_to = "expenditures") %>%
   left_join(select(household_information, hh_id, hh_weights))%>%
-  # here: negative values are deleted (@EU)
+  # here: negative values are deleted
   filter(!is.na(expenditures_year) & expenditures_year > 0 )%>%
   group_by(item_code)%>%
   mutate(outlier_95 = wtd.quantile(expenditures_year, weights = hh_weights, probs = 0.95),
@@ -234,6 +228,9 @@ print("Expenditure data cleaned!")
 rm(expenditure_information_4.1, expenditure_information_4, expenditure_outlier)
 
 # 4       Summary Statistics ####
+
+# Instead, see CPI_3_Econometric_Analysis_LCA.R
+
 # _____   ####
 # 5       Transformation and Modelling ####
 
@@ -270,8 +267,6 @@ cpis_1 <- cpis_0 %>%
 
 
 inflation_factor <- cpis_1$inflation_factor[cpis_1$Country == Country.Name]
-
-#if(Country.Name == "Argentina"){inflation_factor <- 1}
 
 rm(cpis_1, cpis_0, information.ex, cpis)
 
@@ -346,9 +341,7 @@ if(nrow(item_codes != 0) | nrow(matching.check) != 0) break
 
 rm(matching.check, item_codes)
 
-# 5.1.4   Add Codes if necessary (TBD) ####
-
-# 5.1.5   Matching Fuel Concordance ####
+# 5.1.4   Matching Fuel Concordance ####
 
 fuels <- read.xlsx(sprintf("../0_Data/1_Household Data/%s/3_Matching_Tables/Item_Fuel_Concordance_%s.xlsx", path_0, Country.Name), colNames = FALSE)
 
@@ -368,8 +361,7 @@ if(nrow(energy) >0) print("Warning. Watch out for energy item codes.")
 
 rm(energy)
 
-# 5.1.6   Vector with Carbon Intensities ####
-
+# 5.1.5   Vector with Carbon Intensities ####
 
 if(Country.Name != "Barbados"){carbon_intensities_0 <- read.xlsx("../0_Data/2_IO Data/GTAP_10_MRIO/Carbon_Intensities_Full_0.xlsx", sheet = Country.Name)}
 if(Country.Name == "Barbados"){carbon_intensities_0 <- read.xlsx("../0_Data/2_IO Data/GTAP_10_MRIO/Carbon_Intensities_Full_0.xlsx", sheet = "Rest_of_the_Caribbean")}
@@ -450,8 +442,6 @@ expenditures_categories_0 <- left_join(expenditure_information, categories)%>%
   select(hh_id, category, share_category)%>%
   pivot_wider(names_from = "category", values_from = "share_category", names_prefix = "share_", values_fill = 0)
 
-rm()
-
 # 6.5     Calculating Expenditure Shares on detailed Energy Items ####
 
 expenditures_fuels <- left_join(expenditure_information, fuels)%>%
@@ -465,8 +455,6 @@ expenditures_fuels <- left_join(expenditure_information, fuels)%>%
 expenditures_fuels <- distinct(household_information, hh_id)%>%
   left_join(expenditures_fuels)%>%
   mutate_at(vars(-hh_id), list(~ ifelse(is.na(.),0,.)))
-
-rm()
 
 # 6.6     Summarising Expenditures on the GTAP Level ####
 
@@ -521,19 +509,13 @@ household_sectoral_carbon_footprint <- left_join(expenditure_information, matchi
                                                           ifelse(category == "energy" & fuel == "Electricity", "Electricity",
                                                                  ifelse(category == "energy" & (fuel == "Gas" | fuel == "LPG" | fuel == "Kerosene" | fuel == "Coal"), "cooking_fuels", "NA_2")))))))%>%
   left_join(carbon_intensities, by = "GTAP")%>%
-  mutate(
-    #CO2_s_t_global      = expenditures_USD_2014*CO2_t_per_dollar_global,
-         CO2_s_t_national    = expenditures_USD_2014*CO2_t_per_dollar_national,
-    #   CO2_s_t_electricity = expenditures_USD_2014*CO2_t_per_dollar_electricity,
-    #   CO2_s_t_transport   = expenditures_USD_2014*CO2_t_per_dollar_transport
-    )%>%
+  mutate(CO2_s_t_national    = expenditures_USD_2014*CO2_t_per_dollar_national)%>%
   select(-starts_with("CO2_t_per"))%>%
   group_by(hh_id, aggregate_category)%>%
   summarise(CO2_s_t_national      = sum(CO2_s_t_national))%>%
   ungroup()%>%
   mutate(exp_s_CO2_national    = CO2_s_t_national*carbon.price)%>%
   select(-CO2_s_t_national)%>%
-  # Weiterrechnen mit exp_s_CO2_national
   pivot_wider(names_from = "aggregate_category", values_from = "exp_s_CO2_national", values_fill = 0, names_prefix = "exp_s_")%>%
   rename(exp_s_Goods = exp_s_goods, exp_s_Services = exp_s_services, exp_s_Food = exp_s_food)
 
