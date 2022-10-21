@@ -8,7 +8,7 @@ Please note that due to confidentiality restrictions we have no permission to sh
 - Argentina: https://www.indec.gob.ar/indec/web/Nivel4-Tema-4-45-151
 - Barbados: https://publications.iadb.org/en/barbados-survey-living-conditions-2016
 - Bolivia: https://www.ine.gob.bo/index.php/estadisticas-sociales/vivienda-y-servicios-basicos/encuestas-de-hogares-vivienda/
-- Brazil: https://www.ibge.gov.br/en/statistics/social/population/25610-pof-2017-2018-pof-en.html?=&t=downloads
+- Brazil: https://www.ibge.gov.br/en/statistics/social/population/25610-pof-2017-2018-pof-en.html?=&t=downloads including https://github.com/paulobistenealexandrino/Iniciacao-Cientifica/blob/f7a52cb8efb025590ef2a8d27fb0f1b2d79ef3fd/Leitura%20dos%20Microdados%20-%20R.R
 - Chile: https://www.ine.cl/estadisticas/sociales/ingresos-y-gastos/encuesta-de-presupuestos-familiares
 - Colombia: https://www.dane.gov.co/index.php/estadisticas-por-tema/pobreza-y-condiciones-de-vida/encuesta-nacional-de-presupuestos-de-los-hogares-enph
 - Costa Rica: https://inec.cr/estadisticas-fuentes/encuestas/encuesta-nacional-ingresos-gastos-los-hogares
