@@ -1,10 +1,10 @@
-# Supplementary Data to Carbon Pricing, Cash Transfers and Poverty - Missbach et al. 
+# Supplementary Data to Carbon Pricing, Cash Transfers and Poverty 
 
-This repository contains supplementary data on the publication "Carbon Pricing, Cash Transfers and Poverty" by Missbach, Steckel and Vogt-Schilb.
+This repository contains supplementary data on the publication "Carbon Pricing, Cash Transfers and Poverty".
 
 ## Data
 
-Please note that due to confidentiality restrictions we have no permission to share raw data. Access is permitted upon reasonable request from the authors and conditional on permission by the respective statistical authorities. Raw data for each country-specific household budget survey can be accessed via:
+Please note that due to confidentiality restrictions we have no permission to share raw data. Access is permitted upon reasonable request from the authors and conditional on permission by the respective statistical authorities. Raw data for each country-specific household budget survey can nevertheless be accessed via:
 - Argentina: https://www.indec.gob.ar/indec/web/Nivel4-Tema-4-45-151
 - Barbados: https://publications.iadb.org/en/barbados-survey-living-conditions-2016
 - Bolivia: https://www.ine.gob.bo/index.php/estadisticas-sociales/vivienda-y-servicios-basicos/encuestas-de-hogares-vivienda/
@@ -25,10 +25,12 @@ Please note that due to confidentiality restrictions we have no permission to sh
 ## Supplementary data and matching tables
 
 Supplementary data and matching tables are accessible via a stable online repository at Zenodo:
+This repository includes matching tables for each country, computed sectoral carbon_intensities from GTAP and supplementary information, such as exchange rates and consumer prices indices used for this analysis.
 
 # Code:
 
-- CPI_1_Cleaning_Transformiona_Model_LCA.R includes code to homogenize household data and compute the carbon pricing incidence of households.
+- Cleaning_X contains code for each country-specific household data. Outputs are fed into CPI_1_Cleaning_Transformation_Model_LCA.R
+- CPI_1_Cleaning_Transformion_Model_LCA.R includes code to homogenize household data and compute the carbon pricing incidence of households.
 - CPI_2_Graphical_Output_LCA.R includes code to produce all figures shown in the main body of the text and the supplementary information appendix.
 - CPI_3_Econometric_Analysis_LCA.R includes code to produce all tables and statistical analysis, mostly shown in the supplementary information appendix.
 
