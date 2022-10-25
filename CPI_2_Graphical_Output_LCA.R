@@ -19,14 +19,14 @@ for(Country.Name in c("Argentina", "Barbados","Bolivia", "Brazil", "Chile", "Col
                       "Costa Rica", "Dominican Republic", "Ecuador",
                       "El Salvador", "Guatemala", "Mexico", "Nicaragua", "Paraguay", "Peru", "Uruguay")) {
   
-  carbon_pricing_incidence_0 <- read_csv(sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/4_Transformed Data/Carbon_Pricing_Incidence_%s.csv", Country.Name))
+  carbon_pricing_incidence_0 <- read_csv(sprintf("../../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/4_Transformed Data/Carbon_Pricing_Incidence_%s.csv", Country.Name))
   
-  household_information_0    <- read_csv(sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/4_Transformed Data/household_information_%s_new.csv", Country.Name))
+  household_information_0    <- read_csv(sprintf("../../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/4_Transformed Data/household_information_%s_new.csv", Country.Name))
   
   if(Country.Name == "El_Salvador") Country.Name.2 <- "El Salvador" else Country.Name.2 <- Country.Name
   
   if(Country.Name == "Bolivia") {
-    ETH <- read_csv("../0_Data/1_Household Data/3_Bolivia/2_Codes/Ethnicity.Code.csv")%>%
+    ETH <- read_csv("../../0_Data/1_Household Data/3_Bolivia/2_Codes/Ethnicity.Code.csv")%>%
       rename(ETH = ethnicity, ethnicity = Ethnicity_0)%>%
       select(ETH, ethnicity)
     
@@ -106,7 +106,7 @@ plot_figure_1 <- function(ATT  = element_text(size = 7), ATX = element_text(size
                           fill0 = "none",
                           accuracy_0 = 1,
                           data_0 = carbon_pricing_incidence_2.1.1,
-                          title_0 = "National Carbon Prices"){
+                          title_0 = ""){
   
   P_1 <- ggplot(data_0, aes(x = as.character(Income_Group_5)))+
     geom_rect(aes(ymin = min_median, ymax = max_median), xmin = 0, xmax = 6, alpha = 0.2, fill = "lightblue", inherit.aes = FALSE)+
@@ -139,7 +139,7 @@ plot_figure_1 <- function(ATT  = element_text(size = 7), ATX = element_text(size
 
 P_2.1.1 <- plot_figure_1()
 
-jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figure_1.jpg", width = 15.5, height = 15, unit = "cm", res = 400)
+jpeg("../../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figure_1.jpg", width = 15.5, height = 15, unit = "cm", res = 400)
 print(P_2.1.1)
 dev.off()
 
