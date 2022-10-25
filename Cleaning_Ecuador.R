@@ -1,18 +1,23 @@
+if(!require("pacman")) install.packages("pacman")
+
+p_load("haven", "Hmisc", "openxlsx", "rattle", "scales", "tidyverse")
+
 # Load Data ####
 
-ec_01 <- read.csv("Dataset_2014/DATOS_ABIERTOS/BASES/01_ecv6r_vivienda.csv", encoding = "UTF-8", stringsAsFactors = FALSE)
-ec_02 <- read_csv("Dataset_2014/DATOS_ABIERTOS/BASES/02_ecv6r_personas.csv", encoding = "UTF-8", stringsAsFactors = FALSE)
+path_0 <- "R:/MSA/datasets/Household Microdata/Ecuador/" # path with raw data
+
+ec_01 <- read.csv(paste0(path_0, "Dataset_2014/DATOS_ABIERTOS/BASES/01_ecv6r_vivienda.csv"), encoding = "UTF-8", stringsAsFactors = FALSE)
+ec_02 <- read.csv(paste0(path_0, "Dataset_2014/DATOS_ABIERTOS/BASES/02_ecv6r_personas.csv"), encoding = "UTF-8", stringsAsFactors = FALSE)
 
 # ec_03 <- read.csv("Dataset_2014/DATOS_ABIERTOS/BASES/03_ecv6r_gastos_alimentos1.csv", encoding = "UTF-8", stringsAsFactors = FALSE)
 # Information on who was interviewed on expenditures
 
-ec_04 <- read.csv("Dataset_2014/DATOS_ABIERTOS/BASES/04_ecv6r_gastos_alimentos.csv", encoding = "UTF-8", stringsAsFactors = FALSE)
-ec_05 <- read.csv("Dataset_2014/DATOS_ABIERTOS/BASES/05_ecv6r_otros_gastos.csv", encoding = "UTF-8", stringsAsFactors = FALSE)
-ec_11 <- read.csv("Dataset_2014/DATOS_ABIERTOS/BASES/11_ecv6r_equipamiento.csv", encoding = "UTF-8", stringsAsFactors = FALSE)
+ec_04 <- read.csv(paste0(path_0, "Dataset_2014/DATOS_ABIERTOS/BASES/04_ecv6r_gastos_alimentos.csv"), encoding = "UTF-8", stringsAsFactors = FALSE)
+ec_05 <- read.csv(paste0(path_0, "Dataset_2014/DATOS_ABIERTOS/BASES/05_ecv6r_otros_gastos.csv"), encoding = "UTF-8", stringsAsFactors = FALSE)
+ec_11 <- read.csv(paste0(path_0, "Dataset_2014/DATOS_ABIERTOS/BASES/11_ecv6r_equipamiento.csv"), encoding = "UTF-8", stringsAsFactors = FALSE)
 
 #ec_12 <- read.csv("Dataset_2014/DATOS_ABIERTOS/BASES/12_ecv6r_capital_social.csv", encoding = "UTF-8", stringsAsFactors = FALSE)
 # Happiness, how you percieve your life
-
 # ec_24 <- read.csv("Dataset_2014/DATOS_ABIERTOS/BASES/24_factor_fin.csv", encoding = "UTF-8", stringsAsFactors = FALSE)%>%
 #   rename(IDENTIF_SECT = idsector)
 # ec_25 <- read.csv("Dataset_2014/DATOS_ABIERTOS/BASES/25_base_de_trabajo_hogares.csv", encoding = "UTF-8", stringsAsFactors = FALSE)
@@ -20,27 +25,85 @@ ec_11 <- read.csv("Dataset_2014/DATOS_ABIERTOS/BASES/11_ecv6r_equipamiento.csv",
 # ec_26 <- read.csv("Dataset_2014/DATOS_ABIERTOS/BASES/26_base_de_trabajo_personas.csv", encoding = "UTF-8", stringsAsFactors = FALSE)
 # condensed data on persons within households
 
-# there exists way more in ARCHIVOS de Variables but this should suffice
+ec_06 <- read.csv(sprintf(path_0, "/Dataset_2014/DATOS_ABIERTOS/BASES/06_ecv6r_otros_ingresos.csv"),     encoding = "UTF-8", stringsAsFactors = FALSE)
+ec_25 <- read.csv("R:/MSA/datasets/Household Microdata/Ecuador/Dataset_2014/DATOS_ABIERTOS/BASES/25_base_de_trabajo_hogares.csv", encoding = "UTF-8", stringsAsFactors = FALSE)
+ec_26 <- read.csv(sprintf(path_0, "/Dataset_2014/DATOS_ABIERTOS/BASES/26_base_de_trabajo_personas.csv"), encoding = "UTF-8", stringsAsFactors = FALSE)
 
 # Transform Data ####
 
 ec_011 <- ec_01%>%
-  select(IDENTIF_SECT, IDENTIF_HOG, AREA_5000, AREA_2000, VI13, VI14, VI17, VI26, VI27, VI28A, VI30A, VI31, VI32A, VI34A, AM10A, AM10B, FEXP, CIUDAD_AUTO, PROVINCIA)%>%
-  rename(hh_id = IDENTIF_HOG, cooking.fuel = VI13, toilet.type = VI14, water.source = VI17, lighting.fuel = VI26, electricity.access = VI27,
-         internet.access = VI31, light_bulb.noa = AM10A, light_bulb.nob = AM10B, hh_weights = FEXP,
-         district = CIUDAD_AUTO, province = PROVINCIA)
+  select(IDENTIF_SECT, IDENTIF_HOG, CIUDAD, AREA_5000, AREA_2000, VI13, VI14, VI17, VI26, VI27, VI28A, VI30A, VI31, VI32A, VI34A, FEXP, CIUDAD_AUTO, PROVINCIA)%>%
+  rename(hh_id = IDENTIF_HOG, cooking_fuel = VI13, toilet = VI14, water = VI17, lighting_fuel = VI26,
+         internet.access = VI31, hh_weights = FEXP,
+         district = PROVINCIA, province = CIUDAD_AUTO, village = CIUDAD)%>%
+  mutate(electricity.access = ifelse(VI27 == "Si, de uso común para varias viviendas" | VI27 == "Si, de uso exclusivo para la vivienda",1,0))%>%
+  select(-VI27)
 
-ec_011bulb <- ec_011 %>%
-  select(hh_id, light_bulb.noa, light_bulb.nob)%>%
-  mutate(light_bulba.01 = ifelse(light_bulb.noa > 0, 1, 0))%>%
-  mutate(light_bulbb.01 = ifelse(light_bulb.nob > 0, 1, 0))%>%
-  rename(light_bulba.no = light_bulb.noa, light_bulbb.no = light_bulb.nob)
+ec_0111 <- ec_011 %>%
+  select(hh_id, AREA_5000, district, province, hh_weights, cooking_fuel, toilet, water, lighting_fuel, electricity.access, internet.access)%>%
+  mutate(internet.access = ifelse(internet.access == "No", 0, 1))
 
-ec_011bulba <- ec_011bulb %>%
-  select(-light_bulba.01, -light_bulbb.01)
+ec_02.1 <- ec_02 %>%
+  filter(PD04 == "Jefe")%>%
+  rename(hh_id = IDENTIF_HOG, age_hhh = EDAD, sex_hhh = SEXO, ind_hhh = PA16)%>%
+  select(hh_id, age_hhh, sex_hhh, ind_hhh)%>%
+  mutate(sex_hhh = ifelse(sex_hhh == "Hombre",1,2))
 
-ec_011bulbb <- ec_011bulb %>%
-  select(-light_bulba.no, -light_bulbb.no)
+ec_021 <- ec_02%>%
+  select(IDENTIF_HOG, PERSONA, EDAD, PD03B, PD04, PD18, PE47, SEXO, PA16)%>%
+  rename(hh_id = IDENTIF_HOG, edu_hhh = PE47, ethnicity = PD18, sex_hhh = SEXO, ind_hhh = PA16, age_hhh = EDAD)%>%
+  mutate(age_hhh = as.numeric(age_hhh))
+
+ec_021$age[is.na(ec_021$age)] <- 98
+
+ec_022 <- ec_021 %>%
+  mutate(adults = ifelse(age_hhh >= 18, 1, 0))%>%
+  mutate(children = ifelse(age_hhh < 18, 1, 0))%>%
+  group_by(hh_id)%>%
+  mutate(hh_size = n())%>%
+  mutate(adults = sum(adults))%>%
+  mutate(children = sum(children))%>%
+  ungroup()%>%
+  filter(PD04 == "Jefe")%>%
+  select(hh_id, hh_size, adults, children, edu_hhh, ethnicity, ind_hhh, age_hhh, sex_hhh)
+
+ec_0 <- left_join(ec_0111, ec_022, by = "hh_id")%>%
+  select(hh_id, hh_size, hh_weights, adults, children, everything())%>%
+  mutate(urban_01 = ifelse(AREA_5000 == "Urbano",1,0))%>%
+  select(-AREA_5000)
+
+inc_1 <- ec_02 %>%
+  rename(hh_id = IDENTIF_HOG)%>%
+  select(hh_id, PA92, starts_with("PA85"))%>%
+  mutate(PA85B = ifelse(PA85A == "Instituciones Nacionales", PA85B,0),
+         PA92 = ifelse(is.na(PA92),0,PA92))%>%
+  select(hh_id, PA92, PA85B)%>%
+  mutate(sum_a = PA92 + PA85B)%>%
+  group_by(hh_id)%>%
+  summarise(inc_gov_cash = sum(sum_a),
+            inc_gov_monetary = 0)%>%
+  ungroup()
+
+inc_2 <- ec_06 %>%
+  rename(hh_id = IDENTIF_HOG)%>%
+  select(hh_id, starts_with("IB"))%>%
+  select(hh_id, ends_with("02"), IB0104)%>%
+  mutate(IB0102 = as.numeric(IB0102))%>%
+  mutate_at(vars(-hh_id), list(~ ifelse(is.na(.)|. == "",0,.)))%>%
+  mutate(inc_gov_cash     = IB0302 + IB0104,
+         inc_gov_monetary = IB0102 + IB0202)%>%
+  select(hh_id, inc_gov_cash, inc_gov_monetary)
+
+inc_3 <- bind_rows(inc_1, inc_2)%>%
+  group_by(hh_id)%>%
+  summarise(inc_gov_cash = sum(inc_gov_cash),
+            inc_gov_monetary = sum(inc_gov_monetary))%>%
+  ungroup()
+
+household_information <- ec_0 %>%
+  left_join(inc_3)
+
+# write_csv(ec_0, "household_information_Ecuador.csv")
 
 ec_0112 <- ec_01 %>%
   select(IDENTIF_HOG, VI28A, VI30A, VI32A, VI34A, VI37A, VI38A, VI39, VI40, VI45B)%>%
@@ -57,67 +120,14 @@ ec_0112 <- ec_01 %>%
   mutate_at(vars(c(VI28A, VI30A, VI32A, VI34A, VI37A, VI38A, VI39, VI40)), function(x){x = x*12})
 
 ec_0112 <- ec_0112%>%
-  rename_at(vars(starts_with("VI")), funs(str_replace(., "VI", "")))%>%
-  rename_at(vars(ends_with("A")), funs(str_replace(., "A", "")))%>%
-  rename_at(vars(ends_with("B")), funs(str_replace(., "B", "")))
+  rename_at(vars(starts_with("VI")), list(~ str_replace(., "VI", "")))%>%
+  rename_at(vars(ends_with("A")),    list(~ str_replace(., "A", "")))%>%
+  rename_at(vars(ends_with("B")),    list(~ str_replace(., "B", "")))
 
 ec_0112.1 <- ec_0112 %>%
-  gather(key = "item_code", value = "expenditures", - hh_id)%>%
+  pivot_longer(-hh_id, names_to = "item_code", values_to = "expenditures")%>%
   mutate(item_code = as.numeric(item_code))%>%
-  mutate(item_code = item_code + 400)%>%
-  spread(key = "item_code", value = "expenditures")
-
-# write_csv(ec_0112.1, "exp_dwellings_Ecuador.csv")            
-
-ec_0111 <- ec_011 %>%
-  select(hh_id, AREA_5000, AREA_2000, hh_weights, cooking.fuel, toilet.type, water.source, lighting.fuel, electricity.access, internet.access)%>%
-  mutate(internet.access = ifelse(internet.access == "No", 0, 1))
-
-# Attention: VI27 refers to Stromz?hler, not necessarily electricity access
-
-ec_021 <- ec_02%>%
-  select(IDENTIF_HOG, PERSONA, EDAD, PD03B, PD04, PD18, PE47)%>%
-  rename(hh_id = IDENTIF_HOG, education = PE47, ethnicity = PD18)%>%
-  mutate(age = as.numeric(EDAD))
-
-ec_021$age[is.na(ec_021$age)] <- 0
-
-ec_022 <- ec_021 %>%
-  mutate(adults = ifelse(age >= 18, 1, 0))%>%
-  mutate(children = ifelse(age < 18, 1, 0))%>%
-  group_by(hh_id)%>%
-  mutate(hh_size = n())%>%
-  mutate(adults = sum(adults))%>%
-  mutate(children = sum(children))%>%
-  ungroup()%>%
-  filter(PD04 == "Jefe")%>%
-  select(hh_id, hh_size, adults, children, education, ethnicity)
-
-ec_0 <- left_join(ec_0111, ec_022, by = "hh_id")%>%
-  select(hh_id, hh_size, hh_weights, adults, children, everything())%>%
-  mutate(pop = hh_weights*hh_size)
-
-# Population 15.952.442
-
-# ec_01 <- ec_0 %>%
-#   group_by(AREA_5000)%>%
-#   summarise(pop = sum(pop))
-# 
-# ec_02 <- ec_0 %>%
-#   group_by(AREA_2000)%>%
-#   summarise(pop = sum(pop))
-
-# around 63,67 % should live in cities (--> urban)
-
-# AREA_5000 works better --> decision here at this point
-
-ec_0 <- ec_0 %>%
-  select(-pop, - AREA_2000)%>%
-  rename(Urban = AREA_5000)%>%
-  mutate(Urban = ifelse(Urban == "Urbano", "urban", "rural"))%>%
-  mutate(urban = ifelse(Urban == "urban", 2, 1))
-
-# write_csv(ec_0, "household_information_Ecuador.csv")
+  mutate(item_code = item_code + 400)
 
 ec_041 <- ec_04%>%
   select(IDENTIF_HOG, GA00, GA05, GA07)%>%
@@ -319,11 +329,6 @@ expenditures <- read_csv("../0_Data/1_Household Data/3_Ecuador/1_Data_Clean/Old/
 appliances   <- read_csv("../0_Data/1_Household Data/3_Ecuador/1_Data_Clean/Old/appliances_0_1_Ecuador.csv")
 
 
-household_1 <- household %>%
-  rename(edu_hhh = education, water = drinking.water, electricity = electricity.access, cooking_fuel = cooking.fuel, toilet = toilet.type, internet = internet.access, lighting_fuel = lighting.fuel)%>%
-  mutate(urban_01 = ifelse(urban == 2,1,0))%>%
-  select(-urban)
-
 expenditures_1 <- expenditures %>%
   pivot_longer(-hh_id, names_to = "item_code", values_to = "expenditures_year")%>%
   filter(!is.na(expenditures_year) & expenditures_year > 0)
@@ -333,43 +338,6 @@ write_csv(expenditures_1, "../0_Data/1_Household Data/3_Ecuador/1_Data_Clean/exp
 write_csv(appliances,     "../0_Data/1_Household Data/3_Ecuador/1_Data_Clean/appliances_0_1_Ecuador.csv")
 
 # Income
-household    <- read_csv("../0_Data/1_Household Data/3_Ecuador/1_Data_Clean/household_information_Ecuador.csv")
-
-ec_02 <- read.csv("R:/MSA/datasets/Household Microdata/Ecuador/Dataset_2014/DATOS_ABIERTOS/BASES/02_ecv6r_personas.csv", encoding = "UTF-8", stringsAsFactors = FALSE)
-ec_06 <- read.csv("R:/MSA/datasets/Household Microdata/Ecuador/Dataset_2014/DATOS_ABIERTOS/BASES/06_ecv6r_otros_ingresos.csv", encoding = "UTF-8", stringsAsFactors = FALSE)
-ec_26 <- read.csv("R:/MSA/datasets/Household Microdata/Ecuador/Dataset_2014/DATOS_ABIERTOS/BASES/26_base_de_trabajo_personas.csv", encoding = "UTF-8", stringsAsFactors = FALSE)
-
-inc_1 <- ec_02 %>%
-  rename(hh_id = IDENTIF_HOG)%>%
-  select(hh_id, PA92, starts_with("PA85"))%>%
-  mutate(PA85B = ifelse(PA85A == "Instituciones Nacionales", PA85B,0),
-         PA92 = ifelse(is.na(PA92),0,PA92))%>%
-  select(hh_id, PA92, PA85B)%>%
-  mutate(sum_a = PA92 + PA85B)%>%
-  group_by(hh_id)%>%
-  summarise(inc_gov_cash = sum(sum_a),
-            inc_gov_monetary = 0)%>%
-  ungroup()
-
-inc_2 <- ec_06 %>%
-  rename(hh_id = IDENTIF_HOG)%>%
-  select(hh_id, starts_with("IB"))%>%
-  select(hh_id, ends_with("02"), IB0104)%>%
-  mutate(IB0102 = as.numeric(IB0102))%>%
-  mutate_at(vars(-hh_id), list(~ ifelse(is.na(.)|. == "",0,.)))%>%
-  mutate(inc_gov_cash     = IB0302 + IB0104,
-         inc_gov_monetary = IB0102 + IB0202)%>%
-  select(hh_id, inc_gov_cash, inc_gov_monetary)
-
-inc_3 <- bind_rows(inc_1, inc_2)%>%
-  group_by(hh_id)%>%
-  summarise(inc_gov_cash = sum(inc_gov_cash),
-            inc_gov_monetary = sum(inc_gov_monetary))%>%
-  ungroup()
-
-household_1 <- left_join(select(household, -inc_gov_cash, -inc_gov_monetary), inc_3)           
-
-write_csv(household_1,    "../0_Data/1_Household Data/3_Ecuador/1_Data_Clean/household_information_Ecuador.csv")
 
 household_1 <- read_csv("../0_Data/1_Household Data/3_Ecuador/1_Data_Clean/household_information_Ecuador.csv")
 
@@ -393,9 +361,6 @@ ec_02 <- read.csv("R:/MSA/datasets/Household Microdata/Ecuador/Dataset_2014/DATO
 ec_25 <- read.csv("R:/MSA/datasets/Household Microdata/Ecuador/Dataset_2014/DATOS_ABIERTOS/BASES/25_base_de_trabajo_hogares.csv", encoding = "UTF-8", stringsAsFactors = FALSE)
 ec_26 <- read.csv("R:/MSA/datasets/Household Microdata/Ecuador/Dataset_2014/DATOS_ABIERTOS/BASES/26_base_de_trabajo_personas.csv", encoding = "UTF-8", stringsAsFactors = FALSE)
 
-ec_01.1 <- ec_01 %>%
-  rename(hh_id = IDENTIF_HOG, Province = CIUDAD_AUTO, District = PROVINCIA, village = CIUDAD)%>%
-  select(hh_id, Province, District, village)
 
 Province.Code <- distinct(ec_01.1, Province)%>%
   arrange(Province)%>%
@@ -413,11 +378,7 @@ ec_01.2 <- ec_01.1 %>%
   left_join(District.Code)%>%
   select(-Province, -District)
 
-ec_02.1 <- ec_02 %>%
-  filter(PD04 == "Jefe")%>%
-  rename(hh_id = IDENTIF_HOG, age_hhh = EDAD, sex_hhh = SEXO, ind_hhh = PA16)%>%
-  select(hh_id, age_hhh, sex_hhh, ind_hhh)%>%
-  mutate(sex_hhh = ifelse(sex_hhh == "Hombre",1,2))
+
 
 Gender.Code <- data.frame(sex_hhh = c(1,2), Gender = c("Male", "Female"))
 write_csv(Gender.Code, "../0_Data/1_Household Data/3_Ecuador/2_Codes/Gender.Code.csv")
@@ -426,33 +387,8 @@ Industry.Code <- distinct(ec_02.1, ind_hhh)%>%
   arrange(ind_hhh)
 
 
-household_2 <- read_csv("../0_Data/1_Household Data/3_Ecuador/1_Data_Clean/household_information_Ecuador.csv")
 
-household_2.1 <- household_2 %>%
-  left_join(ec_01.2)%>%
-  left_join(ec_02.1)
 
-write_csv(household_2.1,"../0_Data/1_Household Data/3_Ecuador/1_Data_Clean/household_information_Ecuador.csv")
 
-household_3 <- read_csv("../0_Data/1_Household Data/3_Ecuador/1_Data_Clean/household_information_Ecuador.csv")
 
-household_3.1 <- household_3 %>%
-  mutate(age_hhh = ifelse(is.na(age_hhh),98,age_hhh))%>%
-  mutate(age_hhh = as.numeric(age_hhh))
 
-write_csv(household_3.1,"../0_Data/1_Household Data/3_Ecuador/1_Data_Clean/household_information_Ecuador.csv")
-
-household_4 <- read_csv("../0_Data/1_Household Data/3_Ecuador/1_Data_Clean/household_information_Ecuador.csv")
-ec_01 <- read.csv("R:/MSA/datasets/Household Microdata/Ecuador/Dataset_2014/DATOS_ABIERTOS/BASES/01_ecv6r_vivienda.csv", encoding = "UTF-8", stringsAsFactors = FALSE)
-
-ec_0.1.1 <- ec_01 %>%
-  rename(hh_id = IDENTIF_HOG)%>%
-  select(hh_id, VI27)%>%
-  mutate(electricity.access = ifelse(VI27 == "Si, de uso común para varias viviendas" | VI27 == "Si, de uso exclusivo para la vivienda",1,0))%>%
-  select(hh_id, electricity.access)
-
-household_4.1 <- household_4 %>%
-  select(-electricity.access)%>%
-  left_join(ec_0.1.1)
- 
-write_csv(household_4.1,"../0_Data/1_Household Data/3_Ecuador/1_Data_Clean/household_information_Ecuador.csv")
