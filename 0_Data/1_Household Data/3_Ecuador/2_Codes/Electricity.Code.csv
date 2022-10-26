@@ -1,5 +1,0 @@
-Label,electricity.access,Electricity,ELY
-NA,0,0,None
-No tiene medidor,1,0,None
-Si de uso común para varias viviendas,2,1,Electricity
-Si de uso exclusivo para la vivienda,3,1,Electricity

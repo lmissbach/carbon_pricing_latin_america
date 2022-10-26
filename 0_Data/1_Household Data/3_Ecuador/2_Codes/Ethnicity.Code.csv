@@ -1,9 +1,9 @@
-ethnicity,Label
-1,Afro-descendant
-2,White
-3,Indigenous
-4,Mestizo
-5,Montubio
-6, Black (Mulato)
-7,Black
-8,Other
+Ethnicity,ethnicity
+Afrodescendiente,1
+Blanco(a),2
+Indígena,3
+Mestizo(a),4
+Montubio(a),5
+Mulato(a),6
+Negro(a),7
+"Otro, cuál",8
