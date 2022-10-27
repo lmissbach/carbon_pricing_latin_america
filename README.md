@@ -1,6 +1,6 @@
 # Supplementary Data to Carbon Pricing, Cash Transfers and Poverty 
 
-This repository contains supplementary data on the publication "Carbon Pricing, Cash Transfers and Poverty".
+This repository contains supplementary data on the publication "Cash transfers in the context of carbon pricing reforms in Latin America and the Caribbean".
 
 ## Data
 
