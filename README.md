@@ -35,4 +35,4 @@ This repository includes matching tables for each country, computed sectoral car
 - CPI_3_Econometric_Analysis_LCA.R includes code to produce all tables and statistical analysis, mostly shown in the supplementary information appendix.
 
 ## Contact
-- Leonard Missbach, missbach@mcc-berlin.net
+
