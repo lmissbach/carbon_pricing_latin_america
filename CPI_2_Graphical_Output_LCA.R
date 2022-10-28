@@ -210,7 +210,7 @@ P_2.2 <- ggplot(data_joint_0)+
   coord_cartesian(xlim = c(0,99000), ylim = c(0,50))+
   guides(fill = "none", colour = "none")+
   theme_bw()+
-  ylab("Carbon Footprint in tCO2")+
+  ylab(bquote('Carbon Footprint (in ' ~tCO[2]~ ')'))+
   xlab("Total Household Expenditures (USD)")+
   scale_x_continuous(labels = scales::unit_format(unit = "", scale = 1/1000), expand = c(0,0))+
   scale_y_continuous(expand = c(0,0))+
