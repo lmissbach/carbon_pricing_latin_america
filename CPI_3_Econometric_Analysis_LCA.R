@@ -49,7 +49,7 @@ for(Country.Name in c("Argentina", "Barbados","Bolivia", "Brazil", "Chile", "Col
       carbon_pricing_incidence_1 <- carbon_pricing_incidence_1 %>%
         mutate(ethnicity = as.character(ethnicity))
       
-      Ethnicity.Code <- read_csv(sprintf("../0_Data/1_Household Data/3_%s/2_Codes/Ethnicity.Code.csv", Country.Name.2))%>%
+      Ethnicity.Code <- read_csv(sprintf("0_Data/1_Household Data/3_%s/2_Codes/Ethnicity.Code.csv", Country.Name.2))%>%
         select(ethnicity, everything())%>%
         mutate(ethnicity = as.character(ethnicity))
       
@@ -74,7 +74,7 @@ for(Country.Name in c("Argentina", "Barbados","Bolivia", "Brazil", "Chile", "Col
       carbon_pricing_incidence_1 <- carbon_pricing_incidence_1 %>%
         mutate(edu_hhh = as.character(edu_hhh))
       
-      Education.Code <- read_csv(sprintf("../0_Data/1_Household Data/3_%s/2_Codes/Education.Code.csv", Country.Name.2))%>%
+      Education.Code <- read_csv(sprintf("0_Data/1_Household Data/3_%s/2_Codes/Education.Code.csv", Country.Name.2))%>%
         select(edu_hhh, ISCED)%>%
         mutate(edu_hhh = as.character(edu_hhh),
                ISCED = as.character(ISCED))
@@ -92,7 +92,7 @@ for(Country.Name in c("Argentina", "Barbados","Bolivia", "Brazil", "Chile", "Col
       carbon_pricing_incidence_1 <- carbon_pricing_incidence_1 %>%
         mutate(toilet = as.character(toilet))
       
-      Toilet.Code <- read_csv(sprintf("../0_Data/1_Household Data/3_%s/2_Codes/Toilet.Code.csv", Country.Name.2))%>%
+      Toilet.Code <- read_csv(sprintf("0_Data/1_Household Data/3_%s/2_Codes/Toilet.Code.csv", Country.Name.2))%>%
         select(toilet, TLT)%>%
         mutate(toilet = as.character(toilet))
       
@@ -102,14 +102,14 @@ for(Country.Name in c("Argentina", "Barbados","Bolivia", "Brazil", "Chile", "Col
     if("water" %in% colnames(carbon_pricing_incidence_1)){
       carbon_pricing_incidence_1 <- carbon_pricing_incidence_1 %>%
         mutate(water = as.character(water))
-      Water.Code <- read_csv(sprintf("../0_Data/1_Household Data/3_%s/2_Codes/Water.Code.csv", Country.Name.2))%>%
+      Water.Code <- read_csv(sprintf("0_Data/1_Household Data/3_%s/2_Codes/Water.Code.csv", Country.Name.2))%>%
         select(water, WTR)%>%
         mutate(water = as.character(water))
       carbon_pricing_incidence_1 <- left_join(carbon_pricing_incidence_1, Water.Code)
     }
     
     if("cooking_fuel" %in% colnames(carbon_pricing_incidence_1)){
-      Cooking.Code <- read_csv(sprintf("../0_Data/1_Household Data/3_%s/2_Codes/Cooking.Code.csv", Country.Name.2))%>%
+      Cooking.Code <- read_csv(sprintf("0_Data/1_Household Data/3_%s/2_Codes/Cooking.Code.csv", Country.Name.2))%>%
         select(cooking_fuel, CF)%>%
         mutate(cooking_fuel = as.character(cooking_fuel))
       
@@ -120,14 +120,14 @@ for(Country.Name in c("Argentina", "Barbados","Bolivia", "Brazil", "Chile", "Col
     }
     
     if("heating_fuel" %in% colnames(carbon_pricing_incidence_1)){
-      Heating.Code <- read_csv(sprintf("../0_Data/1_Household Data/3_%s/2_Codes/Heating.Code.csv", Country.Name.2))%>%
+      Heating.Code <- read_csv(sprintf("0_Data/1_Household Data/3_%s/2_Codes/Heating.Code.csv", Country.Name.2))%>%
         select(heating_fuel, HF)
       
       carbon_pricing_incidence_1 <- left_join(carbon_pricing_incidence_1, Heating.Code)
     }
     
     if("lighting_fuel" %in% colnames(carbon_pricing_incidence_1)){
-      Lighting.Code <- read_csv(sprintf("../0_Data/1_Household Data/3_%s/2_Codes/Lighting.Code.csv", Country.Name.2))%>%
+      Lighting.Code <- read_csv(sprintf("0_Data/1_Household Data/3_%s/2_Codes/Lighting.Code.csv", Country.Name.2))%>%
         select(lighting_fuel, LF)
       
       carbon_pricing_incidence_1 <- left_join(carbon_pricing_incidence_1, Lighting.Code)
@@ -169,8 +169,8 @@ data_joint_0 <- data_joint_0 %>%
          starts_with("CO2"), starts_with("exp_"), starts_with("burden_"),
          starts_with("hh_exp"), starts_with("log_hh"), starts_with("Income_Group"), starts_with("share_"),
          starts_with("exp_USD_"), starts_with("inc_"), ends_with(".01"), everything())%>%
-  select(-boiler.01, -iron.01, -pump.01, -solar.heater.01, -radio.01, -cooker.01, -vacuum.01, -video.01, -bicycle.01,-sewing.machine.01,
-         -sewing_machine.01, -printer.01, -vaccum.01, - mobile.01, -stove.01a,
+  select(-boiler.01, -iron.01, -pump.01, -solar.heater.01, -radio.01, -cooker.01, -vacuum.01, -bicycle.01,
+         -sewing_machine.01, -printer.01, - mobile.01, 
          -lighting_fuel, -heating_fuel, -cooking_fuel, -water, -toilet, edu_hhh)%>%
   mutate(share_other_binning = ifelse(is.na(share_other_binning),0, share_other_binning))%>%
   mutate(car.01          = ifelse(Country != "Chile" & is.na(car.01),0,car.01),
@@ -384,7 +384,7 @@ reference.list <- data.frame(Country = Country.Set,
                              REF = c(
                                "Reference group for education (\\textit{ISCED}) is ISCED-level 1 and \\textit{Electricity} for cooking fuel (\\textit{CF}).",
                                "Reference group for education (\\textit{ISCED}) is ISCED-level 1, \\textit{Electricity} for cooking fuel (\\textit{CF}) and \\textit{Black} for ethnicity (\\textit{ETH}).",
-                               "Reference group for education (\\textit{ISCED}) is ISCED-level 1, \\textit{Electricity} for cooking fuel (\\textit{CF}) and \\textit{Non-indigeneous} for ethnicity (\\textit{ETH}).",
+                               "Reference group for education (\\textit{ISCED}) is ISCED-level 1, \\textit{LPG} for cooking fuel (\\textit{CF}) and \\textit{Non-indigeneous} for ethnicity (\\textit{ETH}).",
                                "Reference group for education (\\textit{ISCED}) is ISCED-level 1, \\textit{Electricity} for cooking fuel (\\textit{CF}) and \\textit{Parda} for ethnicity (\\textit{ETH}).",
                                "Reference group for education (\\textit{ISCED}) is ISCED-level 1 and \\textit{Electricity} for cooking fuel (\\textit{CF}).",
                                "Reference group for education (\\textit{ISCED}) is ISCED-level 1, \\textit{Electricity} for cooking fuel (\\textit{CF}) and \\textit{Mestizo o blanco} for ethnicity (\\textit{ETH}).",
@@ -419,8 +419,8 @@ for(i in Country.Set){
   if(i != "Chile" & sum(is.na(data_2.1.1$car.01))==0)                                                formula_0 <- paste0(formula_0, " + car.01")
   #if(i != "Chile" & sum(is.na(data_2.1.1$refrigerator.01))==0)                                                formula_0 <- paste0(formula_0, " + refrigerator.01")
   if("cooking_fuel" %in% colnames(household_information_0) & sum(is.na(data_2.1.1$CF))==0){
-    if(i != "Guatemala" & i != "Dominican Republic") formula_0 <- paste0(formula_0, ' + i(CF, ref = "Electricity")')
-    if(i == "Guatemala" | i == "Dominican Republic") formula_0 <- paste0(formula_0, ' + i(CF, ref = "LPG")')
+    if(i != "Guatemala" & i != "Dominican Republic" & i != "Bolivia") formula_0 <- paste0(formula_0, ' + i(CF, ref = "Electricity")')
+    if(i == "Guatemala" | i == "Dominican Republic" | i == "Bolivia") formula_0 <- paste0(formula_0, ' + i(CF, ref = "LPG")')
     }
   #if("lighting_fuel" %in% colnames(household_information_0) & sum(is.na(data_2.1.1$LF))==0)      formula_0 <- paste0(formula_0, " + LF")
   #if("heating_fuel" %in% colnames(household_information_0))      formula_0 <- paste0(formula_0, " + HF")
@@ -547,8 +547,8 @@ for(i in Country.Set){
   if(i != "Chile" & sum(is.na(data_2.1.2.1$car.01))==0)                                                formula_0 <- paste0(formula_0, " + car.01")
   # if(i != "Chile" & sum(is.na(data_2.1.2.1$refrigerator.01))==0)                                                formula_0 <- paste0(formula_0, " + refrigerator.01")
   if("cooking_fuel" %in% colnames(household_information_0) & sum(is.na(data_2.1.2.1$CF))==0){
-    if(i != "Guatemala" & i != "Dominican Republic") formula_0 <- paste0(formula_0, ' + i(CF, ref = "Electricity")')
-    if(i == "Guatemala" | i == "Dominican Republic") formula_0 <- paste0(formula_0, ' + i(CF, ref = "LPG")')
+    if(i != "Guatemala" & i != "Dominican Republic" & i != "Bolivia") formula_0 <- paste0(formula_0, ' + i(CF, ref = "Electricity")')
+    if(i == "Guatemala" | i == "Dominican Republic" | i == "Bolivia") formula_0 <- paste0(formula_0, ' + i(CF, ref = "LPG")')
   }
   #if("lighting_fuel" %in% colnames(household_information_0) & sum(is.na(data_2.1.2.1$LF))==0)      formula_0 <- paste0(formula_0, " + LF")
   #if("heating_fuel" %in% colnames(household_information_0))      formula_0 <- paste0(formula_0, " + HF")
@@ -762,6 +762,73 @@ data_frame_2.1.3.2 <- data_frame_2.1.3.1 %>%
   mutate(more_than_10 = ifelse(p_j > 0.1,"Yes","No"),
          cumulative_95 = ifelse(cumsum_p_j < 0.95, "Yes", "No"))
 
+# 2.1.4 Supplementary Analysis for Peru ####
+
+household_information_0    <- read_csv(sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/4_Transformed Data/household_information_%s_new.csv", "Peru"))
+CF_Peru                    <- read_csv("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/4_Transformed Data/CF_Peru.csv")
+
+data_2.1.4 <- data_joint_0 %>%
+  filter(Country == "Peru")%>%
+  left_join(CF_Peru)
+
+formula_0 <- "burden_CO2_national ~ log_hh_expenditures_USD_2014 + hh_size + urban_01 + electricity.access + car.01 + i(ISCED, ref = 1) + i(Ethnicity, ref = 'Mestizo') + CF_Electricity + CF_LPG + CF_Coal + CF_Natural_Gas + CF_Firewood + CF_Animal_Waste + CF_Other + CF_No_Cooking"
+
+formula_1 <- as.formula(formula_0)
+
+model_2.1.4.0 <- feols(formula_1, data = data_2.1.4, weights = data_2.1.4$hh_weights, vcov = "hetero")
+model_2.1.4.1 <- feols(formula_1, data = data_2.1.4, weights = data_2.1.4$hh_weights, fsplit = ~ Income_Group_5, vcov = "hetero")
+
+notes_0 <- sprintf("This table displays regression results from equation (8) in the carbon price incidence of any household in %s. 
+                     Coefficients are estimates on regressions on the full sample and separated by expenditure quintile. Households may report the use of multiple fuels for cooking.", i)
+
+tex.style <- style.tex(model.title = "", fixef.title = "\\midrule",
+                       stats.title = "\\midrule", model.format = "",
+                       fontsize = "small")
+
+REF_0 <- reference.list$REF[reference.list$Country == i]
+
+etable(model_2.1.4.1, dict = dict_latex, tex = TRUE, file = sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/6_App/Latin-America-Paper/Tables/Table_2_OLS/Table_OLS_%s_CF_Add.tex", i),
+       digits = 3, replace = TRUE, fitstat = c("n", "r2"), style.tex = tex.style, se.row = TRUE, tpt = TRUE,
+       title = sprintf("OLS-Regression Coefficients for %s", i),  label = sprintf("tab:OLS_%s",i), adjustbox = "width = 1\\textwidth, max height = 0.95\\textheight, center", placement = "htbp!",
+       notes = c("\\medskip \\textit{Note:}",
+                 paste0(sprintf("This table displays regression results from equation (8) on the carbon price incidence of any household in %s. Coefficients are estimates on regressions on the full sample and separated by expenditure quintile. Households may report the use of multiple fuels for cooking.",i), REF_0)))
+
+# Logit
+
+barrier_0 <- data_joint_0 %>%
+  group_by(Country)%>%
+  summarise(burden_CO2_national_80q = wtd.quantile(burden_CO2_national, probs = 0.80, weights = hh_weights))%>%
+  ungroup()
+
+data_2.1.2 <- data_joint_0 %>%
+  left_join(barrier_0)%>%
+  mutate(affected_more_than_80q_CO2n = ifelse(burden_CO2_national > burden_CO2_national_80q,1,0))
+
+ref_list_2 <- data.frame()
+
+data_2.1.2.1 <- data_2.1.2 %>%
+  filter(Country == "Peru")%>%
+  left_join(CF_Peru)
+  
+formula_0 <- "affected_more_than_80q_CO2n ~ log_hh_expenditures_USD_2014 + hh_size + urban_01 + electricity.access + car.01 + i(ISCED, ref = 1) + i(Ethnicity, ref = 'Mestizo') + CF_Electricity + CF_LPG + CF_Coal + CF_Natural_Gas + CF_Firewood + CF_Animal_Waste + CF_Other + CF_No_Cooking"
+  
+formula_1 <- as.formula(formula_0)
+model_2.1.5.0 <- feglm(formula_1, data = data_2.1.2.1, weights = data_2.1.2.1$hh_weights, family = quasibinomial("logit"), se = "hetero")
+model_2.1.5.1 <- feglm(formula_1, data = data_2.1.2.1, weights = data_2.1.2.1$hh_weights, family = quasibinomial("logit"), se = "hetero", fsplit = ~ Income_Group_5)
+  
+tex.style <- style.tex(model.title = "", fixef.title = "\\midrule",
+                       stats.title = "\\midrule", model.format = "",
+                       fontsize = "small")
+  
+REF_0 <- reference.list$REF[reference.list$Country == i]
+  
+  
+etable(model_2.1.5.1, dict = dict_latex, tex = TRUE, file = sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/6_App/Latin-America-Paper/Tables/Table_4_Logit_Burden/Table_Logit_Burden_%s_CF_Add.tex", i),
+       digits = 3, replace = TRUE, fitstat = c("n", "cor2"), style.tex = tex.style, se.row = TRUE, tpt = TRUE,
+       title = sprintf("Logit-Model Coefficients Hardship Cases in %s", i),  label = sprintf("tab:Logit_1_%s",i), adjustbox = "width = 1\\textwidth, max height = 0.95\\textheight, center", placement = "htbp!",
+       notes = c("\\medskip \\textit{Note:}",
+                 paste0("This table displays regression results from equation (13) on the log-odds transformed probability of higher additional costs than 80\\% of the population ", sprintf("in %s",i), " as the dependent variable. We show model coefficients separately for the full sample and separated by expenditure quintile. Households may report the use of multiple fuels for cooking.", REF_0)))
+  
 # 2.2   Decomposing Most affected households + No Access to Transfers ####
 
 # 2.2.2 Logit ####
@@ -795,8 +862,8 @@ for(i in Country.Set){
   if(i != "Chile" & sum(is.na(data_2.2.2.1$car.01))==0)                                                formula_0 <- paste0(formula_0, " + car.01")
   #if(i != "Chile" & sum(is.na(data_2.2.2.1$refrigerator.01))==0)                                                formula_0 <- paste0(formula_0, " + refrigerator.01")
   if("cooking_fuel" %in% colnames(household_information_0) & sum(is.na(data_2.2.2.1$CF))==0){
-    if(i != "Guatemala" & i != "Dominican Republic") formula_0 <- paste0(formula_0, ' + i(CF, ref = "Electricity")')
-    if(i == "Guatemala" | i == "Dominican Republic") formula_0 <- paste0(formula_0, ' + i(CF, ref = "LPG")')
+    if(i != "Guatemala" & i != "Dominican Republic" & i != "Bolivia") formula_0 <- paste0(formula_0, ' + i(CF, ref = "Electricity")')
+    if(i == "Guatemala" | i == "Dominican Republic" | i == "Bolivia") formula_0 <- paste0(formula_0, ' + i(CF, ref = "LPG")')
   }
   #if("lighting_fuel" %in% colnames(household_information_0) & sum(is.na(data_2.2.2.1$LF))==0)      formula_0 <- paste0(formula_0, " + LF")
   #if("heating_fuel" %in% colnames(household_information_0))      formula_0 <- paste0(formula_0, " + HF")
