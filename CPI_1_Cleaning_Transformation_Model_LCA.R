@@ -17,7 +17,7 @@ options(scipen=999)
 for(Country.Name in c("Argentina", "Barbados", "Bolivia", "Brazil", "Chile", "Colombia", "Costa Rica", "Dominican Republic", "Ecuador", "El Salvador", "Guatemala", "Mexico", "Nicaragua", "Paraguay" ,"Peru", "Uruguay")) {
 
 Country_Year <- data.frame(Country = c("Argentina", "Barbados", "Bolivia", "Brazil", "Chile", "Colombia", "Costa Rica", "Dominican Republic", "Ecuador", "El Salvador", "Guatemala", "Mexico","Nicaragua", "Paraguay", "Peru", "Uruguay"), 
-                           Year =    c("2017",     "2016"  ,    "2019",    "2017"  , "2018",  "2016",     "2018",       "2018",               "2013",    "2015",        "2014",     "2019",   "2014",    "2011",       "2019", "2016"))
+                           Year =    c("2017",     "2016"  ,    "2019",    "2017"  , "2018",  "2016",     "2018",       "2018",               "2013",    "2015",        "2014",     "2018",   "2014",    "2011",       "2019", "2016"))
 
 Year_0 <- Country_Year$Year[Country_Year$Country == Country.Name]
 
@@ -143,7 +143,7 @@ expenditure_information <- expenditure_information %>%
 
 }
 
-if(Country.Name == "Mexico" | Country.Name == "Dominican Republic" | Country.Name == "Bolivia" | Country.Name == "Peru"){
+if(Country.Name == "Dominican Republic" | Country.Name == "Bolivia" | Country.Name == "Peru"){
   household_information <- household_information %>%
     filter(!hh_id %in% hh_duplicates_information$hh_id)
   
@@ -151,7 +151,7 @@ if(Country.Name == "Mexico" | Country.Name == "Dominican Republic" | Country.Nam
     filter(!hh_id %in% hh_duplicates_information$hh_id)
 }
 
-if(Country.Name == "El Salvador"){
+if(Country.Name == "El Salvador" | Country.Name == "Mexico"){
   household_information <- household_information %>%
     filter(!hh_id %in% hh_duplicates_information$hh_id)%>%
     filter(!hh_id %in% hh_duplicates_expenditures_1$hh_id)
@@ -399,11 +399,19 @@ expenditure_information <- left_join(expenditure_information, household_ids)%>%
   select(hh_id_new, everything(), -hh_id)%>%
   rename(hh_id = hh_id_new)
 
+if(Country.Name == "Peru"){
+  CF_1 <- read_csv("../0_Data/1_Household Data/3_Peru/1_Data_Clean/hi_Peru_CF.csv")%>%
+    left_join(household_ids)%>%
+    select(hh_id_new, everything(), -hh_id)%>%
+    rename(hh_id = hh_id_new)%>%
+    write_csv(., "../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/4_Transformed Data/CF_Peru.csv")
+}
+
 if(Country.Name != "Chile"){appliances_1 <- left_join(appliances_0, household_ids)%>%
   select(hh_id_new, everything(), - hh_id)%>%
   rename(hh_id = hh_id_new)
 
-write_csv(appliances_1, sprintf("../0_Data/1_Household Data/%s/1_Data_Clean/appliances_0_1_new_%s.csv", path_0, Country.Name))
+write_csv(appliances_1, sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/4_Transformed Data/appliances_0_1_new_%s.csv", Country.Name))
 }
 rm(household_ids, appliances_1, appliances_0)
 
