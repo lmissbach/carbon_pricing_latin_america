@@ -93,6 +93,7 @@ Village.Code <- distinct(data_01, CIUDAD)%>%
 Cooking.Code <- distinct(data_01, VI13)%>%
   arrange(VI13)%>%
   rename(Cooking_Fuel = VI13)%>%
+  mutate(Cooking_Fuel = ifelse(Cooking_Fuel == "Leña / carbón", "Lena / carbon",Cooking_Fuel))%>%
   mutate(cooking_fuel = 0:(n()-1))%>%
   mutate(CF = c(NA, "Electricity", "LPG", "Firewood", "Other"))%>%
   write_csv(., "carbon_pricing_latin_america/0_Data/1_Household Data/3_Ecuador/2_Codes/Cooking.Code.csv")
@@ -132,7 +133,7 @@ Gender.Code <- distinct(data_02, SEXO)%>%
 
 Education.Code <- distinct(data_02, PE47)%>%
   arrange(PE47)%>%
-  rename(Edu_hhh = PE47)%>%
+  rename(Education = PE47)%>%
   mutate(edu_hhh = 0:(n()-1))%>%
   mutate(ISCED = c(0,1,1,2,5,0,6,7,1,3,6))%>%
   write_csv(., "carbon_pricing_latin_america/0_Data/1_Household Data/3_Ecuador/2_Codes/Education.Code.csv")
@@ -185,7 +186,7 @@ data_11.1 <- data_11 %>%
                                                                                                                 ifelse(EQ00 == "Radio grabadora", "radio.01",
                                                                                                                        ifelse(EQ00 == "Secadora de ropa", "dryer.01",
                                                                                                                               ifelse(EQ00 == "Máquina de coser", "sewing_machine.01", "None")))))))))))))))))%>%
-  filter(appliance != "none")%>%
+  filter(appliance != "None")%>%
   group_by(hh_id, appliance)%>%
   summarise(ownership = max(ownership))%>%
   ungroup()%>%
@@ -277,6 +278,7 @@ data_05.6 <- data_05.5 %>%
   select(-item_code_GX)
 
 expenditures_items <- bind_rows(data_04.2, data_05.6)%>%
+  bind_rows(data_01.3)%>%
   arrange(hh_id, item_code)
 
 write_csv(expenditures_items, "../0_Data/1_Household Data/3_Ecuador/1_Data_Clean/expenditures_items_Ecuador.csv")

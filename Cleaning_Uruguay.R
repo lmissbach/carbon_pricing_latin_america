@@ -33,13 +33,13 @@ Province.Code <- distinct(hogares_1, province)%>%
   bind_cols(Province = c("Montevideo", "Interior, mas que 5000 inhabitantes", "Interior, menos que 5000 inhabitantes"))%>%
   write_csv(., "../0_Data/1_Household Data/3_Uruguay/2_Codes/Province.Code.csv")
 Lighting.Code <- stack(attr(hogares_1$lighting_fuel, 'labels'))%>%
-  rename(lighting_fuel = values, Lighting.Fuel = ind)%>%
+  rename(lighting_fuel = values, Lighting_Fuel = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Uruguay/2_Codes/Lighting.Code.csv")
 Cooking.Code <- stack(attr(hogares_1$cooking_fuel, 'labels'))%>%
-  rename(cooking_fuel = values, Cooking.Fuel = ind)%>%
+  rename(cooking_fuel = values, Cooking_Fuel = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Uruguay/2_Codes/Cooking.Code.csv")
 Heating.Code <- stack(attr(hogares_1$heating_fuel, 'labels'))%>%
-  rename(heating_fuel = values, Heating.Fuel = ind)%>%
+  rename(heating_fuel = values, Heating_Fuel = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Uruguay/2_Codes/Heating.Code.csv")
 Water.Code <- stack(attr(hogares_1$water, 'labels'))%>%
   rename(water = values, Water = ind)%>%

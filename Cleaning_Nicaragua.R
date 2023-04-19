@@ -109,7 +109,10 @@ household_information <- left_join(vivienda_hogar_1, poblacion_1)%>%
   left_join(poblacion_2)%>%
   left_join(income_3)%>%
   unite(ethnicity, c(ethnicity.1, ethnicity.2), sep = "")%>%
-  mutate(ethnicity = ifelse(ethnicity == "NANA",3,as.numeric(ethnicity)))
+  mutate(ethnicity = ifelse(ethnicity == "NANA",3,as.numeric(ethnicity)))%>%
+  mutate(age_hhh = ifelse(is.na(age_hhh), 16, age_hhh),
+         sex_hhh = ifelse(is.na(sex_hhh),  1, sex_hhh),
+         edu_hhh = ifelse(is.na(edu_hhh),  0, edu_hhh))
 
 # Ethnicity.Code
 
@@ -148,13 +151,13 @@ Cooking.Code <- stack(attr(household_information$cooking_fuel, 'labels'))%>%
 Education.Code <- stack(attr(household_information$edu_hhh, 'labels'))%>%
   rename(edu_hhh = values, Education = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Nicaragua/2_Codes/Education.Code.csv")
-Gender.Code <- stack(attr(household_information$sex_hhh, 'labels'))%>%
+Gender.Code <- stack(attr(poblacion$S2P5, 'labels'))%>%
   rename(sex_hhh = values, Gender = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Nicaragua/2_Codes/Gender.Code.csv")
 Industry.Code <- stack(attr(household_information$ind_hhh, 'labels'))%>%
   rename(ind_hhh = values, Industry = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Nicaragua/2_Codes/Industry.Code.csv")
-Education.Code <- stack(attr(household_information$edu_hhh, 'labels'))%>%
+Education.Code <- stack(attr(poblacion$S4P12A, 'labels'))%>%
   rename(edu_hhh = values, Education = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Nicaragua/2_Codes/Education.Code.csv")
 

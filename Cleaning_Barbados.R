@@ -28,7 +28,11 @@ data_01.1 <- data_01P %>%
   rename(hh_id = hhid, hh_weights = weight, province = par, district = psu, cooking_fuel = q13_13, toilet = q13_14, water = q13_15, lighting_fuel = q13_16)%>%
   select(hh_id, hh_weights, province, district, cooking_fuel, toilet, water, lighting_fuel)%>%
   mutate(electricity.access = ifelse(is.na(lighting_fuel),0,
-                                     ifelse(lighting_fuel == 3,1,0)))
+                                     ifelse(lighting_fuel == 3,1,0)))%>%
+  mutate(cooking_fuel  = ifelse(is.na(cooking_fuel),                      7, cooking_fuel),
+         lighting_fuel = ifelse(is.na(lighting_fuel) | lighting_fuel == 6,5, lighting_fuel),
+         toilet        = ifelse(is.na(toilet) | toilet == 7,              6, toilet),
+         water         = ifelse(is.na(water),                             5, water))
 
 data_02.1 <- data_02P %>%
   rename(hh_id = hhid)%>%
@@ -39,7 +43,12 @@ data_02.1 <- data_02P %>%
   ungroup()%>%
   select(hh_id, sex_hhh, age_hhh, ethnicity, religion, country_of_birth, edu_hhh, ind_hhh, ind_hhh_b, number)%>%
   filter(number == 1 | !is.na(age_hhh))%>%
-  select(-number)
+  select(-number)%>%
+  mutate(sex_hhh   = ifelse(is.na(sex_hhh),   1, sex_hhh),
+         religion  = ifelse(is.na(religion), 12, religion),
+         age_hhh   = ifelse(is.na(age_hhh),  18, age_hhh),
+         ethnicity = ifelse(is.na(ethnicity), 7, ethnicity),
+         edu_hhh   = ifelse(is.na(edu_hhh),  14, edu_hhh))
 
 data_02.2 <- data_02P %>%
   rename(hh_id = hhid)%>%
@@ -157,22 +166,22 @@ Item.Codes.all <- bind_rows(Item.Codes.2, Item.Codes.3, Item.Codes.1)%>%
 write.xlsx(Item.Codes.all, "../0_Data/1_Household Data/3_Barbados/3_Matching_Tables/Item_Code_Description_Barbados.xlsx")
 
 # Codes ####
-Ethnicity.Code <- stack(attr(data_02.1$ethnicity, 'labels'))%>%
+Ethnicity.Code <- stack(attr(data_02P$q1_06, 'labels'))%>%
   rename(ethnicity = values, Ethnicity = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Barbados/2_Codes/Ethnicity.Code.csv")
-Religion.Code <- stack(attr(data_02.1$religion, 'labels'))%>%
+Religion.Code <- stack(attr(data_02P$q1_07, 'labels'))%>%
   rename(religion = values, Religion = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Barbados/2_Codes/Religion.Code.csv")
-Country.Code <- stack(attr(data_02.1$country_of_birth, 'labels'))%>%
-  rename(country_of_birth = values, Country = ind)%>%
-  write_csv(., "../0_Data/1_Household Data/3_Barbados/2_Codes/Country.Code.csv")
-Education.Code <- stack(attr(data_02.1$edu_hhh, 'labels'))%>%
+nationality.Code <- stack(attr(data_02P$q2_01, 'labels'))%>%
+  rename(nationality = values, Nationality = ind)%>%
+  write_csv(., "../0_Data/1_Household Data/3_Barbados/2_Codes/Nationality.Code.csv")
+Education.Code <- stack(attr(data_02P$q3_27, 'labels'))%>%
   rename(edu_hhh = values, Education = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Barbados/2_Codes/Education.Code.csv")
-Industry.Code <- stack(attr(data_02.1$ind_hhh, 'labels'))%>%
+Industry.Code <- stack(attr(data_02P$q9_19, 'labels'))%>%
   rename(ind_hhh = values, Industry = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Barbados/2_Codes/Industry.Code.csv")
-Industry.B.Code <- stack(attr(data_02.1$ind_hhh_b, 'labels'))%>%
+Industry.B.Code <- stack(attr(data_02P$q9_17, 'labels'))%>%
   rename(ind_hhh_b = values, Industry_B = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Barbados/2_Codes/Industry.Code.B.csv")
 
@@ -182,15 +191,15 @@ Province.Code <- stack(attr(data_01.1$province, 'labels'))%>%
 District.Code <- distinct(data_01P, psu, lat_cen, long_cen)%>%
   rename(district = psu)%>%
   write_csv(., "../0_Data/1_Household Data/3_Barbados/2_Codes/District.Code.csv")
-Water.Code <- stack(attr(data_01.1$water, 'labels'))%>%
+Water.Code <- stack(attr(data_01P$q13_15, 'labels'))%>%
   rename(water = values, Water = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Barbados/2_Codes/Water.Code.csv")
-Toilet.Code <- stack(attr(data_01.1$toilet, 'labels'))%>%
+Toilet.Code <- stack(attr(data_01P$q13_14, 'labels'))%>%
   rename(toilet = values, Toilet = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Barbados/2_Codes/Toilet.Code.csv")
-Lighting.Code <- stack(attr(data_01.1$lighting_fuel, 'labels'))%>%
+Lighting.Code <- stack(attr(data_01P$q13_16, 'labels'))%>%
   rename(lighting_fuel = values, Lighting_Fuel = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Barbados/2_Codes/Lighting.Code.csv")
-Cooking.Code <- stack(attr(data_01.1$cooking_fuel, 'labels'))%>%
+Cooking.Code <- stack(attr(data_01P$q13_13, 'labels'))%>%
   rename(cooking_fuel = values, Cooking_Fuel = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Barbados/2_Codes/Cooking.Code.csv")

@@ -1,4 +1,4 @@
-# This script aims at cleaning household data for the Mexcian 2020 ENIGH data
+# This script aims at cleaning household data for the Mexcian 2018 ENIGH data
 
 if(!require("pacman")) install.packages("pacman")
 
@@ -6,14 +6,14 @@ p_load("haven", "Hmisc", "openxlsx", "rattle", "scales", "tidyverse")
 
 # Load Data
 
-data_0_hogares     <- read_dta("../0_Data/1_Household Data/3_Mexico/1_Data_Raw/ENIGH_2020/hogares.dta")
-data_0_gastosh     <- read_dta("../0_Data/1_Household Data/3_Mexico/1_Data_Raw/ENIGH_2020/gastoshogar.dta")
-data_0_poblacion   <- read_dta("../0_Data/1_Household Data/3_Mexico/1_Data_Raw/ENIGH_2020/poblacion.dta")
-data_0_viviendas   <- read_dta("../0_Data/1_Household Data/3_Mexico/1_Data_Raw/ENIGH_2020/viviendas.dta")
-data_0_ingresos    <- read_dta("../0_Data/1_Household Data/3_Mexico/1_Data_Raw/ENIGH_2020/ingresos.dta")
-data_0_gastosp     <- read_dta("../0_Data/1_Household Data/3_Mexico/1_Data_Raw/ENIGH_2020/gastospersona.dta")
-data_0_trabajos    <- read_dta("../0_Data/1_Household Data/3_Mexico/1_Data_Raw/ENIGH_2020/trabajos.dta")
-data_0_concentrado <- read_dta("../0_Data/1_Household Data/3_Mexico/1_Data_Raw/ENIGH_2020/concentradohogar.dta")
+data_0_hogares     <- read_dta("../0_Data/1_Household Data/3_Mexico/1_Data_Raw/ENIGH_2018/hogares.dta")
+data_0_gastosh     <- read_dta("../0_Data/1_Household Data/3_Mexico/1_Data_Raw/ENIGH_2018/gastoshogar.dta")
+data_0_poblacion   <- read_dta("../0_Data/1_Household Data/3_Mexico/1_Data_Raw/ENIGH_2018/poblacion.dta")
+data_0_viviendas   <- read_dta("../0_Data/1_Household Data/3_Mexico/1_Data_Raw/ENIGH_2018/viviendas.dta")
+data_0_ingresos    <- read_dta("../0_Data/1_Household Data/3_Mexico/1_Data_Raw/ENIGH_2018/ingresos.dta")
+data_0_gastosp     <- read_dta("../0_Data/1_Household Data/3_Mexico/1_Data_Raw/ENIGH_2018/gastospersona.dta")
+data_0_trabajos    <- read_dta("../0_Data/1_Household Data/3_Mexico/1_Data_Raw/ENIGH_2018/trabajos.dta")
+data_0_concentrado <- read_dta("../0_Data/1_Household Data/3_Mexico/1_Data_Raw/ENIGH_2018/concentradohogar.dta")
 
 # Transform Data - Expenditures
 
@@ -44,7 +44,7 @@ data_2_gasto <- data_1_gasto %>%
             expenditures_sp_year = sum(expenditures_sp_year))%>%
   ungroup()
 
-write_csv(data_2_gasto, "../0_Data/1_Household Data/3_Mexico/1_Data_Clean/expenditures_items_Mexico_2020.csv")  
+write_csv(data_2_gasto, "../0_Data/1_Household Data/3_Mexico/1_Data_Clean/expenditures_items_Mexico.csv")  
 
 # Transform Data - Household
 
@@ -63,7 +63,8 @@ household_2 <- data_0_viviendas %>%
   select(folioviv, water, toilet, toilet_1, toilet_2, electricity, cooking_fuel)%>%
   mutate(electricity.access = ifelse(electricity == 5,0,1))%>%
   select(-electricity)%>%
-  unite(toilet, c(toilet, toilet_1, toilet_2), sep = "")
+  unite(toilet, c(toilet, toilet_1, toilet_2), sep = "")%>%
+  mutate(cooking_fuel = ifelse(cooking_fuel == "&",6,cooking_fuel))
 
 household_3 <- data_0_poblacion %>%
   unite(hh_id, c(folioviv, foliohog), remove = FALSE)%>%
@@ -110,9 +111,10 @@ data_2_ingresos <- data_1_ingresos %>%
 household_final <- left_join(household_final, data_2_ingresos)%>%
   # Adjustment for 16 households
   mutate(inc_gov_cash     = ifelse(is.na(inc_gov_cash),     0, inc_gov_cash),
-         inc_gov_monetary = ifelse(is.na(inc_gov_monetary), 0, inc_gov_monetary))
+         inc_gov_monetary = ifelse(is.na(inc_gov_monetary), 0, inc_gov_monetary))%>%
+  filter(hh_id %in% data_2_gasto$hh_id)
 
-write_csv(household_final, "../0_Data/1_Household Data/3_Mexico/1_Data_Clean/household_information_Mexico_2020.csv")
+write_csv(household_final, "../0_Data/1_Household Data/3_Mexico/1_Data_Clean/household_information_Mexico.csv")
 
 # Information on Appliances
 
@@ -134,7 +136,7 @@ appliances_3 <- left_join(appliances_2, appliances_1, by = "folioviv")%>%
   select(-folioviv)%>%
   mutate_at(vars(-hh_id), list(~ ifelse(. > 0,1,0)))
 
-write_csv(appliances_3, "../0_Data/1_Household Data/3_Mexico/1_Data_Clean/appliances_0_1_Mexico_2020.csv")
+write_csv(appliances_3, "../0_Data/1_Household Data/3_Mexico/1_Data_Clean/appliances_0_1_Mexico.csv")
 
 # Codes
 Mex_District <- read_csv("../0_Data/1_Household Data/3_Mexico/2_Codes/Mexico_District_Codes.csv")%>%

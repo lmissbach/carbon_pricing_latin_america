@@ -44,7 +44,8 @@ hogares_0 <- hogares %>%
          language = PPD06, electricity = P01A05C, water = P01D06, toilet = P01D17)%>%
   mutate(urban_01 = ifelse(Urban == 1,1,0),
          electricity.access = ifelse(electricity == 1,1,0))%>%
-  select(hh_id, province, district, urban_01, hh_size, hh_weights, language, electricity.access, water, toilet)
+  select(hh_id, province, district, urban_01, hh_size, hh_weights, language, electricity.access, water, toilet)%>%
+  mutate(language = ifelse(is.na(language),98,language))
 
 energy <- hogares %>%
   rename(hh_id = NUMHOG, firewood = P01D27)%>%
@@ -102,13 +103,18 @@ energy_02 <- energy_02 %>%
 write_csv(Cooking.Code, "../0_Data/1_Household Data/3_Guatemala/2_Codes/Cooking.Code.csv")
 
 personas_0 <- personas %>%
-  rename(hh_id = NUMHOG, sex_hhh = PPA02, age_hhh = PPA03, language.b = P04A07A, ethnicity = P04A11A,
+  rename(hh_id = NUMHOG, sex_hhh = PPA02, age_hhh = PPA03, religion = P04A07A, ethnicity = P04A11A,
          edu_hhh = P06B25A, ind_hhh = P10B03B)%>%
   filter(PPA05 == 1)%>%
-  select(hh_id, sex_hhh, age_hhh, language.b, ethnicity, edu_hhh, ind_hhh)
+  select(hh_id, sex_hhh, age_hhh, religion, ethnicity, edu_hhh, ind_hhh)%>%
+  mutate(ethnicity = ifelse(is.na(ethnicity),99, ethnicity),
+         religion  = ifelse(is.na(religion), 99, religion),
+         edu_hhh   = ifelse(is.na(edu_hhh),  0,  edu_hhh),
+         age_hhh   = ifelse(is.na(age_hhh), 16,  age_hhh))
 
 personas_1 <- personas %>%
   rename(hh_id = NUMHOG, age_hhh = PPA03)%>%
+  mutate(age_hhh = ifelse(is.na(age_hhh),18,age_hhh))%>%
   mutate(adults   = ifelse(age_hhh > 15,1,0),
          children = ifelse(age_hhh < 16,1,0))%>%
   group_by(hh_id)%>%
@@ -262,7 +268,9 @@ equipamiento_1 <- equipamiento %>%
   mutate(heater.01   = ifelse(heater.a.01 == 1| heater.b.01 == 1,1,0),
          car.01      = ifelse(car.a.01 == 1 | car.b.01 == 1 | car.c.01 == 1,1,0),
          computer.01 = ifelse(computer.a.01 == 1 | computer.b.01 == 1,1,0))%>%
-  select(-heater.a.01, -heater.b.01, -car.a.01, -car.b.01, -car.c.01, -computer.a.01, -computer.b.01)
+  select(-heater.a.01, -heater.b.01, -car.a.01, -car.b.01, -car.c.01, -computer.a.01, -computer.b.01)%>%
+  # Assumption for two households !
+  mutate_at(vars(-hh_id), list(~ ifelse(is.na(.),0,.)))
 
 write_csv(equipamiento_1, "../0_Data/1_Household Data/3_Guatemala/1_Data_Clean/appliances_0_1_Guatemala.csv")
 
@@ -277,13 +285,13 @@ Province.Code <- stack(attr(hogares_1$province, 'labels'))%>%
 District.Code <- stack(attr(hogares_1$district, 'labels'))%>%
   rename(district = values, District = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Guatemala/2_Codes/District.Code.csv")
-Education.Code <- stack(attr(hogares_1$edu_hhh, 'labels'))%>%
+Education.Code <- stack(attr(personas$P06B25A, 'labels'))%>%
   rename(edu_hhh = values, Education = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Guatemala/2_Codes/Education.Code.csv")
 Industry.Code <- stack(attr(hogares_1$ind_hhh, 'labels'))%>%
   rename(ind_hhh = values, Industry = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Guatemala/2_Codes/Industry.Code.csv")
-Ethnicity.Code <- stack(attr(hogares_1$ethnicity, 'labels'))%>%
+Ethnicity.Code <- stack(attr(personas$P04A11A, 'labels'))%>%
   rename(ethnicity = values, Ethnicity = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Guatemala/2_Codes/Ethnicity.Code.csv")
 Water.Code <- stack(attr(hogares_1$water, 'labels'))%>%
@@ -292,12 +300,13 @@ Water.Code <- stack(attr(hogares_1$water, 'labels'))%>%
 Toilet.Code <- stack(attr(hogares_1$toilet, 'labels'))%>%
   rename(toilet = values, Toilet = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Guatemala/2_Codes/Toilet.Code.csv")
-Language.Code <- stack(attr(hogares_1$language, 'labels'))%>%
+Language.Code <- stack(attr(hogares$PPD06, 'labels'))%>%
   rename(language = values, Language = ind)%>%
   write_csv(., "../0_Data/1_Household Data/3_Guatemala/2_Codes/Language.Code.csv")
-Language.B.Code <- stack(attr(hogares_1$language.b, 'labels'))%>%
-  rename(language.b = values, Language.B = ind)%>%
-  write_csv(., "../0_Data/1_Household Data/3_Guatemala/2_Codes/Language.B.Code.csv")
+# Actually language: 
+Religion.Code <- stack(attr(personas$P04A07A, 'labels'))%>%
+  rename(religion = values, Religion = ind)%>%
+  write_csv(., "../0_Data/1_Household Data/3_Guatemala/2_Codes/Religion.Code.csv")
 
 # Item-Codes ####
 

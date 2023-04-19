@@ -79,6 +79,19 @@ Enaho_01_1.2 <- Enaho_01_0 %>%
   left_join(Cooking.Code)%>%
   select(hh_id, cooking_fuel)
 
+Enaho_01_1.CF <- Enaho_01_0 %>%
+  unite("hh_id", c("nconglome", "conglome", "vivienda", "hogar"), sep = "")%>%
+  select(hh_id, p1131:p1138)%>%
+  mutate(CF_Electricity  = ifelse(p1131 == 1,1,0),
+         CF_LPG          = ifelse(p1132 == 1,1,0),
+         CF_Coal         = ifelse(p1135 == 1,1,0),
+         CF_Natural_Gas  = ifelse(p1133 == 1,1,0),
+         CF_Firewood     = ifelse(p1136 == 1,1,0),
+         CF_Animal_Waste = ifelse(p1139 == 1,1,0),
+         CF_Other        = ifelse(p1137 == 1,1,0),
+         CF_No_Cooking   = ifelse(p1138 == 1,1,0))%>%
+  select(hh_id, starts_with("CF"))
+
 Enaho_02_1 <- Enaho_02_0 %>%
   unite("hh_id", c("nconglome", "conglome", "vivienda", "hogar"), sep = "")%>%
   filter(p203 == 1)%>%
@@ -100,13 +113,17 @@ Enaho_03_1 <- Enaho_03_0 %>%
   unite("hh_id", c("nconglome", "conglome", "vivienda", "hogar"), sep = "")%>%
   filter(p300n == 1)%>%
   select(hh_id, p300a, p301a)%>%
-  rename(language = p300a, edu_hhh = p301a)
+  rename(language = p300a, edu_hhh = p301a)%>%
+  # affects two households
+  mutate(language = ifelse(is.na(language),4, language),
+         edu_hhh  = ifelse(is.na(edu_hhh), 1, edu_hhh))
 
 Enaho_05_1 <- Enaho_05_0 %>%
   unite("hh_id", c("nconglome", "conglome", "vivienda", "hogar"), sep = "")%>%
   rename(ind_hhh = p506r4, ethnicity = p558c)%>%
   filter(p203 == 1)%>%
-  select(hh_id, ind_hhh, ethnicity)
+  select(hh_id, ind_hhh, ethnicity)%>%
+  mutate(ethnicity = ifelse(is.na(ethnicity),8,ethnicity))
 
 Enaho_05_2 <- Enaho_05_0 %>%
   unite("hh_id", c("nconglome", "conglome", "vivienda", "hogar"), sep = "")%>%
@@ -311,7 +328,7 @@ expenditures_items_Peru <- Enaho_07_1 %>%
 Enaho_18_1 <- Enaho_18_0 %>%
   unite("hh_id", c("nconglome", "conglome", "vivienda", "hogar"), sep = "")%>%
   select(hh_id, p612n, p612)%>%
-  mutate(value = ifelse(p612 == 1,1,0))%>%
+  mutate(value = ifelse(p612 == 1 & !is.na(p612),1,0))%>%
   mutate(appliance = ifelse(p612n == 1, "radio.01",
                             ifelse(p612n == 2 | p612n == 3, "tv.01",
                                    ifelse(p612n == 7, "computer.01",
@@ -334,12 +351,16 @@ Enaho_18_1 <- Enaho_18_0 %>%
 household_information_0 <- household_information %>%
   filter(hh_id %in% expenditures_items_Peru$hh_id)
 
-Enhao_18_1 <- Enaho_18_1 %>%
+Cooking_Fuels_Information <- Enaho_01_1.CF %>%
+  filter(hh_id %in% expenditures_items_Peru$hh_id)
+
+Enaho_18_1.1 <- Enaho_18_1 %>%
   filter(hh_id %in% household_information_0$hh_id)
 
 write_csv(Enaho_18_1,              "../0_Data/1_Household Data/3_Peru/1_Data_Clean/appliances_0_1_Peru.csv")
 write_csv(household_information_0,   "../0_Data/1_Household Data/3_Peru/1_Data_Clean/household_information_Peru.csv")
 write_csv(expenditures_items_Peru, "../0_Data/1_Household Data/3_Peru/1_Data_Clean/expenditures_items_Peru.csv")
+write_csv(Cooking_Fuels_Information, "../0_Data/1_Household Data/3_Peru/1_Data_Clean/hi_Peru_CF.csv")
 
 # Codes ####
 Item.Codes.0 <- Enaho_07_0 %>%
