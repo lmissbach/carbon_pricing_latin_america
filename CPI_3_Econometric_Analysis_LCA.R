@@ -35,7 +35,7 @@ for(Country.Name in c("Argentina", "Barbados","Bolivia", "Brazil", "Chile", "Col
     
     if(Country.Name == "El_Salvador") Country.Name.2 <- "El Salvador" else Country.Name.2 <- Country.Name
     
-    if(Country.Name != "Chile") appliances_0_1 <- read_csv(sprintf("../0_Data/1_Household Data/3_%s/1_Data_Clean/appliances_0_1_new_%s.csv", Country.Name.2, Country.Name.2))
+    if(Country.Name != "Chile") appliances_0_1 <- read_csv(sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/4_Transformed Data/appliances_0_1_new_%s.csv", Country.Name.2))
     
         carbon_pricing_incidence_1 <- left_join(carbon_pricing_incidence_0, household_information_0)%>%
       mutate(Country = Country.Name.2)
@@ -341,7 +341,7 @@ LAC_Electricity_2 <- LAC_Electricity %>%
   mutate_at(vars("Coal":"Other"),list(~ paste0(round(.*100,1), "\\%")))%>%
   rename("Cons. [TWh]" = "total Electricity Consumption in TWh (2020)", "Cons. pc. [MWh]" = "Electricity Consumption MWh / per capita (2020)")%>%
   rename_at(vars("Coal":"Cons. pc. [MWh]"), funs(str_replace(.,"^", "\\\\rotatebox{90}{")))%>%
-  rename_at(vars(2:13), funs(str_replace(., "$","}")))
+  rename_at(vars(2:13), list(~str_replace(., "$","}")))
 
 kbl(mutate_all(LAC_Electricity_2, linebreak), format = "latex", caption = "Electricity Generation in 16 Countries of Latin America and the Caribbean", 
     booktabs = T, align = "l|rrrrrrrrrr|r|r", vline = "", format.args = list(big.mark = ",", scientific = FALSE), linesep = "", escape = FALSE)%>%
@@ -419,8 +419,8 @@ for(i in Country.Set){
   if(i != "Chile" & sum(is.na(data_2.1.1$car.01))==0)                                                formula_0 <- paste0(formula_0, " + car.01")
   #if(i != "Chile" & sum(is.na(data_2.1.1$refrigerator.01))==0)                                                formula_0 <- paste0(formula_0, " + refrigerator.01")
   if("cooking_fuel" %in% colnames(household_information_0) & sum(is.na(data_2.1.1$CF))==0){
-    if(i != "Guatemala" & i != "Dominican Republic" & i != "Bolivia") formula_0 <- paste0(formula_0, ' + i(CF, ref = "Electricity")')
-    if(i == "Guatemala" | i == "Dominican Republic" | i == "Bolivia") formula_0 <- paste0(formula_0, ' + i(CF, ref = "LPG")')
+    if(i != "Guatemala" & i != "Dominican Republic" & i != "Bolivia" & i != "Mexico") formula_0 <- paste0(formula_0, ' + i(CF, ref = "Electricity")')
+    if(i == "Guatemala" | i == "Dominican Republic" | i == "Bolivia" | i == "Mexico") formula_0 <- paste0(formula_0, ' + i(CF, ref = "LPG")')
     }
   #if("lighting_fuel" %in% colnames(household_information_0) & sum(is.na(data_2.1.1$LF))==0)      formula_0 <- paste0(formula_0, " + LF")
   #if("heating_fuel" %in% colnames(household_information_0))      formula_0 <- paste0(formula_0, " + HF")
@@ -456,47 +456,47 @@ for(i in Country.Set){
          notes = c("\\medskip \\textit{Note:}",
                    paste0(sprintf("This table displays regression results from equation (8) on the carbon price incidence of any household in %s. Coefficients are estimates on regressions on the full sample and separated by expenditure quintile. ",i), REF_0)))
   
-  model_2.1.1.2 <- etable(model_2.1.1.1)%>%
-    as_tibble(rownames = NA)%>%
-    rownames_to_column()%>%
-    separate("model 1", c("model_1", "model_1_SE"), sep = " ")%>%
-    separate("model 2", c("model_2", "model_2_SE"), sep = " ")%>%
-    separate("model 3", c("model_3", "model_3_SE"), sep = " ")%>%
-    separate("model 4", c("model_4", "model_4_SE"), sep = " ")%>%
-    separate("model 5", c("model_5", "model_5_SE"), sep = " ")%>%
-    separate("model 6", c("model_6", "model_6_SE"), sep = " ")%>%
-    mutate(number = 1:n())
+  #model_2.1.1.2 <- etable(model_2.1.1.1)%>%
+  #  as_tibble(rownames = NA)%>%
+  #  rownames_to_column()%>%
+  #  separate("model 1", c("model_1", "model_1_SE"), sep = " ", fill = "right")%>%
+  #  separate("model 2", c("model_2", "model_2_SE"), sep = " ", fill = "right")%>%
+  #  separate("model 3", c("model_3", "model_3_SE"), sep = " ", fill = "right")%>%
+  #  separate("model 4", c("model_4", "model_4_SE"), sep = " ", fill = "right")%>%
+  #  separate("model 5", c("model_5", "model_5_SE"), sep = " ", fill = "right")%>%
+  #  separate("model 6", c("model_6", "model_6_SE"), sep = " ", fill = "right")%>%
+  #  mutate(number = 1:n())
+  #
+  #model_2.1.1.3 <- model_2.1.1.2 %>%
+  #  select(- ends_with("_SE"))
   
-  model_2.1.1.3 <- model_2.1.1.2 %>%
-    select(- ends_with("_SE"))
-  
-  model_2.1.1.4 <- model_2.1.1.2 %>%
-    select(-starts_with("model"), ends_with("_SE"))%>%
-    rename_at(vars(starts_with("model")), list(~ str_replace(., "_SE", "")))
-  
-  model_2.1.1.5 <- rbind(model_2.1.1.3, model_2.1.1.4)%>%
-    arrange(number)%>%
-    filter(number != 1 | model_2 == 1)%>%
-    mutate(model_1 = ifelse(model_1 == "Full", "Full Sample", model_1))%>%
-    filter(number != 2 | model_2 == "burden_CO2_national")%>%
-    mutate_at(vars(starts_with("model")), list(~ ifelse(. == "burden_CO2_national", "Carbon Price Incidence",.)))%>%
-    filter(number != 3)%>%
-    filter(!(rowname != lead(rowname) & rowname %in% c("_____________________________________", "S.E. type",
-                                                    "Observations", "R2", "Adj. R2")))%>%
-    mutate(rowname_1 = ifelse(str_sub(rowname,1,2)  == "CF", paste0("Cooks with ", str_sub(rowname,5,-1)), rowname))%>%
-    mutate(rowname_1 = ifelse(str_sub(rowname,1,5) == "ISCED", paste0("ISCED: ", str_sub(rowname,-1,-1)), rowname_1))%>%
-    mutate(rowname_1 = ifelse(str_sub(rowname,1,2)  == "HF", paste0("Heats with", str_sub(rowname,3,-1)), rowname_1))%>%
-    mutate(rowname_1 = ifelse(str_sub(rowname,1,2)  == "LF", paste0("Lighting Fuel:", str_sub(rowname,3,-1)), rowname_1))%>%
-    mutate(rowname_1 = ifelse(str_sub(rowname,1,9) == "Ethnicity", paste0("ETH: ", str_sub(rowname,12,-1)), rowname_1))%>%
-    mutate(rowname_1 = ifelse(rowname_1 == "hh_size", "HH Size", 
-                             ifelse(rowname_1 == "car.01", "Car Ownership",
-                                    ifelse(rowname_1 == "refrigerator.01", "Refrigerator Own.",
-                                           ifelse(rowname_1 == "urban_01", "Urban Area",
-                                                  ifelse(rowname_1 == "log_hh_expenditures_USD_2014", "HH Exp. (log)", 
-                                                         ifelse(rowname_1 == "Sample (Income_Group_5)", "Sample:",rowname_1)))))))%>%
-    select(rowname_1, starts_with("model"))%>%
-    mutate(rowname_1 = ifelse(rowname_1 == lag(rowname_1) & rowname_1 != "Sample:","",rowname_1))%>%
-    mutate(rowname_1 = ifelse(i == "Mexico" & rowname_1 == 'i(var=Ethnicity,ref="Non-Indigeneous")', "ETH: Non-Indigeneous", rowname_1))
+  #model_2.1.1.4 <- model_2.1.1.2 %>%
+  #  select(-starts_with("model"), ends_with("_SE"))%>%
+  #  rename_at(vars(starts_with("model")), list(~ str_replace(., "_SE", "")))
+  #
+  #model_2.1.1.5 <- rbind(model_2.1.1.3, model_2.1.1.4)%>%
+  #  arrange(number)%>%
+  #  filter(number != 1 | model_2 == 1)%>%
+  #  mutate(model_1 = ifelse(model_1 == "Full", "Full Sample", model_1))%>%
+  #  filter(number != 2 | model_2 == "burden_CO2_national")%>%
+  #  mutate_at(vars(starts_with("model")), list(~ ifelse(. == "burden_CO2_national", "Carbon Price Incidence",.)))%>%
+  #  filter(number != 3)%>%
+  #  filter(!(rowname != lead(rowname) & rowname %in% c("_____________________________________", "S.E. type",
+  #                                                  "Observations", "R2", "Adj. R2")))%>%
+  #  mutate(rowname_1 = ifelse(str_sub(rowname,1,2)  == "CF", paste0("Cooks with ", str_sub(rowname,5,-1)), rowname))%>%
+  #  mutate(rowname_1 = ifelse(str_sub(rowname,1,5) == "ISCED", paste0("ISCED: ", str_sub(rowname,-1,-1)), rowname_1))%>%
+  #  mutate(rowname_1 = ifelse(str_sub(rowname,1,2)  == "HF", paste0("Heats with", str_sub(rowname,3,-1)), rowname_1))%>%
+  #  mutate(rowname_1 = ifelse(str_sub(rowname,1,2)  == "LF", paste0("Lighting Fuel:", str_sub(rowname,3,-1)), rowname_1))%>%
+  #  mutate(rowname_1 = ifelse(str_sub(rowname,1,9) == "Ethnicity", paste0("ETH: ", str_sub(rowname,12,-1)), rowname_1))%>%
+  #  mutate(rowname_1 = ifelse(rowname_1 == "hh_size", "HH Size", 
+  #                           ifelse(rowname_1 == "car.01", "Car Ownership",
+  #                                  ifelse(rowname_1 == "refrigerator.01", "Refrigerator Own.",
+  #                                         ifelse(rowname_1 == "urban_01", "Urban Area",
+  #                                                ifelse(rowname_1 == "log_hh_expenditures_USD_2014", "HH Exp. (log)", 
+  #                                                       ifelse(rowname_1 == "Sample (Income_Group_5)", "Sample:",rowname_1)))))))%>%
+  #  select(rowname_1, starts_with("model"))%>%
+  #  mutate(rowname_1 = ifelse(rowname_1 == lag(rowname_1) & rowname_1 != "Sample:","",rowname_1))%>%
+  #  mutate(rowname_1 = ifelse(i == "Mexico" & rowname_1 == 'i(var=Ethnicity,ref="Non-Indigeneous")', "ETH: Non-Indigeneous", rowname_1))
   
   tidy_2.1.1.1 <- tidy(model_2.1.1.0)%>%
     mutate(Country = i)
@@ -504,7 +504,7 @@ for(i in Country.Set){
   data_frame_2.1.1 <- data_frame_2.1.1 %>%
     bind_rows(tidy_2.1.1.1)
   
-  list_2.1.1[[i]] <- model_2.1.1.5
+  #list_2.1.1[[i]] <- model_2.1.1.5
   print(i)
 }
 
@@ -547,8 +547,8 @@ for(i in Country.Set){
   if(i != "Chile" & sum(is.na(data_2.1.2.1$car.01))==0)                                                formula_0 <- paste0(formula_0, " + car.01")
   # if(i != "Chile" & sum(is.na(data_2.1.2.1$refrigerator.01))==0)                                                formula_0 <- paste0(formula_0, " + refrigerator.01")
   if("cooking_fuel" %in% colnames(household_information_0) & sum(is.na(data_2.1.2.1$CF))==0){
-    if(i != "Guatemala" & i != "Dominican Republic" & i != "Bolivia") formula_0 <- paste0(formula_0, ' + i(CF, ref = "Electricity")')
-    if(i == "Guatemala" | i == "Dominican Republic" | i == "Bolivia") formula_0 <- paste0(formula_0, ' + i(CF, ref = "LPG")')
+    if(i != "Guatemala" & i != "Dominican Republic" & i != "Bolivia" & i != "Mexico") formula_0 <- paste0(formula_0, ' + i(CF, ref = "Electricity")')
+    if(i == "Guatemala" | i == "Dominican Republic" | i == "Bolivia" | i == "Mexico") formula_0 <- paste0(formula_0, ' + i(CF, ref = "LPG")')
   }
   #if("lighting_fuel" %in% colnames(household_information_0) & sum(is.na(data_2.1.2.1$LF))==0)      formula_0 <- paste0(formula_0, " + LF")
   #if("heating_fuel" %in% colnames(household_information_0))      formula_0 <- paste0(formula_0, " + HF")
@@ -582,47 +582,47 @@ for(i in Country.Set){
                    paste0("This table displays regression results from equation (13) on the log-odds transformed probability of higher additional costs than 80\\% of the population ", sprintf("in %s",i), " as the dependent variable. We show model coefficients separately for the full sample and separated by expenditure quintile. ", REF_0)))
   
   
-  model_2.1.2.2 <- etable(model_2.1.2.1)%>%
-    as_tibble(rownames = NA)%>%
-    rownames_to_column()%>%
-    separate("model 1", c("model_1", "model_1_SE"), sep = " ")%>%
-    separate("model 2", c("model_2", "model_2_SE"), sep = " ")%>%
-    separate("model 3", c("model_3", "model_3_SE"), sep = " ")%>%
-    separate("model 4", c("model_4", "model_4_SE"), sep = " ")%>%
-    separate("model 5", c("model_5", "model_5_SE"), sep = " ")%>%
-    separate("model 6", c("model_6", "model_6_SE"), sep = " ")%>%
-    mutate(number = 1:n())
-  
-  model_2.1.2.3 <- model_2.1.2.2 %>%
-    select(- ends_with("_SE"))
-  
-  model_2.1.2.4 <- model_2.1.2.2 %>%
-    select(-starts_with("model"), ends_with("_SE"))%>%
-    rename_at(vars(starts_with("model")), list(~ str_replace(., "_SE", "")))
-  
-  model_2.1.2.5 <- rbind(model_2.1.2.3, model_2.1.2.4)%>%
-    arrange(number)%>%
-    filter(number != 1 | model_2 == 1)%>%
-    mutate(model_1 = ifelse(model_1 == "Full", "Full Sample", model_1))%>%
-    filter(number != 2 | model_2 == "burden_CO2_national")%>%
-    mutate_at(vars(starts_with("model")), list(~ ifelse(. == "burden_CO2_national", "Carbon Price Incidence",.)))%>%
-    filter(number != 3)%>%
-    filter(!(rowname != lead(rowname) & rowname %in% c("_____________________________________", "S.E. type",
-                                                       "Observations", "R2", "Adj. R2")))%>%
-    mutate(rowname_1 = ifelse(str_sub(rowname,1,2)  == "CF", paste0("Cooks with ", str_sub(rowname,5,-1)), rowname))%>%
-    mutate(rowname_1 = ifelse(str_sub(rowname,1,5) == "ISCED", paste0("ISCED: ", str_sub(rowname,-1,-1)), rowname_1))%>%
-    mutate(rowname_1 = ifelse(str_sub(rowname,1,2)  == "HF", paste0("Heats with", str_sub(rowname,3,-1)), rowname_1))%>%
-    mutate(rowname_1 = ifelse(str_sub(rowname,1,2)  == "LF", paste0("Lighting Fuel:", str_sub(rowname,3,-1)), rowname_1))%>%
-    mutate(rowname_1 = ifelse(str_sub(rowname,1,9) == "Ethnicity", paste0("ETH: ", str_sub(rowname,12,-1)), rowname_1))%>%
-    mutate(rowname_1 = ifelse(rowname_1 == "hh_size", "HH Size", 
-                              ifelse(rowname_1 == "car.01", "Car Ownership",
-                                     ifelse(rowname_1 == "refrigerator.01", "Refrigerator Own.",
-                                            ifelse(rowname_1 == "urban_01", "Urban Area",
-                                                   ifelse(rowname_1 == "log_hh_expenditures_USD_2014", "HH Exp. (log)", 
-                                                          ifelse(str_sub(rowname_1,1,6) == "Sample", "Sample:",rowname_1)))))))%>%
-    select(rowname_1, starts_with("model"))%>%
-    mutate(rowname_1 = ifelse(rowname_1 == lag(rowname_1) & rowname_1 != "Sample:","",rowname_1))%>%
-    mutate(rowname_1 = ifelse(i == "Mexico" & rowname_1 == 'i(var=Ethnicity,ref="Non-Indigeneous")', "ETH: Non-Indigeneous", rowname_1))
+ # model_2.1.2.2 <- etable(model_2.1.2.1)%>%
+ #   as_tibble(rownames = NA)%>%
+ #   rownames_to_column()%>%
+ #   separate("model 1", c("model_1", "model_1_SE"), sep = " ")%>%
+ #   separate("model 2", c("model_2", "model_2_SE"), sep = " ")%>%
+ #   separate("model 3", c("model_3", "model_3_SE"), sep = " ")%>%
+ #   separate("model 4", c("model_4", "model_4_SE"), sep = " ")%>%
+ #   separate("model 5", c("model_5", "model_5_SE"), sep = " ")%>%
+ #   separate("model 6", c("model_6", "model_6_SE"), sep = " ")%>%
+ #   mutate(number = 1:n())
+ # 
+ # model_2.1.2.3 <- model_2.1.2.2 %>%
+ #   select(- ends_with("_SE"))
+ # 
+ # model_2.1.2.4 <- model_2.1.2.2 %>%
+ #   select(-starts_with("model"), ends_with("_SE"))%>%
+ #   rename_at(vars(starts_with("model")), list(~ str_replace(., "_SE", "")))
+ # 
+ # model_2.1.2.5 <- rbind(model_2.1.2.3, model_2.1.2.4)%>%
+ #   arrange(number)%>%
+ #   filter(number != 1 | model_2 == 1)%>%
+ #   mutate(model_1 = ifelse(model_1 == "Full", "Full Sample", model_1))%>%
+ #   filter(number != 2 | model_2 == "burden_CO2_national")%>%
+ #   mutate_at(vars(starts_with("model")), list(~ ifelse(. == "burden_CO2_national", "Carbon Price Incidence",.)))%>%
+ #   filter(number != 3)%>%
+ #   filter(!(rowname != lead(rowname) & rowname %in% c("_____________________________________", "S.E. type",
+ #                                                      "Observations", "R2", "Adj. R2")))%>%
+ #   mutate(rowname_1 = ifelse(str_sub(rowname,1,2)  == "CF", paste0("Cooks with ", str_sub(rowname,5,-1)), rowname))%>%
+ #   mutate(rowname_1 = ifelse(str_sub(rowname,1,5) == "ISCED", paste0("ISCED: ", str_sub(rowname,-1,-1)), rowname_1))%>%
+ #   mutate(rowname_1 = ifelse(str_sub(rowname,1,2)  == "HF", paste0("Heats with", str_sub(rowname,3,-1)), rowname_1))%>%
+ #   mutate(rowname_1 = ifelse(str_sub(rowname,1,2)  == "LF", paste0("Lighting Fuel:", str_sub(rowname,3,-1)), rowname_1))%>%
+ #   mutate(rowname_1 = ifelse(str_sub(rowname,1,9) == "Ethnicity", paste0("ETH: ", str_sub(rowname,12,-1)), rowname_1))%>%
+ #   mutate(rowname_1 = ifelse(rowname_1 == "hh_size", "HH Size", 
+ #                             ifelse(rowname_1 == "car.01", "Car Ownership",
+ #                                    ifelse(rowname_1 == "refrigerator.01", "Refrigerator Own.",
+ #                                           ifelse(rowname_1 == "urban_01", "Urban Area",
+ #                                                  ifelse(rowname_1 == "log_hh_expenditures_USD_2014", "HH Exp. (log)", 
+ #                                                         ifelse(str_sub(rowname_1,1,6) == "Sample", "Sample:",rowname_1)))))))%>%
+ #   select(rowname_1, starts_with("model"))%>%
+ #   mutate(rowname_1 = ifelse(rowname_1 == lag(rowname_1) & rowname_1 != "Sample:","",rowname_1))%>%
+ #   mutate(rowname_1 = ifelse(i == "Mexico" & rowname_1 == 'i(var=Ethnicity,ref="Non-Indigeneous")', "ETH: Non-Indigeneous", rowname_1))
   
   tidy_2.1.2.1 <- tidy(model_2.1.2.0)%>%
     mutate(Country = i)
@@ -630,7 +630,7 @@ for(i in Country.Set){
   data_frame_2.1.2 <- data_frame_2.1.2 %>%
     bind_rows(tidy_2.1.2.1)
   
-  list_2.1.2[[i]] <- model_2.1.2.5
+ # list_2.1.2[[i]] <- model_2.1.2.5
   print(i)
 }
 
@@ -763,7 +763,7 @@ data_frame_2.1.3.2 <- data_frame_2.1.3.1 %>%
          cumulative_95 = ifelse(cumsum_p_j < 0.95, "Yes", "No"))
 
 # 2.1.4 Supplementary Analysis for Peru ####
-
+ 
 household_information_0    <- read_csv(sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/4_Transformed Data/household_information_%s_new.csv", "Peru"))
 CF_Peru                    <- read_csv("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/4_Transformed Data/CF_Peru.csv")
 
@@ -779,19 +779,19 @@ model_2.1.4.0 <- feols(formula_1, data = data_2.1.4, weights = data_2.1.4$hh_wei
 model_2.1.4.1 <- feols(formula_1, data = data_2.1.4, weights = data_2.1.4$hh_weights, fsplit = ~ Income_Group_5, vcov = "hetero")
 
 notes_0 <- sprintf("This table displays regression results from equation (8) in the carbon price incidence of any household in %s. 
-                     Coefficients are estimates on regressions on the full sample and separated by expenditure quintile. Households may report the use of multiple fuels for cooking.", i)
+                     Coefficients are estimates on regressions on the full sample and separated by expenditure quintile. Households may report the use of multiple fuels for cooking.", "Peru")
 
 tex.style <- style.tex(model.title = "", fixef.title = "\\midrule",
                        stats.title = "\\midrule", model.format = "",
                        fontsize = "small")
 
-REF_0 <- reference.list$REF[reference.list$Country == i]
+REF_0 <- reference.list$REF[reference.list$Country == "Peru"]
 
-etable(model_2.1.4.1, dict = dict_latex, tex = TRUE, file = sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/6_App/Latin-America-Paper/Tables/Table_2_OLS/Table_OLS_%s_CF_Add.tex", i),
+etable(model_2.1.4.1, dict = dict_latex, tex = TRUE, file = sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/6_App/Latin-America-Paper/Tables/Table_2_OLS/Table_OLS_%s_CF_Add.tex", "Peru"),
        digits = 3, replace = TRUE, fitstat = c("n", "r2"), style.tex = tex.style, se.row = TRUE, tpt = TRUE,
-       title = sprintf("OLS-Regression Coefficients for %s", i),  label = sprintf("tab:OLS_%s",i), adjustbox = "width = 1\\textwidth, max height = 0.95\\textheight, center", placement = "htbp!",
+       title = sprintf("OLS-Regression Coefficients for %s","Peru"),  label = sprintf("tab:OLS_%s_Add","Peru"), adjustbox = "width = 1\\textwidth, max height = 0.95\\textheight, center", placement = "htbp!",
        notes = c("\\medskip \\textit{Note:}",
-                 paste0(sprintf("This table displays regression results from equation (8) on the carbon price incidence of any household in %s. Coefficients are estimates on regressions on the full sample and separated by expenditure quintile. Households may report the use of multiple fuels for cooking.",i), REF_0)))
+                 paste0(sprintf("This table displays regression results from equation (8) on the carbon price incidence of any household in %s. Coefficients are estimates on regressions on the full sample and separated by expenditure quintile. Households may report the use of multiple fuels for cooking.","Peru"), REF_0)))
 
 # Logit
 
@@ -820,14 +820,14 @@ tex.style <- style.tex(model.title = "", fixef.title = "\\midrule",
                        stats.title = "\\midrule", model.format = "",
                        fontsize = "small")
   
-REF_0 <- reference.list$REF[reference.list$Country == i]
+REF_0 <- reference.list$REF[reference.list$Country == "Peru"]
   
   
-etable(model_2.1.5.1, dict = dict_latex, tex = TRUE, file = sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/6_App/Latin-America-Paper/Tables/Table_4_Logit_Burden/Table_Logit_Burden_%s_CF_Add.tex", i),
+etable(model_2.1.5.1, dict = dict_latex, tex = TRUE, file = sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/6_App/Latin-America-Paper/Tables/Table_4_Logit_Burden/Table_Logit_Burden_%s_CF_Add.tex", "Peru"),
        digits = 3, replace = TRUE, fitstat = c("n", "cor2"), style.tex = tex.style, se.row = TRUE, tpt = TRUE,
-       title = sprintf("Logit-Model Coefficients Hardship Cases in %s", i),  label = sprintf("tab:Logit_1_%s",i), adjustbox = "width = 1\\textwidth, max height = 0.95\\textheight, center", placement = "htbp!",
+       title = sprintf("Logit-Model Coefficients Hardship Cases in %s", "Peru"),  label = sprintf("tab:Logit_1_%s_Add","Peru"), adjustbox = "width = 1\\textwidth, max height = 0.95\\textheight, center", placement = "htbp!",
        notes = c("\\medskip \\textit{Note:}",
-                 paste0("This table displays regression results from equation (13) on the log-odds transformed probability of higher additional costs than 80\\% of the population ", sprintf("in %s",i), " as the dependent variable. We show model coefficients separately for the full sample and separated by expenditure quintile. Households may report the use of multiple fuels for cooking.", REF_0)))
+                 paste0("This table displays regression results from equation (13) on the log-odds transformed probability of higher additional costs than 80\\% of the population ", sprintf("in %s","Peru"), " as the dependent variable. We show model coefficients separately for the full sample and separated by expenditure quintile. Households may report the use of multiple fuels for cooking.", REF_0)))
   
 # 2.2   Decomposing Most affected households + No Access to Transfers ####
 
@@ -889,7 +889,7 @@ for(i in Country.Set){
   
   REF_0 <- reference.list$REF[reference.list$Country == i]
   
-  etable(model_2.2.2.1, dict = dict_latex, tex = TRUE, file = sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/6_App/Latin-America-Paper/Tables/Table_5_Logit_Transfers_Burden/Table_Logit_Transfers_Burden_%s.tex", i),
+  etable(model_2.2.2.1, dict = dict_latex, tex = TRUE, file = sprintf("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/6_App/Latin-America-Paper/Tables/Table_5/Table_Logit_Transfers_Burden_%s_1.tex", i),
          digits = 3, replace = TRUE, fitstat = c("n", "cor2"), style.tex = tex.style, se.row = TRUE, tpt = TRUE,
          title = sprintf("Logit-Model Coefficients Hardship Cases and no Access to Transfers in %s", i),  label = sprintf("tab:Logit_2_%s",i), adjustbox = "width = 1\\textwidth, max height = 0.95\\textheight, center", placement = "htbp!",
          notes = c("\\medskip \\textit{Note:}",
