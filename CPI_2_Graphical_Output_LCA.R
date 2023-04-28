@@ -80,7 +80,7 @@ data_joint_0 <- data_joint_0 %>%
   select(hh_id, hh_weights, hh_size, Country, hh_expenditures_USD_2014, everything())
 
 # 2.1   Boxplots ####
-# 2.1.1 National Carbon Price ####
+# 2.1.1 National Carbon Price (Figure 1) ####
 
 carbon_pricing_incidence_2.1.1 <- data_joint_0 %>%
   group_by(Income_Group_5, Country)%>%
@@ -101,8 +101,8 @@ carbon_pricing_incidence_2.1.1 <- data_joint_0 %>%
 ylim0 <- 0.085
 
 plot_figure_1 <- function(ATT  = element_text(size = 7), ATX = element_text(size = 7), ATY = element_text(size = 7),
-                          XLAB = "Expenditure Quintiles",
-                          YLAB = "Carbon Price Incidence", 
+                          XLAB = "Expenditure quintiles",
+                          YLAB = "Carbon price incidence", 
                           fill0 = "none",
                           accuracy_0 = 1,
                           data_0 = carbon_pricing_incidence_2.1.1,
@@ -143,65 +143,7 @@ jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figu
 print(P_2.1.1)
 dev.off()
 
-# 2.1.2 Fossil Fuel Subsidy Reform ####
-
-carbon_pricing_incidence_2.1.2 <- data_joint_0 %>%
-  group_by(Income_Group_5, Country)%>%
-  summarise(
-    y5  = wtd.quantile(burden_CO2_transport, weights = hh_weights, probs = 0.05),
-    y25 = wtd.quantile(burden_CO2_transport, weights = hh_weights, probs = 0.25),
-    y50 = wtd.quantile(burden_CO2_transport, weights = hh_weights, probs = 0.5),
-    y75 = wtd.quantile(burden_CO2_transport, weights = hh_weights, probs = 0.75),
-    y95 = wtd.quantile(burden_CO2_transport, weights = hh_weights, probs = 0.95),
-    mean = wtd.mean(   burden_CO2_transport, weights = hh_weights))%>%
-  ungroup()
-
-# Default Y-Axis
-ylim0 <- 0.055
-
-plot_figure_1.1 <- function(ATT  = element_text(size = 7), ATX = element_text(size = 7), ATY = element_text(size = 7),
-                          XLAB = "Expenditure Quintiles",
-                          YLAB = "Fossil Fuel Subsidy Reform Incidence", 
-                          fill0 = "none",
-                          accuracy_0 = 1,
-                          data_0 = carbon_pricing_incidence_2.1.2,
-                          title_0 = "Fossil Fuel Subsidy Reform*"){
-  
-  P_1.1 <- ggplot(data_0, aes(x = factor(Income_Group_5)))+
-    geom_boxplot(aes(ymin = y5, lower = y25, middle = y50, upper = y75, ymax = y95), stat = "identity", position = position_dodge(0.5), outlier.shape = NA, width = 0.5, size = 0.3) +
-    theme_bw()+
-    facet_wrap(.~Country, nrow = )+
-    xlab(XLAB)+ ylab(YLAB)+
-    geom_point(aes(y = mean), shape = 23, size = 1.1, stroke = 0.4, fill = "white")+
-    scale_y_continuous(labels = scales::percent_format(accuracy = accuracy_0), expand = c(0,0))+
-    scale_x_discrete(labels = c("1", "2", "3", "4", "5"))+
-    coord_flip(ylim = c(0,ylim0))+
-    #ggtitle(title_0)+
-    theme(axis.text.y = ATY, 
-          axis.text.x = ATX,
-          axis.title  = ATT,
-          plot.title = element_text(size = 7),
-          legend.position = "bottom",
-          strip.text = element_text(size = 7),
-          strip.text.y = element_text(angle = 180),
-          panel.grid.major = element_line(size = 0.3),
-          panel.grid.minor = element_blank(),
-          axis.ticks = element_line(size = 0.2),
-          legend.text = element_text(size = 7),
-          legend.title = element_text(size = 7),
-          plot.margin = unit(c(0.1,0.1,0,0), "cm"),
-          panel.border = element_rect(size = 0.3))
-  
-  return(P_1.1)
-}
-
-P_2.1.2 <- plot_figure_1.1()
-
-#jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figure_1_Appendix", width = 15.5, height = 15, unit = "cm", res = 400)
-#print(P_2.1.2)
-#dev.off()
-
-# 2.2   Carbon Footprints over Household Expenditures ####
+# 2.2   Carbon Footprints over Household Expenditures (Figure 1 Appendix) ####
 
 P_2.2 <- ggplot(data_joint_0)+
   geom_smooth(formula = y ~ x, aes(y = CO2_t_national, x = hh_expenditures_USD_2014), method = "lm", se = FALSE, colour = "black", size = 0.6, fullrange = TRUE)+
@@ -234,7 +176,7 @@ jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figu
 print(P_2.2)
 dev.off()
 
-# 3.1   Vertical vs. horizontal effects ####
+# 3.1   Vertical vs. horizontal effects (Figure 2) ####
 
 data_3.1 <- data_joint_0 %>%
   group_by(Country, Income_Group_5)%>%
@@ -385,17 +327,17 @@ P.3.1 <- ggplot()+
   geom_label(data = poly_5, aes(label = text, x = x, y = y, alpha = 0.5), size = 3)+
   #geom_text(data = poly, aes(x = z_4, y = z_3, group = g, label = label))+
   theme_bw()+
-  geom_point(data = data_3.1.2, aes(y = median_1_5, x = dif_95_05_1_5), shape = 17, colour = "black", size = 2)+
-  geom_text_repel(data = data_3.1.2, aes(label = Country_Code, y = median_1_5, x = dif_95_05_1_5),
-                  direction = "both", size = 2.5, nudge_x = 0.05)+
+  geom_text_repel(data = data_3.1.2, aes(label = Country, y = median_1_5, x = dif_95_05_1_5),
+                  direction = "both", size = 2.5, min.segment.length = 0)+
+  geom_point(data = data_3.1.2, aes(y = median_1_5, x = dif_95_05_1_5), shape = 21, colour = "black", size = 2, fill = "black")+
   coord_cartesian(xlim = c(0,3.2), ylim = c(0,3.2))+
   #geom_abline(intercept = 0, slope = 1)+
   scale_fill_viridis_d()+
   scale_shape_manual(values = c(15,15,15,15,17,17,17,17,18,18,18,18,19,19,19,19))+
   scale_x_continuous(expand = c(0,0))+
   scale_y_continuous(expand = c(0,0))+
-  ylab("Vertical Distribution Coefficient")+
-  xlab("Horizontal Distribution Coefficient")+
+  ylab("Vertical distribution coefficient")+
+  xlab("Horizontal distribution coefficient")+
   labs(fill = "")+
   guides(fill = guide_legend(nrow = 2), alpha = "none")+
   theme(axis.text.y = element_text(size = 7), 
@@ -413,11 +355,11 @@ P.3.1 <- ggplot()+
         plot.margin = unit(c(0.1,0.1,0,0), "cm"),
         panel.border = element_rect(size = 0.3))
 
-jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figure_2.jpg", width = 14, height = 15, unit = "cm", res = 400)
+jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figure_2_Country.jpg", width = 14, height = 15, unit = "cm", res = 400)
 print(P.3.1)
 dev.off()
 
-# 3.2   Robustness Check on Indicator for Horizontal Effects ####
+# 3.2   Robustness Check on Indicator for Horizontal Effects (Figure 2 Appendix) ####
 
 data_3.2 <- data.frame()
 
@@ -493,7 +435,7 @@ jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figu
 print(P_3.2)
 dev.off()
 
-# 4     Correlation Analyses ####
+# 4     Correlation Analyses (Figure 3) ####
 # 4.1   Correlation with Expenditure Shares ####
 
 data_4.1 <- data.frame()
@@ -545,7 +487,7 @@ P.4.1 <- ggplot(data_4.1.4, aes(x = Correlation, group = Country))+
                                rep("#0072B5FF",4),
                                rep("#E18727FF",4),
                                rep("#20854EFF",4)))+
-  xlab("Correlation Coefficient for Expenditure Share and Relative Additional Costs")+
+  xlab("Correlation coefficient for expenditure share and relative additional costs")+
   ylab("")+
   theme(axis.text.y = element_blank(), 
         axis.text.x = element_text(size = 6),
@@ -636,7 +578,7 @@ P.4.2 <- ggplot(data_4.2.4, aes(x = Correlation, group = Country))+
                                rep("#0072B5FF",4),
                                rep("#E18727FF",4),
                                rep("#20854EFF",4)))+
-  xlab("Correlation Coefficient for Expenditure Share and Relative Additional Costs")+
+  xlab("Correlation coefficient for expenditure share and relative additional costs")+
   ylab("")+
   theme(axis.text.y = element_blank(), 
         axis.text.x = element_text(size = 6),
@@ -666,7 +608,7 @@ jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figu
 print(P_4)
 dev.off()
 
-# 5.1   Venn-Diagramm on the Targeted, the Poor, the Affected ####
+# 5.1   Venn-Diagramm on the Targeted, the Poor, the Affected (Figure 4) ####
 # 5.1.1 Joint ####
 
 data_5.1.1 <- data_joint_0 %>%
