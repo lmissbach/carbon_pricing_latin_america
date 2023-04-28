@@ -43,7 +43,9 @@ if(sum(is.na(household_information$inc_gov_cash))==nrow(household_information)){
 # 3       Data Cleaning ####
 # 3.1     Check for Duplicates ####
 
-# Multiple checks for duplicates.
+# Multiple checks for duplicates
+
+# 1: Household information
 
 household_information_1 <- household_information %>%
   group_by_at(vars(-hh_id))%>%
@@ -64,7 +66,7 @@ expenditure_information <- expenditure_information %>%
   select(-expenditures_sp_year)
 }
 
-# Exact duplicates for expenditures - see below for more detailed approach
+# 2: Expenditure information. Exact duplicates for expenditures - see below for more detailed approach
 expenditure_information_1 <- expenditure_information %>%
   pivot_wider(names_from = "item_code", values_from = "expenditures_year")%>%
   group_by_at(vars(-hh_id))%>%
@@ -78,7 +80,7 @@ hh_duplicates_expenditures_1 <- expenditure_information_1 %>%
   filter(flag != 0)%>%
   select(hh_id)
 
-# Alternative: calculates share of duplicates on the item level
+# 3: Expenditure information. Alternative: calculates share of duplicates on the item level
 
 expenditure_information_2 <- expenditure_information %>%
   filter(!is.na(expenditures_year) & expenditures_year != 0)%>%
@@ -93,6 +95,8 @@ hh_duplicates_expenditures_2 <- expenditure_information_2 %>%
   filter(duplicate_share == 1)%>%
   select(hh_id)%>%
   distinct()
+
+# 4: Expenditure information. Total amount of expenditures on all items.
 
 expenditure_information_3 <- expenditure_information %>%
   filter(!is.na(expenditures_year) & expenditures_year != 0)%>%
@@ -110,7 +114,7 @@ hh_duplicates_expenditures_3 <- expenditure_information_3 %>%
   filter(duplicate_flag_2 == 1)%>%
   select(hh_id)
 
-# Negative total expenditures
+# 5: Expenditure information. Negative total expenditures
 
 expenditure_information_4 <- expenditure_information_3 %>%
   mutate(flag_negative = ifelse(hh_expenditures < 0,1,0))
