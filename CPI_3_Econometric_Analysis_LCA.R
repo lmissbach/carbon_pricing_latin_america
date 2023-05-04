@@ -867,6 +867,7 @@ data_2.2.4.3 <- left_join(data_2.2.4.1, data_2.2.4.2)%>%
   mutate_at(vars(car.01:FirewoodC), list(~round(.,3)))%>%
   mutate_at(vars(car.01:FirewoodC), list(~ ifelse(. == 0,NA,.)))%>%
   mutate_at(vars(setdiff(ends_with("C"), starts_with("hh"))), list(~ ifelse(!is.na(.),paste0("(",.*100,"%)"),.)))%>%
+  mutate_at(vars(car.01, urban_01, LPG, Gas, Firewood), list(~ ifelse(!is.na(.), paste0(.*100,"%"),.)))%>%
   mutate_at(vars(starts_with("hh")), list(~format(., big.mark = ",")))%>%
   mutate(hh_expenditures_USD_2014C = paste0("(",hh_expenditures_USD_2014C, ")"))%>%
   mutate_all(~ ifelse(is.na(.),"",.))
