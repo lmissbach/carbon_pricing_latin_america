@@ -434,7 +434,7 @@ for(i in Country.Set){
     
     formula_0 <- paste0(formula_0, ' + i(Ethnicity, ref = "', ref_0,'")')
   }
-  if("religion" %in% colnames(household_information_0) & sum(is.na(data_2.1.1$religion))==0)           formula_0 <- paste0(formula_0, " + factor(religion)")
+  #if("religion" %in% colnames(household_information_0) & sum(is.na(data_2.1.1$religion))==0)           formula_0 <- paste0(formula_0, " + factor(religion)")
   #if("district" %in% colnames(household_information_0) & sum(is.na(data_2.1.1$district))==0)           formula_0 <- paste0(formula_0, " + factor(district)")
   #if("province" %in% colnames(household_information_0) & sum(is.na(data_2.1.1$province))==0)           formula_0 <- paste0(formula_0, " + factor(province)")
   
@@ -785,7 +785,7 @@ for(i in Country.Set){
     
     formula_0 <- paste0(formula_0, ' + i(Ethnicity, ref = "', ref_0,'")')
   }
-  if("religion" %in% colnames(household_information_0) & sum(is.na(data_2.2.2.1$religion))==0)           formula_0 <- paste0(formula_0, " + factor(religion)")
+  #if("religion" %in% colnames(household_information_0) & sum(is.na(data_2.2.2.1$religion))==0)           formula_0 <- paste0(formula_0, " + factor(religion)")
   #if("district" %in% colnames(household_information_0) & sum(is.na(data_2.2.2.1$district))==0)           formula_0 <- paste0(formula_0, " + factor(district)")
   #if("province" %in% colnames(household_information_0) & sum(is.na(data_2.2.2.1$province))==0)           formula_0 <- paste0(formula_0, " + factor(province)")
   

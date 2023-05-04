@@ -291,7 +291,7 @@ poly_3 <- data.frame(g = c(1,1,1,
                      x = c(0.02,0.02,3.17,
                            0.03,3.18,3.18))
 
-poly_4 <- data.frame(text = c("Horizontal Differences > Vertical Differences",
+poly_4 <- data.frame(text = c("Vertical Differences < Horizontal Differences",
                               "Vertical Differences > Horizontal Differences"),
                      x = c(2,1),
                      y = c(0.5,2.5))
@@ -803,6 +803,93 @@ kbl(data_5.1.2.5, format = "latex", caption = "Summary Statistics on Access to T
   footnote(general = "This table reports shares of total population and shares of the 20% of population with highest carbon pricing incidence adhering to different criteria for 16 countries in Latin America and the Caribbean.", threeparttable = T)%>%
   save_kable(., "../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/6_App/Latin-America-Paper/Tables/Table_A8/Table_A8.tex")
 
+# 5.1.3 Graphical Abstract ####
+
+data_5.1.3.0 <- data_joint_0 %>%
+  group_by(Country)%>%
+  mutate(barrier_0 = wtd.quantile(burden_CO2_national, probs = 0.8, weights = hh_weights))%>%
+  ungroup()%>%
+  mutate(poorest_20_percent  = ifelse(Income_Group_5 == 1,1,0),
+         access_to_transfers = ifelse((!is.na(inc_gov_cash)|!is.na(inc_gov_monetary))&(inc_gov_cash > 0 | inc_gov_monetary > 0),1,0),
+         most_affected       = ifelse(burden_CO2_national > barrier_0,1,0))%>%
+  filter(poorest_20_percent == 1 | most_affected == 1 | access_to_transfers == 1)
+
+data_5.1.3.1 <- data_5.1.3.0 %>%
+  select(Country, access_to_transfers, poorest_20_percent, most_affected, hh_weights) %>%
+  mutate(A = ifelse(most_affected == 1 & access_to_transfers == 0 & poorest_20_percent == 0, hh_weights,0),
+         B = ifelse(most_affected == 0 & access_to_transfers == 0 & poorest_20_percent == 1, hh_weights,0),
+         C = ifelse(most_affected == 0 & access_to_transfers == 1 & poorest_20_percent == 0, hh_weights,0),
+         
+         D = ifelse(most_affected == 1 & access_to_transfers == 0 & poorest_20_percent == 1, hh_weights,0),
+         E = ifelse(most_affected == 1 & access_to_transfers == 1 & poorest_20_percent == 0, hh_weights,0),
+         G = ifelse(most_affected == 0 & access_to_transfers == 1 & poorest_20_percent == 1, hh_weights,0),
+         
+         H = ifelse(most_affected == 1 & access_to_transfers == 1 & poorest_20_percent == 1, hh_weights,0))%>%
+  summarise("Most Affected"       = sum(A),
+            "The Poorest"         = sum(B),
+            "Access to Transfers" = sum(C),
+            "Most Affected&The Poorest"         = sum(D),
+            "Most Affected&Access to Transfers" = sum(E),
+            "The Poorest&Access to Transfers"   = sum(G),
+            "Most Affected&The Poorest&Access to Transfers" = sum(H))
+
+data_5.1.3.2 <- c(
+    "Most Affected"                                 = data_5.1.3.1$'Most Affected',
+    "The Poorest"                                   = data_5.1.3.1$'The Poorest',
+    "Access to Transfers"                           = data_5.1.3.1$'Access to Transfers',
+    "Most Affected&The Poorest"                     = data_5.1.3.1$'Most Affected&The Poorest',
+    "Most Affected&Access to Transfers"             = data_5.1.3.1$'Most Affected&Access to Transfers',
+    "The Poorest&Access to Transfers"               = data_5.1.3.1$'The Poorest&Access to Transfers',
+    "The Poorest&Access to Transfers&Most Affected" = data_5.1.3.1$'Most Affected&The Poorest&Access to Transfers'
+  )
+  
+  P.venn <- plot(euler(data_5.1.3.2, shape = "ellipse"), labels = FALSE,
+                 quantities = list(type = "percent", fontsize = 7), fills = list(fill = c("#BC3C29FF", "#FFDC91FF", "#6F99ADFF"), alpha = 0.8),
+                 main = list(label = "Households in Latin America and the Caribbean", fontsize = 7)
+                 #legend = list(side = "bottom", nrow = 1, ncol = 3)
+  )
+  
+pop <- sum(data_joint_0$hh_weights)
+  
+data_5.1.3.3 <- rownames_to_column(as.data.frame(data_5.1.3.2))%>%
+  rename(Type = rowname, value = data_5.1.3.2)%>%
+  mutate(total = pop)%>%
+  mutate(percent = round(value/total,2))%>%
+  mutate(label = paste0(percent*100, "%"))
+  
+P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.1$children$tag.quantity.1$label <- data_5.1.3.3$label[data_5.1.3.3$Type == "Most Affected"]
+P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.2$children$tag.quantity.2$label <- data_5.1.3.3$label[data_5.1.3.3$Type == "The Poorest"]
+P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.3$children$tag.quantity.3$label <- data_5.1.3.3$label[data_5.1.3.3$Type == "Access to Transfers"]
+P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.4$children$tag.quantity.4$label <- data_5.1.3.3$label[data_5.1.3.3$Type == "Most Affected&The Poorest"]
+P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.5$children$tag.quantity.5$label <- data_5.1.3.3$label[data_5.1.3.3$Type == "Most Affected&Access to Transfers"]
+P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.6$children$tag.quantity.6$label <- data_5.1.3.3$label[data_5.1.3.3$Type == "The Poorest&Access to Transfers"]
+P.venn$children$canvas.grob$children$diagram.grob.1$children$tags$children$tag.number.7$children$tag.quantity.7$label <- data_5.1.3.3$label[data_5.1.3.3$Type == "The Poorest&Access to Transfers&Most Affected"]
+
+data.0 <- data.frame(A = c("20% of households most affected by carbon pricing per country", 
+                           "Households with access to governmental transfers", 
+                           "Poorest 20% of households per country"),
+                     B = c(1,2,3),
+                     C = c(1,2,3))
+data.0$A <- factor(data.0$A, levels = c("20% of households most affected by carbon pricing per country", "Poorest 20% of households per country", "Households with access to governmental transfers"))
+  
+Legend <- ggplot(data.0, aes(x = B, y = C, fill = A))+
+  geom_point(shape = 21, alpha = 0.8, size = 2)+
+  scale_fill_manual(values = c("#BC3C29FF", "#FFDC91FF", "#6F99ADFF"))+
+  guides(fill = guide_legend(nrow = 3,
+                             override.aes = list(size = 10)))+
+  theme_bw()+
+  labs(fill = "")
+  
+Legend.2 <- ggdraw(get_legend(Legend))
+
+jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figure_0.jpg", width = 9, height = 9, unit = "cm", res = 400)
+print(P.venn)
+dev.off()
+  
+jpeg("../1_Carbon_Pricing_Incidence/3_Analyses/1_LAC_2021/1_Figures/Figures/Figure_0_Legend.jpg", width = 10, height = 9, unit = "cm", res = 400)
+print(Legend.2)
+dev.off()
+    
 # 6     Spanish ####
 
 Country.Translation <- data.frame(Country = c("Argentina", "Barbados", "Bolivia", "Brazil", "Chile", "Colombia", "Costa Rica", "Dominican Republic", "Ecuador", "El Salvador", "Guatemala", "Mexico", "Nicaragua", "Paraguay", "Peru", "Uruguay"),
