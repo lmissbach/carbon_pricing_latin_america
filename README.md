@@ -36,3 +36,4 @@ This repository includes matching tables for each country, computed sectoral car
 
 ## Contact
 
+Leonard Missbach (missbach@mcc-berlin.net)
